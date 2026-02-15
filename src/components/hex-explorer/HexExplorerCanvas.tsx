@@ -264,7 +264,7 @@ export function HexExplorerCanvas({
       if (!ctx) return;
       const s = stateRef.current;
       s.time = now;
-      const dt = 1 / 60; // normalized timestep
+
 
       const moveDuration = s.prefersReducedMotion ? 0 : 200; // ms
 
