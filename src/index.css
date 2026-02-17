@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=MedievalSharp&family=Rajdhani:wght@400;500;600;700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=MedievalSharp&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 
 @import 'tailwindcss';
 
@@ -49,7 +49,7 @@
   --realm-border-strong: oklch(0.44 0.03 80);
   --realm-glow-soft: color-mix(in oklab, var(--primary) 30%, transparent);
   --realm-vignette: linear-gradient(180deg, transparent 0%, color-mix(in oklab, black 38%, transparent) 100%);
-  --font-sans: Rajdhani, sans-serif;
+  --font-sans: 'Exo 2', sans-serif;
   --font-serif: MedievalSharp, serif;
   --font-ui: Cinzel, serif;
   --font-mono: Source Code Pro, monospace;
@@ -108,7 +108,7 @@
   --realm-border-strong: oklch(0.46 0.04 82);
   --realm-glow-soft: color-mix(in oklab, var(--primary) 32%, transparent);
   --realm-vignette: linear-gradient(180deg, transparent 0%, color-mix(in oklab, black 55%, transparent) 100%);
-  --font-sans: Rajdhani, sans-serif;
+  --font-sans: 'Exo 2', sans-serif;
   --font-serif: MedievalSharp, serif;
   --font-ui: Cinzel, serif;
   --font-mono: Source Code Pro, monospace;
