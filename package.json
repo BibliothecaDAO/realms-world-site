@@ -10,7 +10,7 @@
     "dev": "vite",
     "prebuild": "node scripts/generate-scroll-posts.mjs",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --format json",
     "preview": "vite preview"
   },
   "dependencies": {

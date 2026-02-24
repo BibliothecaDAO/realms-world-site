@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import {
+  holdersMapQueryOptions,
   lordsInfoQueryOptions,
   treasuryBalanceQueryOptions,
 } from "@/lib/query-options";
@@ -28,6 +29,11 @@ function EconomicsSectionContent() {
   const { currentAPY, tokensThisWeek, lordsLocked, tvl } = useVelords();
   const { data: lordsInfo } = useQuery(lordsInfoQueryOptions());
   const { data: treasuryBalance } = useQuery(treasuryBalanceQueryOptions());
+  const {
+    data: holdersMap,
+    isLoading: holdersMapLoading,
+    isError: holdersMapError,
+  } = useQuery(holdersMapQueryOptions());
 
   const treasuryLords = treasuryBalance?.LORDS.amount || 0;
   const treasuryPercentage = (
@@ -104,6 +110,37 @@ function EconomicsSectionContent() {
       highlight: false,
     },
   ];
+
+  const holdersKpis = [
+    {
+      label: "Cross-Chain Holders",
+      value: holdersMapLoading
+        ? "Syncing..."
+        : holdersMap?.totals.combinedHolders.toLocaleString() ?? "—",
+      sub: "Ethereum + Starknet",
+    },
+    {
+      label: "Ethereum Holders",
+      value: holdersMapLoading
+        ? "Syncing..."
+        : holdersMap?.totals.ethereumHolders.toLocaleString() ?? "—",
+      sub: "Mainnet wallets",
+    },
+    {
+      label: "Starknet Holders",
+      value: holdersMapLoading
+        ? "Syncing..."
+        : holdersMap?.totals.starknetHolders.toLocaleString() ?? "—",
+      sub: "L2 wallets",
+    },
+  ];
+
+  const holdersBuckets = holdersMap?.buckets ?? [];
+  const topHolders = holdersMap?.topHolders.slice(0, 6) ?? [];
+  const maxBucketCount = Math.max(...holdersBuckets.map((bucket) => bucket.count), 1);
+
+  const formatAddress = (address: string) =>
+    address.length > 16 ? `${address.slice(0, 8)}...${address.slice(-6)}` : address;
 
   return (
     <section className="realm-section container mx-auto px-4 py-16 md:py-24">
@@ -290,6 +327,111 @@ function EconomicsSectionContent() {
                   })}
                 </div>
               </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Holders map */}
+        <motion.div
+          className="realm-panel rounded-2xl border border-primary/20 bg-black/30 backdrop-blur-sm p-5 sm:p-6 space-y-5"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.55 }}
+        >
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+            <div>
+              <h3 className="realm-banner">Holders Map</h3>
+              <p className="text-sm text-foreground/65 mt-1">
+                Live cross-chain holder distribution across Ethereum and Starknet.
+              </p>
+            </div>
+            <p className="text-xs text-foreground/50">
+              {holdersMap?.updatedAt
+                ? `Updated ${new Date(holdersMap.updatedAt).toLocaleString()}`
+                : "Awaiting holder snapshot"}
+            </p>
+          </div>
+
+          {holdersMap?.partial ? (
+            <p className="rounded-lg border border-yellow-400/25 bg-yellow-500/10 px-3 py-2 text-xs text-yellow-200">
+              Partial data: one chain provider is currently unavailable.
+            </p>
+          ) : null}
+          {holdersMapError && !holdersMap ? (
+            <p className="rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+              Holder data is temporarily unavailable. Retry shortly.
+            </p>
+          ) : null}
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {holdersKpis.map((item) => (
+              <div
+                key={item.label}
+                className="rounded-xl border border-primary/15 bg-black/40 p-3.5"
+              >
+                <p className="realm-sigil">{item.label}</p>
+                <p className="mt-2 text-xl font-bold tabular-nums text-foreground/95">
+                  {item.value}
+                </p>
+                <p className="mt-1 text-[10px] text-foreground/55 uppercase tracking-[0.14em]">
+                  {item.sub}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="rounded-xl border border-primary/15 bg-black/35 p-4 space-y-3">
+              <h4 className="realm-banner">Holder Buckets</h4>
+              {holdersBuckets.length === 0 ? (
+                <p className="text-sm text-foreground/55">No holder bucket data yet.</p>
+              ) : (
+                holdersBuckets.map((bucket) => {
+                  const width = `${Math.max(
+                    6,
+                    Math.round((bucket.count / maxBucketCount) * 100)
+                  )}%`;
+                  return (
+                    <div key={bucket.label} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-foreground/70">{bucket.label}</span>
+                        <span className="tabular-nums text-foreground/55">
+                          {bucket.count.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                        <div className="h-full rounded-full bg-primary/80" style={{ width }} />
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            <div className="rounded-xl border border-primary/15 bg-black/35 p-4 space-y-3">
+              <h4 className="realm-banner">Top Holders</h4>
+              {topHolders.length === 0 ? (
+                <p className="text-sm text-foreground/55">No top holder rows yet.</p>
+              ) : (
+                <div className="space-y-2">
+                  {topHolders.map((holder) => (
+                    <div
+                      key={`${holder.chain}-${holder.address}`}
+                      className="grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-lg border border-primary/10 bg-black/25 px-3 py-2 text-xs"
+                    >
+                      <span className="rounded-full border border-primary/25 px-2 py-0.5 uppercase text-[10px] text-foreground/65">
+                        {holder.chain}
+                      </span>
+                      <span className="font-mono text-foreground/75">
+                        {formatAddress(holder.address)}
+                      </span>
+                      <span className="tabular-nums text-foreground/70">
+                        {holder.pctOfSupply.toFixed(2)}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
