@@ -230,14 +230,6 @@ export function TopBar() {
                 >
                   Account
                 </a>
-                <a
-                  href="https://market.realms.world/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="realm-nav-link text-xs uppercase tracking-[0.15em] text-foreground/75 hover:text-primary transition-colors"
-                >
-                  Marketplace
-                </a>
                 <Link
                   to="/scroll"
                   className="realm-nav-link text-xs uppercase tracking-[0.15em] text-foreground/75 hover:text-primary transition-colors"
@@ -269,11 +261,6 @@ export function TopBar() {
                     <DropdownMenuItem asChild>
                       <a href="https://account.realms.world/velords" target="_blank" rel="noopener noreferrer" className="w-full">
                         Account
-                      </a>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <a href="https://market.realms.world/" target="_blank" rel="noopener noreferrer" className="w-full">
-                        Marketplace
                       </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>

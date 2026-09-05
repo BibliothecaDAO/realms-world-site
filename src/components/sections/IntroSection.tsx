@@ -118,8 +118,8 @@ function IntroSectionContent() {
             transition={{ delay: 1.4, duration: 0.6, ease: "easeOut" }}
           >
             <Button size="lg" variant="oath" className="w-full justify-center text-base px-6" asChild>
-              <a href="https://market.realms.world/" target="_blank" rel="noopener noreferrer">
-                Browse Marketplace
+              <a href="https://account.realms.world/realms" target="_blank" rel="noopener noreferrer">
+                View Your Realms
               </a>
             </Button>
             <Button
