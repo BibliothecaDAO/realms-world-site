@@ -13,6 +13,13 @@ import {
 
 export const Route = createFileRoute("/scroll/$slug")({
   loader: async ({ params }) => {
+    if (params.slug === "a-history-of-lost-worlds") {
+      throw redirect({
+        to: "/scroll/history-of-lost-worlds",
+        statusCode: 301,
+        replace: true,
+      });
+    }
     const post = getScrollPostBySlug(params.slug);
     if (!post) {
       throw new Error("Scroll post not found");

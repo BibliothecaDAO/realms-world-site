@@ -1,6 +1,14 @@
 {
   "version": 2,
 
+  "redirects": [
+    {
+      "source": "/scroll/a-history-of-lost-worlds",
+      "destination": "/scroll/history-of-lost-worlds",
+      "permanent": true
+    }
+  ],
+
   "rewrites": [
     {
       "source": "/api/(.*)",

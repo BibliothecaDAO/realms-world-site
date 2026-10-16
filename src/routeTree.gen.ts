@@ -16,6 +16,7 @@ import { Route as BlitzRouteImport } from './routes/blitz'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ScrollIndexRouteImport } from './routes/scroll/index'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
+import { Route as ScrollHistoryOfLostWorldsRouteImport } from './routes/scroll/history-of-lost-worlds'
 import { Route as ScrollSlugRouteImport } from './routes/scroll/$slug'
 import { Route as GamesSlugRouteImport } from './routes/games/$slug'
 
@@ -54,6 +55,12 @@ const GamesIndexRoute = GamesIndexRouteImport.update({
   path: '/games/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScrollHistoryOfLostWorldsRoute =
+  ScrollHistoryOfLostWorldsRouteImport.update({
+    id: '/scroll/history-of-lost-worlds',
+    path: '/scroll/history-of-lost-worlds',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ScrollSlugRoute = ScrollSlugRouteImport.update({
   id: '/scroll/$slug',
   path: '/scroll/$slug',
@@ -73,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/games/$slug': typeof GamesSlugRoute
   '/scroll/$slug': typeof ScrollSlugRoute
+  '/scroll/history-of-lost-worlds': typeof ScrollHistoryOfLostWorldsRoute
   '/games/': typeof GamesIndexRoute
   '/scroll/': typeof ScrollIndexRoute
 }
@@ -84,6 +92,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/games/$slug': typeof GamesSlugRoute
   '/scroll/$slug': typeof ScrollSlugRoute
+  '/scroll/history-of-lost-worlds': typeof ScrollHistoryOfLostWorldsRoute
   '/games': typeof GamesIndexRoute
   '/scroll': typeof ScrollIndexRoute
 }
@@ -96,6 +105,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/games/$slug': typeof GamesSlugRoute
   '/scroll/$slug': typeof ScrollSlugRoute
+  '/scroll/history-of-lost-worlds': typeof ScrollHistoryOfLostWorldsRoute
   '/games/': typeof GamesIndexRoute
   '/scroll/': typeof ScrollIndexRoute
 }
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/games/$slug'
     | '/scroll/$slug'
+    | '/scroll/history-of-lost-worlds'
     | '/games/'
     | '/scroll/'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/games/$slug'
     | '/scroll/$slug'
+    | '/scroll/history-of-lost-worlds'
     | '/games'
     | '/scroll'
   id:
@@ -131,6 +143,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/games/$slug'
     | '/scroll/$slug'
+    | '/scroll/history-of-lost-worlds'
     | '/games/'
     | '/scroll/'
   fileRoutesById: FileRoutesById
@@ -143,6 +156,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   GamesSlugRoute: typeof GamesSlugRoute
   ScrollSlugRoute: typeof ScrollSlugRoute
+  ScrollHistoryOfLostWorldsRoute: typeof ScrollHistoryOfLostWorldsRoute
   GamesIndexRoute: typeof GamesIndexRoute
   ScrollIndexRoute: typeof ScrollIndexRoute
 }
@@ -198,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scroll/history-of-lost-worlds': {
+      id: '/scroll/history-of-lost-worlds'
+      path: '/scroll/history-of-lost-worlds'
+      fullPath: '/scroll/history-of-lost-worlds'
+      preLoaderRoute: typeof ScrollHistoryOfLostWorldsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/scroll/$slug': {
       id: '/scroll/$slug'
       path: '/scroll/$slug'
@@ -223,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   GamesSlugRoute: GamesSlugRoute,
   ScrollSlugRoute: ScrollSlugRoute,
+  ScrollHistoryOfLostWorldsRoute: ScrollHistoryOfLostWorldsRoute,
   GamesIndexRoute: GamesIndexRoute,
   ScrollIndexRoute: ScrollIndexRoute,
 }

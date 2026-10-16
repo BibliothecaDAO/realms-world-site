@@ -34,6 +34,7 @@ Posts are authored as `.md` files in-repo and compiled at build time into static
   - `coverImage: string` (public path, e.g. `/content/scroll/my-cover.jpg`)
   - `canonicalUrl: string` (SEO canonical only; does not change the link destination)
   - `externalUrl: string` (absolute HTTP(S) destination for a hosted article or chronicle)
+  - `readingTimeMinutes: positive integer` (override for a custom presentation whose prose lives outside the markdown body)
 
 ### 2) Build-Time Generation
 
@@ -115,3 +116,7 @@ Posts are authored as `.md` files in-repo and compiled at build time into static
 ## Authoring a linked entry
 
 Use the same title, excerpt, date, type, author, tags and published frontmatter as an ordinary post, then set `externalUrl` to its hosted HTTP(S) URL. The markdown body may be empty. Cards and related-entry links open that URL directly; visiting `/scroll/<slug>` also redirects there. Linked lore displays “Illustrated chronicle” instead of a reading estimate derived from the empty body. Run `pnpm build` after content changes to regenerate the runtime module. The sitemap is maintained in `public/sitemap.xml`; do not add local redirect entries.
+
+## Illustrated lore presentation
+
+`/scroll/history-of-lost-worlds` is a native route within this site. Its archive metadata lives in `content/scroll/2026-10-16-history-of-lost-worlds.md`; its full editorial content and interactions live in `src/components/lore/`, with artwork in `public/lore/history-of-lost-worlds/`. It has its own banner and footer, and styles are scoped to `.lore-chronicle`. No external page is embedded or fetched. The former `/scroll/a-history-of-lost-worlds` URL redirects to the new route.

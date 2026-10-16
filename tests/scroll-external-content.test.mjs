@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { generate } from "../scripts/generate-scroll-posts.mjs";
 
-async function generateFixture({ type = "lore", externalUrl } = {}) {
+async function generateFixture({ type = "lore", externalUrl, readingTimeMinutes } = {}) {
   const root = mkdtempSync(join(tmpdir(), "scroll-content-"));
   try {
     mkdirSync(join(root, "content/scroll"), { recursive: true });
@@ -19,6 +19,7 @@ tags: ["lore"]
 published: true
 canonicalUrl: "https://example.com/canonical"
 ${externalUrl === undefined ? "" : `externalUrl: ${JSON.stringify(externalUrl)}`}
+${readingTimeMinutes === undefined ? "" : `readingTimeMinutes: ${JSON.stringify(readingTimeMinutes)}`}
 ---
 `);
     await generate(root);
@@ -55,4 +56,16 @@ test("Scroll generator rejects unsafe, relative, and malformed destinations", as
 
 test("Scroll generator still rejects unknown entry types", async () => {
   await assert.rejects(generateFixture({ type: "unknown" }), /Invalid frontmatter.*type/);
+});
+
+test("Scroll generator accepts a reading estimate for custom presentations", async () => {
+  const posts = await generateFixture({ readingTimeMinutes: 12 });
+  assert.equal(posts[0].readingTimeMinutes, 12);
+  assert.equal(Object.hasOwn(posts[0], "externalUrl"), false);
+  for (const readingTimeMinutes of [0, -1, 1.5, "12"]) {
+    await assert.rejects(
+      generateFixture({ readingTimeMinutes }),
+      /Invalid frontmatter.*readingTimeMinutes/
+    );
+  }
 });

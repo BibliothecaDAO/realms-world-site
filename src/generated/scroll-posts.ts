@@ -21,7 +21,7 @@ export interface ScrollPost {
 
 export const scrollPosts: ScrollPost[] = [
   {
-    "slug": "a-history-of-lost-worlds",
+    "slug": "history-of-lost-worlds",
     "title": "A History of Lost Worlds",
     "excerpt": "Loot vanished. The Realms endured. Follow the four ages of Blitz, Frontier, Eternum and Dominion, from the age of war to the return of Loot.",
     "date": "2026-10-16",
@@ -33,8 +33,8 @@ export const scrollPosts: ScrollPost[] = [
       "loot"
     ],
     "published": true,
-    "externalUrl": "https://realms-lore-chronicle.vengeful-gnome.chatgpt.site",
-    "readingTimeMinutes": 1,
+    "coverImage": "/lore/history-of-lost-worlds/twilight-tundra.webp",
+    "readingTimeMinutes": 7,
     "html": ""
   },
   {

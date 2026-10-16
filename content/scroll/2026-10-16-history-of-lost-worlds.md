@@ -6,5 +6,6 @@ type: "lore"
 author: "Realms World"
 tags: ["lore", "realms", "loot"]
 published: true
-externalUrl: "https://realms-lore-chronicle.vengeful-gnome.chatgpt.site"
+coverImage: "/lore/history-of-lost-worlds/twilight-tundra.webp"
+readingTimeMinutes: 7
 ---

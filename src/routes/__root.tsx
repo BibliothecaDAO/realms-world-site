@@ -131,9 +131,22 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const location = useLocation();
+  const isLorePresentation =
+    location.pathname.replace(/\/$/, "") === "/scroll/history-of-lost-worlds";
   useEffect(() => {
+    // The illustrated chronicle handles its own section anchors and scroll position.
+    if (isLorePresentation) return;
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location.pathname]);
+  }, [location.pathname, isLorePresentation]);
+
+  if (isLorePresentation) {
+    return (
+      <>
+        <HeadContent />
+        <Outlet />
+      </>
+    );
+  }
 
   return (
     <>
