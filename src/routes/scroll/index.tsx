@@ -1,15 +1,23 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { generateMetaTags } from "@/lib/og-image";
-import { formatScrollDate, getPublishedScrollPosts } from "@/lib/scroll";
+import { ScrollPostLink } from "@/components/scroll/ScrollPostLink";
+import {
+  formatScrollDate,
+  getPublishedScrollPosts,
+  scrollTypeLabel,
+  scrollReadingLabel,
+  type ScrollPostType,
+} from "@/lib/scroll";
 
-type ScrollFilter = "all" | "update" | "thought-piece";
+type ScrollFilter = "all" | ScrollPostType;
 
 const filterOptions = [
   { id: "all", label: "All Dispatches" },
   { id: "update", label: "Updates" },
   { id: "thought-piece", label: "Thought Pieces" },
+  { id: "lore", label: "Lore" },
 ] as const;
 
 export const Route = createFileRoute("/scroll/")({
@@ -22,15 +30,11 @@ export const Route = createFileRoute("/scroll/")({
   head: () => ({
     meta: generateMetaTags({
       title: "Scroll - Realms World",
-      description: "Updates from the ecosystem and thought pieces.",
+      description: "Ecosystem updates, thought pieces, and lore from the Realms.",
       path: "/scroll",
     }),
   }),
 });
-
-function typeLabel(type: "update" | "thought-piece") {
-  return type === "update" ? "Update" : "Thought Piece";
-}
 
 function ScrollIndexPage() {
   const { posts } = Route.useLoaderData();
@@ -51,8 +55,8 @@ function ScrollIndexPage() {
     () => posts.filter((post) => post.type === "thought-piece").length,
     [posts]
   );
-  const totalReadingMinutes = useMemo(
-    () => posts.reduce((total, post) => total + post.readingTimeMinutes, 0),
+  const loreCount = useMemo(
+    () => posts.filter((post) => post.type === "lore").length,
     [posts]
   );
 
@@ -71,8 +75,8 @@ function ScrollIndexPage() {
                 Scroll Archive
               </h1>
               <p className="mt-3 text-base sm:text-lg text-foreground/80">
-                The written layer for Realms. Read ecosystem updates, design notes,
-                and strategic thought pieces published as an open chronicle.
+                The written layer for Realms. Read ecosystem updates, thought pieces,
+                and lore published as an open chronicle.
               </p>
             </div>
             <div className="flex gap-2 sm:gap-3">
@@ -94,9 +98,9 @@ function ScrollIndexPage() {
               </p>
             </article>
             <article className="scroll-codex-metric">
-              <p className="realm-sigil">Reading Minutes</p>
+              <p className="realm-sigil">Lore</p>
               <p className="mt-2 text-2xl font-semibold text-primary tabular-nums">
-                {totalReadingMinutes}
+                {loreCount}
               </p>
             </article>
           </div>
@@ -108,6 +112,7 @@ function ScrollIndexPage() {
               <button
                 key={option.id}
                 type="button"
+                aria-pressed={filter === option.id}
                 onClick={() => setFilter(option.id as ScrollFilter)}
                 className={`scroll-codex-filter ${
                   filter === option.id
@@ -122,17 +127,16 @@ function ScrollIndexPage() {
         </div>
 
         {featuredPost ? (
-          <Link
-            to="/scroll/$slug"
-            params={{ slug: featuredPost.slug }}
+          <ScrollPostLink
+            post={featuredPost}
             className="scroll-codex-feature realm-panel realm-grid-scan block rounded-lg p-5 sm:p-7 transition-transform duration-300 hover:-translate-y-1"
           >
             <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.13em] text-foreground/60">
-              <span>{typeLabel(featuredPost.type)}</span>
+              <span>{scrollTypeLabel(featuredPost.type)}</span>
               <span>•</span>
               <span>{formatScrollDate(featuredPost.date)}</span>
               <span>•</span>
-              <span>{featuredPost.readingTimeMinutes} min read</span>
+              <span>{scrollReadingLabel(featuredPost)}</span>
             </div>
 
             <h2 className="realm-title mt-3 text-2xl sm:text-3xl lg:text-4xl leading-tight">
@@ -153,7 +157,7 @@ function ScrollIndexPage() {
                 </span>
               ))}
             </div>
-          </Link>
+          </ScrollPostLink>
         ) : null}
 
         {feedPosts.length > 0 ? (
@@ -164,21 +168,20 @@ function ScrollIndexPage() {
                 className="scroll-codex-card realm-panel rounded-lg p-5 md:p-6"
               >
                 <div className="text-xs uppercase tracking-[0.13em] text-foreground/60">
-                  <span>{typeLabel(post.type)}</span>
+                  <span>{scrollTypeLabel(post.type)}</span>
                   <span className="mx-2">•</span>
                   <span>{formatScrollDate(post.date)}</span>
                   <span className="mx-2">•</span>
-                  <span>{post.readingTimeMinutes} min read</span>
+                  <span>{scrollReadingLabel(post)}</span>
                 </div>
 
                 <h3 className="text-xl md:text-2xl font-semibold mt-2 mb-2">
-                  <Link
-                    to="/scroll/$slug"
-                    params={{ slug: post.slug }}
+                  <ScrollPostLink
+                    post={post}
                     className="scroll-codex-link transition-colors"
                   >
                     {post.title}
-                  </Link>
+                  </ScrollPostLink>
                 </h3>
 
                 <p className="text-foreground/76">{post.excerpt}</p>
