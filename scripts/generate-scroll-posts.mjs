@@ -20,6 +20,7 @@ const frontmatterSchema = z.object({
   author: z.string().trim().min(1),
   tags: z.array(z.string().trim().min(1)),
   published: z.boolean(),
+  readingTimeMinutes: z.number().int().positive().optional(),
   coverImage: z.string().trim().min(1).optional(),
   canonicalUrl: z.string().trim().url().optional(),
   externalUrl: z.string().trim().url().refine(
@@ -149,7 +150,7 @@ export async function generate(rootDir = process.cwd()) {
       coverImage: parsed.data.coverImage,
       canonicalUrl: parsed.data.canonicalUrl,
       externalUrl: parsed.data.externalUrl,
-      readingTimeMinutes: countReadingMinutes(content),
+      readingTimeMinutes: parsed.data.readingTimeMinutes ?? countReadingMinutes(content),
       html: safeHtml,
     });
   }
