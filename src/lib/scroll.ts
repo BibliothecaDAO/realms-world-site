@@ -1,6 +1,23 @@
-import { scrollPosts, type ScrollPost } from "@/generated/scroll-posts";
+import { scrollPosts, type ScrollPost, type ScrollPostType } from "@/generated/scroll-posts";
 
-export type { ScrollPost };
+export type { ScrollPost, ScrollPostType };
+
+const typeLabels: Record<ScrollPostType, string> = {
+  update: "Update",
+  "thought-piece": "Thought Piece",
+  lore: "Lore",
+};
+
+export function scrollTypeLabel(type: ScrollPostType) {
+  return typeLabels[type];
+}
+
+export function scrollReadingLabel(post: ScrollPost) {
+  if (post.externalUrl) {
+    return post.type === "lore" ? "Illustrated chronicle" : "External read";
+  }
+  return `${post.readingTimeMinutes} min read`;
+}
 
 export function getAllScrollPosts() {
   return scrollPosts;

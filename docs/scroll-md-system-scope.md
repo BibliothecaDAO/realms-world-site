@@ -6,6 +6,7 @@ Add a markdown-driven "Scroll" section where the team publishes:
 
 - ecosystem updates
 - thought pieces
+- lore
 
 Posts are authored as `.md` files in-repo and compiled at build time into static assets served by the existing Vite site.
 
@@ -25,13 +26,14 @@ Posts are authored as `.md` files in-repo and compiled at build time into static
   - `title: string`
   - `excerpt: string`
   - `date: YYYY-MM-DD`
-  - `type: update | thought-piece`
+  - `type: update | thought-piece | lore`
   - `author: string`
   - `tags: string[]`
   - `published: boolean`
 - Optional frontmatter:
   - `coverImage: string` (public path, e.g. `/content/scroll/my-cover.jpg`)
-  - `canonicalUrl: string`
+  - `canonicalUrl: string` (SEO canonical only; does not change the link destination)
+  - `externalUrl: string` (absolute HTTP(S) destination for a hosted article or chronicle)
 
 ### 2) Build-Time Generation
 
@@ -52,7 +54,7 @@ Posts are authored as `.md` files in-repo and compiled at build time into static
   - `/scroll/$slug` (post detail)
 - `/scroll` page:
   - Chronological feed (latest first)
-  - Type filter tabs: `All`, `Updates`, `Thought Pieces`
+  - Type filter tabs: `All`, `Updates`, `Thought Pieces`, `Lore`
   - Card list with title, date, excerpt, tags
 - `/scroll/$slug` page:
   - Full article render from generated HTML/AST
@@ -64,7 +66,7 @@ Posts are authored as `.md` files in-repo and compiled at build time into static
 - Add `Scroll` link in top nav next to `Games`.
 - Naming in UI:
   - Section title: `Scroll`
-  - Supporting copy: `Updates from the ecosystem and thought pieces`
+  - Supporting copy: `Ecosystem updates, thought pieces, and lore from the Realms`
 
 ### 5) SEO and Metadata
 
@@ -109,3 +111,7 @@ Posts are authored as `.md` files in-repo and compiled at build time into static
 - Tag landing pages (`/scroll/tag/<tag>`)
 - Featured posts
 - Optional migration to CMS-backed editing (Keystatic-managed authoring while preserving generated static output)
+
+## Authoring a linked entry
+
+Use the same title, excerpt, date, type, author, tags and published frontmatter as an ordinary post, then set `externalUrl` to its hosted HTTP(S) URL. The markdown body may be empty. Cards and related-entry links open that URL directly; visiting `/scroll/<slug>` also redirects there. Linked lore displays “Illustrated chronicle” instead of a reading estimate derived from the empty body. Run `pnpm build` after content changes to regenerate the runtime module. The sitemap is maintained in `public/sitemap.xml`; do not add local redirect entries.

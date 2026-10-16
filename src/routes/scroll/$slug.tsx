@@ -1,8 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { ScrollPostLink } from "@/components/scroll/ScrollPostLink";
 import { motion } from "framer-motion";
 import { generateMetaTags } from "@/lib/og-image";
 import {
   formatScrollDate,
+  scrollTypeLabel,
+  scrollReadingLabel,
   getScrollPostBySlug,
   getScrollPostNeighbors,
   getSimilarScrollPosts,
@@ -13,6 +16,10 @@ export const Route = createFileRoute("/scroll/$slug")({
     const post = getScrollPostBySlug(params.slug);
     if (!post) {
       throw new Error("Scroll post not found");
+    }
+
+    if (post.externalUrl) {
+      throw redirect({ href: post.externalUrl });
     }
 
     const { older, newer } = getScrollPostNeighbors(params.slug);
@@ -39,10 +46,6 @@ export const Route = createFileRoute("/scroll/$slug")({
   },
 });
 
-function typeLabel(type: "update" | "thought-piece") {
-  return type === "update" ? "Update" : "Thought Piece";
-}
-
 function ScrollPostPage() {
   const { post, older, newer, similarPosts } = Route.useLoaderData();
 
@@ -63,11 +66,11 @@ function ScrollPostPage() {
             <p className="realm-banner mt-4">Codex Entry</p>
 
             <div className="mt-4 text-xs uppercase tracking-[0.13em] text-foreground/60">
-              <span>{typeLabel(post.type)}</span>
+              <span>{scrollTypeLabel(post.type)}</span>
               <span className="mx-2">•</span>
               <span>{formatScrollDate(post.date)}</span>
               <span className="mx-2">•</span>
-              <span>{post.readingTimeMinutes} min read</span>
+              <span>{scrollReadingLabel(post)}</span>
             </div>
 
             <h1 className="realm-title mt-3 text-3xl md:text-5xl leading-tight">
@@ -108,16 +111,15 @@ function ScrollPostPage() {
 
           <footer className="scroll-detail-neighbors grid grid-cols-1 md:grid-cols-2 gap-4">
             {newer ? (
-              <Link
-                to="/scroll/$slug"
-                params={{ slug: newer.slug }}
+              <ScrollPostLink
+                post={newer}
                 className="realm-panel scroll-detail-neighbor-card block rounded-lg p-4"
               >
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
                   Newer Entry
                 </p>
                 <p className="mt-2 text-lg font-semibold text-foreground/90">{newer.title}</p>
-              </Link>
+              </ScrollPostLink>
             ) : (
               <div className="realm-panel scroll-detail-neighbor-card rounded-lg p-4 opacity-55">
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
@@ -128,16 +130,15 @@ function ScrollPostPage() {
             )}
 
             {older ? (
-              <Link
-                to="/scroll/$slug"
-                params={{ slug: older.slug }}
+              <ScrollPostLink
+                post={older}
                 className="realm-panel scroll-detail-neighbor-card block rounded-lg p-4"
               >
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
                   Older Entry
                 </p>
                 <p className="mt-2 text-lg font-semibold text-foreground/90">{older.title}</p>
-              </Link>
+              </ScrollPostLink>
             ) : (
               <div className="realm-panel scroll-detail-neighbor-card rounded-lg p-4 opacity-55">
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
@@ -153,14 +154,13 @@ function ScrollPostPage() {
               <h2 className="realm-title text-2xl font-semibold mb-4">Similar Scrolls</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {similarPosts.map((candidate) => (
-                  <Link
+                  <ScrollPostLink
                     key={candidate.slug}
-                    to="/scroll/$slug"
-                    params={{ slug: candidate.slug }}
+                    post={candidate}
                     className="similar-scroll-card scroll-detail-similar-card"
                   >
                     <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      {candidate.type === "update" ? "Update" : "Thought Piece"}
+                      {scrollTypeLabel(candidate.type)}
                     </p>
                     <p className="text-lg font-semibold mt-1 line-clamp-2">
                       {candidate.title}
@@ -171,7 +171,7 @@ function ScrollPostPage() {
                     <p className="text-xs text-muted-foreground mt-3">
                       {formatScrollDate(candidate.date)}
                     </p>
-                  </Link>
+                  </ScrollPostLink>
                 ))}
               </div>
             </section>
