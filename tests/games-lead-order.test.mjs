@@ -30,6 +30,7 @@ let cacheDir;
 const pages = {};
 let takenDownRoute;
 let homeLive;
+let gamesLive;
 let reorderSlugs = false;
 const blitzFirst = {};
 
@@ -128,6 +129,11 @@ before(async () => {
     const frontier = liveGames.find((game) => game.slug === "frontier");
     frontier.isLive = true;
     homeLive = await renderRoute("/", app);
+    // /games the same way, with Eternum on the one status no game has today.
+    const eternum = liveGames.find((game) => game.slug === "realms-eternum");
+    eternum.status = "testnet";
+    gamesLive = await renderRoute("/games", app);
+    eternum.status = "development";
     frontier.isLive = false;
 
     // The same pages, freshly loaded, with another game first in the shared list.
@@ -175,8 +181,8 @@ function homeGames() {
   return between(pages.home, 'id="games"', 'id="economics"');
 }
 
-function gamesDirectory() {
-  return pages.games.slice(pages.games.indexOf("</header>"));
+function gamesDirectory(html = pages.games) {
+  return html.slice(html.indexOf("</header>"));
 }
 
 // One card's markup: from its opening tag to the next card of the same kind.
@@ -387,6 +393,28 @@ test("Other games keep their own status on the same surfaces", () => {
   assert.ok(shownText(card(homeGames(), "article", "Realms: Eternum")).includes("development"));
   assert.ok(shownText(card(gamesDirectory(), "button", "Realms: Eternum")).includes("development"));
   assert.ok(shownText(card(homeGames(), "article", "zKube")).includes("Live"));
+});
+
+// A card's status chips: what each says and its background classes.
+function chips(html) {
+  return [...html.matchAll(/<span class="([^"]*rounded-full border[^"]*)">(?:<span[^>]*><\/span>)?([^<]+)/g)].map(
+    ([, classes, text]) => [decode(text).trim(), classes.split(/\s+/).filter((name) => name.startsWith("bg-"))]
+  );
+}
+
+test("Every status chip on /games sits on the solid ground, whatever art is behind it", () => {
+  const SOLID = ["bg-black/80"];
+  const expected = (...texts) => texts.map((text) => [text, SOLID]);
+  const today = gamesDirectory();
+  const live = gamesDirectory(gamesLive);
+
+  assert.deepEqual(chips(card(today, "button", "Realms: Eternum")), expected("development"));
+  assert.deepEqual(chips(card(today, "button", "Realms: Blitz")), expected("Live", "mainnet"));
+  assert.deepEqual(chips(card(today, "button", "zKube")), expected("Live", "mainnet"));
+  assert.deepEqual(chips(gamesFeature()), expected(FRONTIER_LABEL));
+  assert.deepEqual(chips(card(live, "button", "Realms: Eternum")), expected("testnet"));
+  assert.deepEqual(chips(between(live, "Featured Game", 'class="grid grid-cols-1 gap-5 md:grid-cols-2')), expected("Live", FRONTIER_LABEL));
+  assert.deepEqual(chips(today).filter(([, ground]) => ground.join() !== SOLID.join()), []);
 });
 
 test("Other studios' games stay in the data", () => {

@@ -26,16 +26,16 @@ export const Route = createFileRoute("/games/")({
 
 function statusChipClasses(status: Game["status"]) {
   if (!status) {
-    return "bg-[#F3D08A]/10 text-[#F3D08A] border-[#F3D08A]/40";
+    return "bg-black/80 text-[#F3D08A] border-[#F3D08A]/40";
   }
   if (status === "mainnet") {
-    return "bg-emerald-400/15 text-emerald-300 border-emerald-400/35";
+    return "bg-black/80 text-emerald-300 border-emerald-400/35";
   }
   if (status === "testnet") {
-    return "bg-amber-300/15 text-amber-200 border-amber-300/35";
+    return "bg-black/80 text-amber-200 border-amber-300/35";
   }
 
-  return "bg-slate-300/10 text-slate-200 border-slate-300/30";
+  return "bg-black/80 text-slate-200 border-slate-300/30";
 }
 
 function gameGenreTags(game: { genre?: string[]; studio: string }) {
@@ -68,7 +68,7 @@ function GameCard({ game, index }: { game: Game; index: number }) {
 
         <div className="absolute left-3 top-3 flex items-center gap-2">
           {game.isLive ? (
-            <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/45 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
+            <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/80 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
               <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
               Live
             </span>
@@ -221,7 +221,7 @@ function GamesPage() {
                   </div>
                   <div className="mt-5 flex flex-wrap items-center gap-2">
                     {featuredGame.isLive ? (
-                      <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/45 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
+                      <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/80 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
                         <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
                         Live
                       </span>
