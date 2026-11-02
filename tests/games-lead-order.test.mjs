@@ -14,6 +14,7 @@ const APP_ENTRY = "virtual:site-render-test-app";
 const FRONTIER_LABEL = "Season 0 - 3-6 November 2026";
 const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
 const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
+const ETERNUM_ART = "/games/realms-eternum/alpine-war-council.webp";
 const FRONTIER_BLURB =
   "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.";
 const FRONTIER_DETAIL =
@@ -29,6 +30,8 @@ let cacheDir;
 const pages = {};
 let takenDownRoute;
 let homeLive;
+let reorderSlugs = false;
+const blitzFirst = {};
 
 // Renders a route through the app's real router, loaders and components.
 async function loadRoute(path, app) {
@@ -92,6 +95,10 @@ before(async () => {
                export { queryClient } from "/src/lib/queryClient.ts";
                export { routeTree } from "/src/routeTree.gen.ts";`
             : null,
+        transform: (code, id) =>
+          reorderSlugs && id.endsWith("/src/data/games.ts")
+            ? code.replace('["frontier", "blitz", "realms-eternum"]', '["blitz", "frontier", "realms-eternum"]')
+            : null,
       },
     ],
   });
@@ -105,6 +112,7 @@ before(async () => {
     pages.games = await renderRoute("/games", app);
     pages.frontier = await renderRoute("/games/frontier", app);
     pages.blitz = await renderRoute("/games/blitz", app);
+    pages.eternum = await renderRoute("/games/realms-eternum", app);
     pages.scroll = await renderRoute("/scroll", app);
     takenDownRoute = (await loadRoute(`/scroll/${TAKEN_DOWN_SLUG}`, app)).state;
 
@@ -121,6 +129,13 @@ before(async () => {
     frontier.isLive = true;
     homeLive = await renderRoute("/", app);
     frontier.isLive = false;
+
+    // The same pages, freshly loaded, with another game first in the shared list.
+    reorderSlugs = true;
+    vite.moduleGraph.invalidateAll();
+    const reordered = await vite.ssrLoadModule(APP_ENTRY);
+    blitzFirst.home = await renderRoute("/", reordered);
+    blitzFirst.games = await renderRoute("/games", reordered);
   } finally {
     console.log = log;
   }
@@ -215,6 +230,15 @@ test("The home page features Frontier, then Blitz and Eternum, above other studi
     "Loot Survivor",
     "zKube",
   ]);
+});
+
+test("Both pages lead with the first slug in the shared list", () => {
+  const home = between(blitzFirst.home, 'id="games"', 'id="economics"');
+  const lead = ["Realms: Blitz", "Realms: Frontier", "Realms: Eternum"];
+
+  assert.deepEqual(listing(home).slice(1, 4), lead);
+  assert.ok(shownText(homeFeature(home)).includes("Realms: Blitz"), "Expected Blitz in the home feature");
+  assert.deepEqual(listing(blitzFirst.games.slice(blitzFirst.games.indexOf("</header>"))).slice(2, 5), lead);
 });
 
 test("Frontier's date shows on both features, with no Live or Play Now", () => {
@@ -321,6 +345,21 @@ test("Blitz's own page shows the soldiers in rain, and nothing renders the old c
   }
   assert.equal(existsSync(join(ROOT, "public/brand/blitz-card.png")), false);
   assert.ok(statSync(join(ROOT, `public${BLITZ_ART}`)).size <= 256000);
+});
+
+test("Eternum's cards show the war council, and nothing renders the old cover", () => {
+  const home = card(homeGames(), "article", "Realms: Eternum");
+  const directory = card(gamesDirectory(), "button", "Realms: Eternum");
+
+  for (const eternum of [home, directory]) {
+    assert.match(eternum.match(/<img\b[^>]*>/)[0], new RegExp(`src="${ETERNUM_ART}"`));
+    assert.match(eternum.match(/<img\b[^>]*>/)[0], /object-cover/);
+  }
+  for (const [name, html] of Object.entries(pages)) {
+    assert.doesNotMatch(html, /realms-eternum\/cover/, `Expected no old Eternum cover on ${name}`);
+  }
+  assert.equal(existsSync(join(ROOT, "public/games/realms-eternum/cover.png")), false);
+  assert.ok(statSync(join(ROOT, `public${ETERNUM_ART}`)).size <= 256000);
 });
 
 test("No rendered page says test LORDS", () => {

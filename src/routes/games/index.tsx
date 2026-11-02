@@ -94,7 +94,7 @@ function GameCard({ game, index }: { game: Game; index: number }) {
           {game.studio}
         </p>
         <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-foreground/78">
-          {game.summary ?? game.description}
+          {game.description}
         </p>
 
         <div className="mt-4 flex flex-nowrap items-start justify-between gap-2">

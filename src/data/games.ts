@@ -13,7 +13,6 @@ export interface Game {
   }[];
   genre?: string[];
   description: string;
-  summary?: string;
   featureBlurb?: string;
   featureDetail?: string;
   status?: "mainnet" | "testnet" | "development";
@@ -75,8 +74,6 @@ export const games: Game[] = [
     genre: ["PvE", "Roguelite", "Free to play"],
     description:
       "Your realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land and send home what they find. At the day's end the mist takes the map and every army. Your realm keeps all it earned. Free to play, and no other player can attack you.",
-    summary:
-      "Explore a new map each day. At the day's end the mist takes the map and every army. Your realm keeps all it earned. Free to play.",
     featureBlurb:
       "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.",
     featureDetail:
@@ -96,8 +93,8 @@ export const games: Game[] = [
     id: 9,
     slug: "realms-eternum",
     title: "Realms: Eternum",
-    image: "/games/realms-eternum/cover.png",
-    backgroundImage: "/games/realms-eternum/cover.png",
+    image: "/games/realms-eternum/alpine-war-council.webp",
+    backgroundImage: "/games/realms-eternum/alpine-war-council.webp",
     backgroundImages: [
       "/games/realms-eternum/screenshots/1.png",
       "/games/realms-eternum/screenshots/2.png",

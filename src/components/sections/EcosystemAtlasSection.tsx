@@ -14,10 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 // Frontier leads the Realms games with its own card, above this grid.
-const [frontier] = pickGames(["frontier"]);
-const realmsGridGames = pickGames(realmsGameSlugs).filter(
-  (game) => game.slug !== "frontier",
-);
+const [frontier, ...realmsGridGames] = pickGames(realmsGameSlugs);
 const otherStudioGames = pickGames(["loot-survivor", "zkube"]);
 
 const frontierFeatures = [
@@ -75,7 +72,7 @@ function GameCard({ game, index }: { game: Game; index: number }) {
 
         <h3 className="text-xl font-semibold mb-1.5">{game.title}</h3>
         <p className="text-xs text-foreground/80 mb-2.5 line-clamp-3">
-          {game.summary ?? game.description}
+          {game.description}
         </p>
 
         {/* Genre tags */}
