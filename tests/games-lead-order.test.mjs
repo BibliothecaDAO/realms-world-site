@@ -11,7 +11,7 @@ import { games, gameStatusText, pickGames } from "../src/data/games.ts";
 
 const ROOT = process.cwd();
 const APP_ENTRY = "virtual:site-render-test-app";
-const FRONTIER_LABEL = "Season 0 - 3-6 November 2026";
+const FRONTIER_LABEL = "Season 0 - November 3-6, 2026";
 const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
 const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
 const ETERNUM_ART = "/games/realms-eternum/alpine-war-council.webp";
@@ -601,6 +601,10 @@ test("The taken-down post is not in what the site ships", () => {
 
 test("The economics section keeps the flywheel and staking block, with no token supply panel", () => {
   const text = shownText(pages.economics);
+  assert.ok(text.includes("$LORDS TOKEN"));
+  assert.equal(text.includes("TREASURY"), false);
+  // Without the wrap, the two buttons run 41 px past a 390 px screen.
+  assert.match(pages.economics, /class="flex flex-wrap shrink-0 gap-3"/);
   assert.ok(text.includes("Stake LORDS"));
   assert.ok(text.includes("Lock LORDS as veLORDS and earn weekly staking rewards."));
   assert.match(pages.economics, /<svg/);

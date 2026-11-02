@@ -66,7 +66,7 @@ function EconomicsSectionContent() {
             ECONOMICS
           </p>
           <h2 className="realm-title text-2xl sm:text-3xl md:text-4xl">
-            $LORDS TOKEN & TREASURY
+            $LORDS TOKEN
           </h2>
           <p className="realm-subtitle text-base sm:text-lg">
             An ecosystem token designed for real-stakes gameplay economies and
@@ -138,7 +138,7 @@ function EconomicsSectionContent() {
               Lock LORDS as veLORDS and earn weekly staking rewards.
             </p>
           </div>
-          <div className="flex shrink-0 gap-3">
+          <div className="flex flex-wrap shrink-0 gap-3">
             <Button size="lg" variant="war" asChild>
               <a
                 href="https://account.realms.world/velords"
