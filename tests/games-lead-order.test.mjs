@@ -249,10 +249,11 @@ test("Both pages lead with the first slug in the shared list", () => {
   assert.deepEqual(listing(blitzFirst.games.slice(blitzFirst.games.indexOf("</header>"))).slice(2, 5), lead);
 });
 
-test("Both features show Frontier as Live, and /games keeps its date beside it", () => {
-  assert.ok(shownText(homeFeature()).includes("Live"), "Expected Live on the home feature");
-  const shown = shownText(gamesFeature());
-  assert.ok(shown.indexOf(FRONTIER_LABEL) === shown.indexOf("Live") + 1, `Expected Live, then the label, among ${shown}`);
+test("Both features show Frontier as Live, then its date, above the title", () => {
+  for (const shown of [shownText(homeFeature()), shownText(gamesFeature())]) {
+    assert.ok(shown.indexOf(FRONTIER_LABEL) === shown.indexOf("Live") + 1, `Expected Live, then the label, among ${shown}`);
+    assert.ok(shown.indexOf(FRONTIER_LABEL) < shown.indexOf("Realms: Frontier"), `Expected the chips before the title among ${shown}`);
+  }
 });
 
 test("/games features Frontier with both texts and exactly its three tags", () => {
@@ -300,7 +301,7 @@ test("Frontier's primary actions follow isLive", () => {
     ["Learn More", "/games/frontier"],
   ]);
   assert.ok(shownText(homeFeature()).includes("Live"));
-  assert.ok(!shownText(homeFeature()).includes(FRONTIER_LABEL));
+  assert.ok(shownText(homeFeature()).includes(FRONTIER_LABEL));
   assert.match(pages.frontier, /Play Now/);
 
   const before = homeFeature(between(notLive.home, 'id="games"', 'id="economics"'));
@@ -380,6 +381,28 @@ test("No rendered page says test LORDS", () => {
       "A normal day lasts 8 to 24 hours, or 4 to 12 in the Devcon season. The game shows when today ends and how long tomorrow lasts."
     )
   );
+});
+
+// The classes of the button or link whose text is the given label.
+function actionClasses(html, label) {
+  const at = html.indexOf(`${label}<`);
+  assert.notEqual(at, -1, `Expected ${label} on the page`);
+  const tag = html.slice(Math.max(html.lastIndexOf("<button ", at), html.lastIndexOf("<a ", at)), at);
+  return tag.match(/class="([^"]*)"/)[1];
+}
+
+const GOLD = "bg-primary text-primary-foreground";
+
+test("Play Now is the gold action on a live game's page, and How to Play is gold without it", () => {
+  assert.ok(actionClasses(pages.frontier, "Play Now").includes(GOLD), "Expected Play Now in gold");
+  assert.ok(!actionClasses(pages.frontier, "How to Play").includes(GOLD), "Expected How to Play outlined beside Play Now");
+  assert.ok(actionClasses(notLive.frontier, "How to Play").includes(GOLD), "Expected How to Play in gold without Play Now");
+});
+
+test("The Live badge on a game's page does not animate", () => {
+  const badge = between(pages.frontier, "</h1>", "Live<");
+  const tag = badge.slice(badge.lastIndexOf('<span class="inline-flex'));
+  assert.match(tag, /^<span class="inline-flex[^"]*">/, `Expected a plain Live badge, got ${tag}`);
 });
 
 test("Frontier's page shows Live beside its date, and the date on its Game Status card", () => {
