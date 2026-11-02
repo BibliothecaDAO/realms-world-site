@@ -13,32 +13,33 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Blitz leads the Realms games with its own card, above this grid.
+// Frontier leads the Realms games with its own card, above this grid.
+const [frontier] = pickGames(["frontier"]);
 const realmsGridGames = pickGames(realmsGameSlugs).filter(
-  (game) => game.slug !== "blitz",
+  (game) => game.slug !== "frontier",
 );
 const otherStudioGames = pickGames(["loot-survivor", "zkube"]);
 
-const blitzFeatures = [
+const frontierFeatures = [
   {
     icon: Swords,
-    label: "Real-Time Strategy",
-    detail: "One-hour matches with live tactical decisions",
+    label: "PvE Roguelite",
+    detail: "Explore, fight beasts, and upgrade your realm",
   },
   {
     icon: Castle,
-    label: "Hyperstructures",
-    detail: "Compete over territory, resources and Hyperstructures",
+    label: "Free to Play",
+    detail: "Found your realm for free",
   },
   {
     icon: Shield,
-    label: "Fully Verified",
-    detail: "Every move auditable on Starknet",
+    label: "Fully Onchain",
+    detail: "All actions verifiable onchain",
   },
   {
     icon: Coins,
     label: "$LORDS Rewards",
-    detail: "Top-ranking players win a prize-pool share",
+    detail: "Recover $LORDS from ruins; top players win a prize",
   },
 ];
 
@@ -55,16 +56,11 @@ function GameCard({ game, index }: { game: Game; index: number }) {
       <img
         src={game.backgroundImage}
         alt={game.title}
-        className={`absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-105 ${
-          // An emblem is shown whole; a painting fills the card.
-          game.slug === "frontier"
-            ? "bg-[#14101D] object-contain opacity-40 lg:opacity-60"
-            : "object-cover opacity-60"
-        }`}
+        className="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/10" />
 
-      <div className="relative flex h-full flex-col justify-end p-4 pt-12 sm:p-5 sm:pt-12">
+      <div className="relative flex h-full flex-col justify-end p-4 pt-28 sm:p-5 sm:pt-28 lg:pt-12">
         {/* Status badge */}
         <div className="absolute top-3 right-3">
           {game.isLive ? (
@@ -128,6 +124,8 @@ function GameCard({ game, index }: { game: Game; index: number }) {
 }
 
 export function EcosystemAtlasSection() {
+  const frontierStatus = gameStatusText(frontier);
+
   return (
     <section className="realm-section relative">
       <div className="container mx-auto px-4">
@@ -158,7 +156,7 @@ export function EcosystemAtlasSection() {
           </Link>
         </motion.div>
 
-        {/* ── Blitz Flagship Card ── */}
+        {/* ── Frontier Flagship Card ── */}
         <motion.div
           className="group relative overflow-hidden rounded-lg border border-primary/30 bg-black/40 mb-4 sm:mb-6"
           initial={{ opacity: 0, y: 30 }}
@@ -167,18 +165,19 @@ export function EcosystemAtlasSection() {
         >
           {/* Background art */}
           <img
-            src="/brand/blitz-card.png"
+            src={frontier.backgroundImage}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover opacity-58 saturate-[0.95] contrast-110 scale-[1.02] transition-transform duration-700 group-hover:scale-[1.05]"
+            className="absolute inset-x-0 top-0 h-64 w-full object-cover object-[100%_18%] opacity-85 saturate-[0.95] contrast-110 scale-[1.02] transition-transform duration-700 group-hover:scale-[1.05] sm:h-80 xl:inset-0 xl:h-full"
           />
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+          {/* Gradient overlay: the art sits above the text until the card is wide enough to sit beside it */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent from-[8rem] to-black to-[16rem] sm:from-[10rem] sm:to-[20rem] xl:hidden" />
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-black via-black/80 via-45% to-black/10 to-70% xl:block" />
+          <div className="absolute inset-0 hidden bg-gradient-to-t from-black/80 via-transparent to-black/30 xl:block" />
 
           {/* Content */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 p-6 sm:p-8 lg:p-10 min-h-[340px] sm:min-h-[400px]">
+          <div className="relative z-10 grid grid-cols-1 xl:grid-cols-[1fr_auto] gap-8 p-6 pt-52 sm:p-8 sm:pt-72 xl:p-10 min-h-[340px] sm:min-h-[400px]">
             {/* Left: Info */}
             <div className="flex flex-col justify-end">
               <motion.div
@@ -186,17 +185,26 @@ export function EcosystemAtlasSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                <p className="realm-banner mb-3">
-                  <Swords className="h-3.5 w-3.5" />
-                  Featured Game
-                </p>
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <p className="realm-banner">
+                    <Swords className="h-3.5 w-3.5" />
+                    Featured Game
+                  </p>
+                  {frontier.isLive ? (
+                    <span className="realm-sigil text-green-400 border-green-500/30">
+                      Live
+                    </span>
+                  ) : frontierStatus ? (
+                    <span className="realm-sigil text-foreground/85">
+                      {frontierStatus}
+                    </span>
+                  ) : null}
+                </div>
                 <h3 className="realm-title text-3xl sm:text-4xl md:text-5xl leading-tight mb-3">
-                  Realms: Blitz
+                  {frontier.title}
                 </h3>
                 <p className="text-base sm:text-lg text-foreground/85 max-w-xl mb-6 leading-relaxed">
-                  A fast-paced onchain RTS where players execute tactics in real
-                  time. One-hour matches are fully verified on Starknet, with
-                  top-ranking players winning a share of the $LORDS prize pool.
+                  {frontier.featureBlurb}
                 </p>
 
                 <div className="flex flex-wrap gap-3 mb-6">
@@ -206,21 +214,25 @@ export function EcosystemAtlasSection() {
                     className="shadow-lg shadow-primary/20"
                     asChild
                   >
-                    <a href="https://blitz.realms.world" target="_blank" rel="noopener noreferrer">
-                      Enter Blitz
+                    <a
+                      href={frontier.isLive ? frontier.links?.homepage : frontier.howToPlay}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {frontier.isLive ? "Enter Frontier" : "How to Play"}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </a>
                   </Button>
                   <Button size="lg" variant="oath" asChild>
-                    <Link to="/games/$slug" params={{ slug: "blitz" }}>Learn More</Link>
+                    <Link to="/games/$slug" params={{ slug: frontier.slug }}>Learn More</Link>
                   </Button>
                 </div>
               </motion.div>
             </div>
 
             {/* Right: Feature pills (desktop) */}
-            <div className="hidden lg:flex flex-col justify-end gap-2.5 w-64">
-              {blitzFeatures.map((feature, index) => (
+            <div className="hidden xl:flex flex-col justify-end gap-2.5 w-64">
+              {frontierFeatures.map((feature, index) => (
                 <motion.div
                   key={feature.label}
                   className="flex items-center gap-3 rounded-lg border border-primary/20 bg-black/50 backdrop-blur-sm px-4 py-3"
@@ -243,8 +255,8 @@ export function EcosystemAtlasSection() {
           </div>
 
           {/* Mobile feature row */}
-          <div className="relative z-10 lg:hidden grid grid-cols-2 gap-2 px-6 pb-6 sm:px-8 sm:pb-8">
-            {blitzFeatures.map((feature) => (
+          <div className="relative z-10 xl:hidden grid grid-cols-2 gap-2 px-6 pb-6 sm:px-8 sm:pb-8">
+            {frontierFeatures.map((feature) => (
               <div
                 key={feature.label}
                 className="flex items-center gap-2 rounded-lg border border-primary/15 bg-black/40 backdrop-blur-sm px-3 py-2"

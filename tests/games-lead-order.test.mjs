@@ -1,6 +1,6 @@
 import test, { after, before } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createElement } from "react";
@@ -11,7 +11,13 @@ import { games, gameStatusText, pickGames } from "../src/data/games.ts";
 
 const ROOT = process.cwd();
 const APP_ENTRY = "virtual:site-render-test-app";
-const FRONTIER_LABEL = "Season 0 live 3 November 2026";
+const FRONTIER_LABEL = "Season 0 - 3-6 November 2026";
+const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
+const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
+const FRONTIER_BLURB =
+  "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.";
+const FRONTIER_DETAIL =
+  "Each player starts with their realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.";
 const TAKEN_DOWN_SLUG = "eternum-agent-first-design";
 
 function read(relPath) {
@@ -22,6 +28,7 @@ let vite;
 let cacheDir;
 const pages = {};
 let takenDownRoute;
+let homeLive;
 
 // Renders a route through the app's real router, loaders and components.
 async function loadRoute(path, app) {
@@ -97,6 +104,7 @@ before(async () => {
     pages.home = await renderRoute("/", app);
     pages.games = await renderRoute("/games", app);
     pages.frontier = await renderRoute("/games/frontier", app);
+    pages.blitz = await renderRoute("/games/blitz", app);
     pages.scroll = await renderRoute("/scroll", app);
     takenDownRoute = (await loadRoute(`/scroll/${TAKEN_DOWN_SLUG}`, app)).state;
 
@@ -106,6 +114,13 @@ before(async () => {
     scrollPosts.unshift({ ...plain, slug: "newer-dispatch", title: "A Newer Dispatch" });
     pages.scrollPlain = await renderRoute("/scroll", app);
     scrollPosts.shift();
+
+    // The same page after the one-line switch that takes Frontier live.
+    const { games: liveGames } = await vite.ssrLoadModule("/src/data/games.ts");
+    const frontier = liveGames.find((game) => game.slug === "frontier");
+    frontier.isLive = true;
+    homeLive = await renderRoute("/", app);
+    frontier.isLive = false;
   } finally {
     console.log = log;
   }
@@ -159,21 +174,29 @@ function card(html, tag, title) {
   return found[0];
 }
 
+// A page's feature: from its Featured Game banner to the first card under it.
+function homeFeature(html = homeGames()) {
+  return between(html, "Featured Game", "<article ");
+}
+
+function gamesFeature() {
+  return between(gamesDirectory(), "Featured Game", 'class="grid grid-cols-1 gap-5 md:grid-cols-2');
+}
+
+function links(html) {
+  return [...html.matchAll(/<a\b[^>]*href="([^"]*)"[^>]*>([^<]+)/g)].map(([, href, text]) => [text.trim(), href]);
+}
+
 function shownText(html) {
   return [...html.matchAll(/>([^<]+)</g)].map(([, text]) => decode(text).trim());
 }
 
-function imageClass(cardHtml) {
-  const img = cardHtml.match(/<img\b[^>]*>/)[0];
-  return img.match(/class="([^"]*)"/)[1].split(/\s+/);
-}
-
-test("/games lists Blitz, Frontier and Eternum above other studios' games", () => {
+test("/games features Frontier, then Blitz and Eternum, above other studios' games", () => {
   assert.deepEqual(listing(gamesDirectory()), [
     "Realms Games",
     "Featured Game",
-    "Realms: Blitz",
     "Realms: Frontier",
+    "Realms: Blitz",
     "Realms: Eternum",
     "Games from Other Studios",
     "Loot Survivor",
@@ -182,11 +205,11 @@ test("/games lists Blitz, Frontier and Eternum above other studios' games", () =
   ]);
 });
 
-test("The home page lists Blitz, Frontier and Eternum above other studios' games", () => {
+test("The home page features Frontier, then Blitz and Eternum, above other studios' games", () => {
   assert.deepEqual(listing(homeGames()), [
     "REALMS GAMES",
-    "Realms: Blitz",
     "Realms: Frontier",
+    "Realms: Blitz",
     "Realms: Eternum",
     "GAMES FROM OTHER STUDIOS",
     "Loot Survivor",
@@ -194,17 +217,122 @@ test("The home page lists Blitz, Frontier and Eternum above other studios' games
   ]);
 });
 
-test("Frontier's date shows on its home card and /games card, with no Live or Play Now", () => {
-  for (const frontier of [
-    card(homeGames(), "article", "Realms: Frontier"),
-    card(gamesDirectory(), "button", "Realms: Frontier"),
-  ]) {
-    const shown = shownText(frontier);
+test("Frontier's date shows on both features, with no Live or Play Now", () => {
+  for (const feature of [homeFeature(), gamesFeature()]) {
+    const shown = shownText(feature);
 
     assert.ok(shown.includes(FRONTIER_LABEL), `Expected the label among ${shown}`);
     assert.ok(!shown.includes("Live"), "Expected no Live badge");
-    assert.doesNotMatch(frontier, /Play Now/);
+    assert.doesNotMatch(feature, /Play Now|Enter Frontier/);
   }
+});
+
+test("/games features Frontier with both texts and exactly its three tags", () => {
+  const feature = gamesFeature();
+  const shown = shownText(feature);
+
+  assert.ok(shown.includes("Realms: Frontier"));
+  assert.ok(shown.includes(FRONTIER_BLURB), "Expected the blurb");
+  assert.ok(shown.includes(FRONTIER_DETAIL), "Expected the explainer");
+  assert.deepEqual(
+    [...feature.matchAll(/<span class="rounded-md[^"]*">([^<]*)</g)].map(([, tag]) => tag),
+    ["PvE", "Roguelite", "Free to play"]
+  );
+});
+
+test("Frontier's own page lists the same three tags", () => {
+  const genres = between(pages.frontier, ">Genres</h3>", "</div>");
+
+  assert.deepEqual(
+    shownText(genres).filter(Boolean),
+    ["PvE", "Roguelite", "Free to play"]
+  );
+});
+
+test("The home page features Frontier with the blurb and exact pills, without the explainer", () => {
+  const feature = homeFeature();
+  const shown = shownText(feature);
+
+  assert.ok(shown.includes("Realms: Frontier"));
+  assert.ok(shown.includes(FRONTIER_BLURB), "Expected the blurb");
+  assert.ok(!shown.includes(FRONTIER_DETAIL), "Expected the explainer to stay on /games");
+  for (const [label, detail] of [
+    ["PvE Roguelite", "Explore, fight beasts, and upgrade your realm"],
+    ["Free to Play", "Found your realm for free"],
+    ["Fully Onchain", "All actions verifiable onchain"],
+    ["$LORDS Rewards", "Recover $LORDS from ruins; top players win a prize"],
+  ]) {
+    assert.ok(shown.indexOf(detail) === shown.indexOf(label) + 1, `Expected ${label} with its detail among ${shown}`);
+  }
+});
+
+test("The home feature's primary action follows isLive", () => {
+  assert.deepEqual(links(homeFeature()), [
+    ["How to Play", "https://docs.realms.party/frontier"],
+    ["Learn More", "/games/frontier"],
+  ]);
+
+  const live = homeFeature(between(homeLive, 'id="games"', 'id="economics"'));
+  assert.deepEqual(links(live), [
+    ["Enter Frontier", "https://play.realms.party"],
+    ["Learn More", "/games/frontier"],
+  ]);
+  assert.ok(shownText(live).includes("Live"));
+  assert.ok(!shownText(live).includes(FRONTIER_LABEL));
+});
+
+test("Both Frontier features show the settlement at dawn, and the art it replaced is gone", () => {
+  for (const art of [
+    between(homeGames(), "All Games", "Featured Game"),
+    between(gamesDirectory(), "realm-games-feature", "Featured Game"),
+  ]) {
+    const images = art.match(/<img\b[^>]*>/g);
+    assert.equal(images.length, 1);
+    assert.match(images[0], new RegExp(`src="${FRONTIER_ART}"`));
+    assert.match(images[0], /object-cover/);
+  }
+  for (const [name, html] of Object.entries(pages)) {
+    assert.doesNotMatch(html, /emblem\.png|storm-castle/, `Expected no replaced art on ${name}`);
+  }
+  assert.equal(existsSync(join(ROOT, "public/games/frontier/emblem.png")), false);
+  assert.equal(existsSync(join(ROOT, "public/games/frontier/storm-castle.webp")), false);
+  assert.ok(statSync(join(ROOT, `public${FRONTIER_ART}`)).size <= 256000);
+});
+
+test("Blitz is an ordinary card, first under each feature", () => {
+  const home = card(homeGames(), "article", "Realms: Blitz");
+  const directory = card(gamesDirectory(), "button", "Realms: Blitz");
+
+  assert.ok(homeGames().indexOf(">Realms: Blitz</h3>") < homeGames().indexOf(">Realms: Eternum</h3>"));
+  assert.ok(gamesDirectory().indexOf(">Realms: Blitz</h3>") < gamesDirectory().indexOf(">Realms: Eternum</h3>"));
+  for (const blitz of [home, directory]) {
+    assert.match(blitz.match(/<img\b[^>]*>/)[0], new RegExp(`src="${BLITZ_ART}"`));
+    assert.match(blitz.match(/<img\b[^>]*>/)[0], /object-cover/);
+    assert.ok(shownText(blitz).some((text) => text.startsWith("Blitz is a one-hour onchain RTS")));
+  }
+  assert.match(home, /Play Now/);
+});
+
+test("Blitz's own page shows the soldiers in rain, and nothing renders the old card", () => {
+  const images = pages.blitz.match(/<img\b[^>]*>/g);
+  assert.ok(images.some((image) => image.includes(`src="${BLITZ_ART}"`)));
+  for (const [name, html] of Object.entries(pages)) {
+    assert.doesNotMatch(html, /blitz-card/, `Expected no old Blitz card on ${name}`);
+  }
+  assert.equal(existsSync(join(ROOT, "public/brand/blitz-card.png")), false);
+  assert.ok(statSync(join(ROOT, `public${BLITZ_ART}`)).size <= 256000);
+});
+
+test("No rendered page says test LORDS", () => {
+  for (const [name, html] of Object.entries(pages)) {
+    assert.doesNotMatch(decode(html), /test LORDS/i, `Expected no test LORDS on ${name}`);
+  }
+  assert.ok(shownText(pages.frontier).includes("Chests pay LORDS from the season's pool into your realm."));
+  assert.ok(
+    decode(pages.frontier).includes(
+      "A normal day lasts 8 to 24 hours, or 4 to 12 in the Devcon season. The game shows when today ends and how long tomorrow lasts."
+    )
+  );
 });
 
 test("Frontier's date shows on its page chip and Game Status card, with no Play Now", () => {
@@ -220,18 +348,6 @@ test("Other games keep their own status on the same surfaces", () => {
   assert.ok(shownText(card(homeGames(), "article", "Realms: Eternum")).includes("development"));
   assert.ok(shownText(card(gamesDirectory(), "button", "Realms: Eternum")).includes("development"));
   assert.ok(shownText(card(homeGames(), "article", "zKube")).includes("Live"));
-});
-
-test("Frontier's /games image sits below the chip, whole, on its own ground", () => {
-  const frontier = imageClass(card(gamesDirectory(), "button", "Realms: Frontier"));
-  const eternum = imageClass(card(gamesDirectory(), "button", "Realms: Eternum"));
-
-  for (const name of ["object-contain", "pt-9", "bg-[#14101D]"]) {
-    assert.ok(frontier.includes(name), `Expected ${name} among ${frontier}`);
-  }
-  assert.ok(!frontier.includes("object-cover"));
-  assert.ok(eternum.includes("object-cover"));
-  assert.ok(!eternum.includes("pt-9"));
 });
 
 test("Other studios' games stay in the data", () => {
@@ -270,7 +386,7 @@ test("Home game cards never dim a game", () => {
   const atlas = read("src/components/sections/EcosystemAtlasSection.tsx");
 
   assert.doesNotMatch(homeGames(), /Coming Soon/);
-  for (const title of ["Realms: Frontier", "Realms: Eternum", "Loot Survivor", "zKube"]) {
+  for (const title of ["Realms: Blitz", "Realms: Eternum", "Loot Survivor", "zKube"]) {
     const articleClass = card(homeGames(), "article", title).match(/class="([^"]*)"/)[1];
     assert.doesNotMatch(articleClass, /opacity-\d/);
   }
@@ -302,18 +418,6 @@ test("The hero counts the Realms games", () => {
   const hero = between(pages.home, 'id="hero"', 'id="games"');
 
   assert.match(hero, />Realms Games<\/[a-z0-9]+>\s*<[a-z0-9]+\b[^>]*>3</);
-});
-
-test("Frontier's list cards reach the mist and the price", () => {
-  const summary =
-    "Explore a new map each day. At the day's end the mist takes the map and every army. Your realm keeps all it earned. Free to play.";
-
-  for (const frontier of [
-    card(homeGames(), "article", "Realms: Frontier"),
-    card(gamesDirectory(), "button", "Realms: Frontier"),
-  ]) {
-    assert.ok(decode(frontier).includes(`>${summary}</p>`), "Expected the summary, not the description");
-  }
 });
 
 test("The footer does not call the ecosystem autonomous", () => {

@@ -14,6 +14,8 @@ export interface Game {
   genre?: string[];
   description: string;
   summary?: string;
+  featureBlurb?: string;
+  featureDetail?: string;
   status?: "mainnet" | "testnet" | "development";
   statusLabel?: string;
   isLive: boolean;
@@ -33,7 +35,7 @@ export interface Game {
 }
 
 /** Realms' own games, in the order every games list leads with. */
-export const realmsGameSlugs = ["blitz", "frontier", "realms-eternum"];
+export const realmsGameSlugs = ["frontier", "blitz", "realms-eternum"];
 
 /** The status a game shows wherever one is rendered. */
 export function gameStatusText(game: Game) {
@@ -49,8 +51,8 @@ export const games: Game[] = [
     id: 2,
     slug: "blitz",
     title: "Realms: Blitz",
-    image: "/brand/blitz-card.png",
-    backgroundImage: "/brand/blitz-card.png",
+    image: "/games/blitz/soldiers-in-rain.webp",
+    backgroundImage: "/games/blitz/soldiers-in-rain.webp",
     genre: ["Real-Time Strategy", "Free-for-All", "PvP", "Realms Games"],
     description:
       "Blitz is a one-hour onchain RTS where players compete over territory, production, and tactical timing. Matches are fully verifiable on Starknet, and top-ranking players win a share of the $LORDS prize pool.",
@@ -69,13 +71,17 @@ export const games: Game[] = [
     slug: "frontier",
     title: "Realms: Frontier",
     image: "/games/frontier/cover.png",
-    backgroundImage: "/games/frontier/emblem.png",
-    genre: ["Daily Expedition", "Strategy", "Free to Play", "Realms Games"],
+    backgroundImage: "/games/frontier/settlement-at-dawn.webp",
+    genre: ["PvE", "Roguelite", "Free to play"],
     description:
       "Your realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land and send home what they find. At the day's end the mist takes the map and every army. Your realm keeps all it earned. Free to play, and no other player can attack you.",
     summary:
       "Explore a new map each day. At the day's end the mist takes the map and every army. Your realm keeps all it earned. Free to play.",
-    statusLabel: "Season 0 live 3 November 2026",
+    featureBlurb:
+      "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.",
+    featureDetail:
+      "Each player starts with their realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.",
+    statusLabel: "Season 0 - 3-6 November 2026",
     isLive: false,
     studio: "Realms Games",
     howToPlay: "https://docs.realms.party/frontier",

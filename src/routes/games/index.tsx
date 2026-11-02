@@ -24,12 +24,6 @@ export const Route = createFileRoute("/games/")({
   }),
 });
 
-const blitzGrab =
-  "Blitz is a one-hour, fully onchain real-time strategy game where players compete over territory, resources, and Hyperstructures. Every match is fully onchain and verifiable, with top-ranked players sharing the $LORDS prize pool.";
-
-const blitzFeaturedDetail =
-  "Each player begins with three equally capable Realms and must turn them into an economy, supply network, and military powerhouse. Exploration pushes back the fog of war, uncovering key strategic opportunities across the battlefield. Armies scout, defend key holdings, strike neighbouring positions, and fight across various biomes that can impact their combat effectiveness. Hyperstructures, placed at regular intervals on the map, are key objectives and decisive flashpoints, rewarding players who claim and maintain control at the right moments. Exploring the map and controlling key objectives earns Victory Points, which determine leaderboard placement and prize eligibility.";
-
 function statusChipClasses(status: Game["status"]) {
   if (!status) {
     return "bg-[#F3D08A]/10 text-[#F3D08A] border-[#F3D08A]/40";
@@ -68,7 +62,7 @@ function GameCard({ game, index }: { game: Game; index: number }) {
         <img
           src={game.image}
           alt={game.title}
-          className={`h-full w-full transition-transform duration-500 group-hover:scale-105 ${game.slug === "frontier" ? "bg-[#14101D] object-contain pt-9" : "object-cover"}`}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
@@ -192,7 +186,7 @@ function GamesPage() {
                   <img
                     src={featuredGame.backgroundImage || featuredGame.image}
                     alt={featuredGame.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    className="absolute inset-0 h-full w-full object-cover object-[100%_50%] lg:object-[62%_50%] transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent lg:bg-gradient-to-t lg:from-black/65 lg:via-black/20 lg:to-transparent" />
                 </div>
@@ -205,10 +199,10 @@ function GamesPage() {
                     {featuredGame.studio}
                   </p>
                   <p className="mt-5 text-sm font-bold leading-relaxed text-foreground/90 sm:text-base">
-                    {blitzGrab}
+                    {featuredGame.featureBlurb}
                   </p>
                   <p className="mt-4 text-sm leading-relaxed text-foreground/78">
-                    {blitzFeaturedDetail}
+                    {featuredGame.featureDetail}
                   </p>
                   <div className="mt-5 flex flex-nowrap items-start justify-between gap-2">
                     <div className="flex min-w-0 flex-wrap gap-1.5">

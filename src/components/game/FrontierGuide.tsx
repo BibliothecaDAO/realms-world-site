@@ -38,7 +38,7 @@ const mistLists = [
 
 const costs = [
   "Free to play. Your realm is founded free the first time you enter, on any day of the season.",
-  "Chests pay LORDS. Until the LORDS launch these are test LORDS with no value.",
+  "Chests pay LORDS from the season's pool into your realm.",
   "Refill tops up an army's stamina for 1 LORDS a missing point, paid from your realm's LORDS.",
 ];
 
@@ -67,8 +67,8 @@ export function FrontierGuide() {
           ))}
         </ol>
         <p className="mt-5 border-t border-[#6238A0]/70 pt-4 text-sm leading-relaxed text-[#F4EBDC] sm:text-base">
-          A day lasts 8 to 24 hours. The game shows when today ends and how long
-          tomorrow lasts.
+          A normal day lasts 8 to 24 hours, or 4 to 12 in the Devcon season. The
+          game shows when today ends and how long tomorrow lasts.
         </p>
       </section>
 
