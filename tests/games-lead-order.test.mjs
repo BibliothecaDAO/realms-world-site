@@ -615,20 +615,33 @@ function readableWords(html) {
   return [...shownText(html), ...attributes];
 }
 
-const VISITOR_PAGES = ["home", "economics", "games", "frontier", "scroll"];
+const VISITOR_PAGES = ["home", "economics", "games", "frontier", "blitz", "eternum", "scroll"];
+
+// A link or file path stays as written. Any other lowercase "realm", wherever it sits in a sentence, is a word.
+const NOT_A_WORD = /^(?:[a-z]+:\/\/\S+|(?:[a-z0-9-]+\.)*realms\.(?:world|party)(?:\/\S*)?|(?:\/[\w-]+)+(?:\.\w+)?)$/;
+
+function lowercaseRealms(text) {
+  return text.split(/\s+/).filter((token) => /\brealms?\b/.test(token) && !NOT_A_WORD.test(token));
+}
+
+function stringsIn(value) {
+  if (typeof value === "string") return [value];
+  return value && typeof value === "object" ? Object.values(value).flatMap(stringsIn) : [];
+}
 
 test("Realm is capitalized in everything these pages show", () => {
-  const lowercase = /(?<![/.-])\brealm(s|'s)?\b(?![.-])/;
   for (const name of VISITOR_PAGES) {
     // A post's tag is an identifier, shown as "#realms" beside "#lore" and "#loot".
     const html = pages[name].replace(/#<!-- -->realms</g, "#<");
     for (const words of readableWords(html)) {
-      assert.doesNotMatch(words, lowercase, `Expected a capital Realm on ${name}: "${words}"`);
+      assert.deepEqual(lowercaseRealms(words), [], `Expected a capital Realm on ${name}: "${words}"`);
     }
   }
   // Not every game is listed on /games, but each has its own page.
-  for (const game of games) {
-    assert.doesNotMatch(JSON.stringify(game), lowercase, `Expected a capital Realm in ${game.slug}`);
+  for (const { slug, ...game } of games) {
+    for (const words of stringsIn(game)) {
+      assert.deepEqual(lowercaseRealms(words), [], `Expected a capital Realm in ${slug}: "${words}"`);
+    }
   }
   assert.ok(shownText(pages.frontier).includes("The mist forgets. Your Realm remembers."));
 });
