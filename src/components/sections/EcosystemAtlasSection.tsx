@@ -21,12 +21,12 @@ const frontierFeatures = [
   {
     icon: Swords,
     label: "PvE Roguelite",
-    detail: "Explore, fight beasts, and upgrade your realm",
+    detail: "Explore, fight beasts, and upgrade your Realm",
   },
   {
     icon: Castle,
     label: "Free to Play",
-    detail: "Found your realm for free",
+    detail: "Found your Realm for free",
   },
   {
     icon: Shield,
@@ -53,67 +53,69 @@ function GameCard({ game, index }: { game: Game; index: number }) {
       <img
         src={game.backgroundImage}
         alt={game.title}
-        className="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105"
+        className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/10" />
 
       <div className="relative flex h-full flex-col justify-end p-4 pt-28 sm:p-5 sm:pt-28 lg:pt-12">
         {/* Status badge */}
         <div className="absolute top-3 right-3">
           {game.isLive ? (
-            <span className="realm-sigil text-green-400 border-green-500/30">
+            <span className="realm-sigil bg-black/80 text-green-400 border-green-500/30">
               Live
             </span>
           ) : statusText ? (
-            <span className="realm-sigil text-foreground/85">{statusText}</span>
+            <span className="realm-sigil bg-black/80 text-foreground/85">{statusText}</span>
           ) : null}
         </div>
 
+        {/* The scrim sits behind the text alone, so the art above it stays bright */}
+        <div className="-mx-4 -mb-4 bg-gradient-to-t from-black/50 via-black/35 via-75% to-transparent p-4 pt-10 sm:-mx-5 sm:-mb-5 sm:p-5 sm:pt-10">
+          <h3 className="text-xl font-semibold mb-1.5">{game.title}</h3>
+          <p className="text-xs text-foreground/80 mb-2.5 line-clamp-3">
+            {game.description}
+          </p>
 
-        <h3 className="text-xl font-semibold mb-1.5">{game.title}</h3>
-        <p className="text-xs text-foreground/80 mb-2.5 line-clamp-3">
-          {game.description}
-        </p>
-
-        {/* Genre tags */}
-        <div className="mb-3 flex flex-nowrap items-start justify-between gap-2">
-          <div className="flex min-w-0 flex-wrap gap-1.5">
-            {game.genre
-              ?.filter((genre) => genre !== game.studio)
-              .slice(0, 3)
-              .map((genre) => (
-                <span
-                  key={`${game.slug}-${genre}`}
-                  className="realm-sigil text-[9px]"
-                >
-                  {genre}
-                </span>
-              ))}
+          {/* Genre tags */}
+          <div className="mb-3 flex flex-nowrap items-start justify-between gap-2">
+            <div className="flex min-w-0 flex-wrap gap-1.5">
+              {game.genre
+                ?.filter((genre) => genre !== game.studio)
+                .slice(0, 3)
+                .map((genre) => (
+                  <span
+                    key={`${game.slug}-${genre}`}
+                    className="realm-sigil text-[9px]"
+                  >
+                    {genre}
+                  </span>
+                ))}
+            </div>
+            <span className="realm-sigil realm-studio-tag ml-auto shrink-0 text-[9px]">
+              {game.studio}
+            </span>
           </div>
-          <span className="realm-sigil realm-studio-tag ml-auto shrink-0 text-[9px]">
-            {game.studio}
-          </span>
-        </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-          {game.isLive && game.links?.homepage && (
-            <a
-              href={game.links.homepage}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center text-xs font-semibold text-primary hover:text-primary/80 transition-colors sm:min-h-6"
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            {game.isLive && game.links?.homepage && (
+              <a
+                href={game.links.homepage}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center text-xs font-semibold text-primary hover:text-primary/80 transition-colors sm:min-h-6"
+              >
+                Play Now <ExternalLink className="ml-1 h-3 w-3" />
+              </a>
+            )}
+            <Link
+              to="/games/$slug"
+              params={{ slug: game.slug }}
+              className="inline-flex min-h-11 items-center text-xs text-foreground/80 hover:text-primary transition-colors sm:min-h-6"
             >
-              Play Now <ExternalLink className="ml-1 h-3 w-3" />
-            </a>
-          )}
-          <Link
-            to="/games/$slug"
-            params={{ slug: game.slug }}
-            className="inline-flex min-h-11 items-center text-xs text-foreground/80 hover:text-primary transition-colors sm:min-h-6"
-          >
-            Details <ArrowUpRight className="ml-1 h-3 w-3" />
-          </Link>
+              Details <ArrowUpRight className="ml-1 h-3 w-3" />
+            </Link>
+          </div>
         </div>
       </div>
     </motion.article>
@@ -165,13 +167,13 @@ export function EcosystemAtlasSection() {
             src={frontier.backgroundImage}
             alt=""
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-64 w-full object-cover object-[100%_18%] opacity-85 saturate-[0.95] contrast-110 scale-[1.02] transition-transform duration-700 group-hover:scale-[1.05] sm:h-80 xl:inset-0 xl:h-full"
+            className="absolute inset-x-0 top-0 h-64 w-full object-cover object-[100%_18%] opacity-100 saturate-[0.95] contrast-110 scale-[1.02] transition-transform duration-700 group-hover:scale-[1.05] sm:h-80 xl:inset-0 xl:h-full"
           />
 
           {/* Gradient overlay: the art sits above the text until the card is wide enough to sit beside it */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent from-[8rem] to-black to-[16rem] sm:from-[10rem] sm:to-[20rem] xl:hidden" />
-          <div className="absolute inset-0 hidden bg-gradient-to-r from-black via-black/80 via-45% to-black/10 to-70% xl:block" />
-          <div className="absolute inset-0 hidden bg-gradient-to-t from-black/80 via-transparent to-black/30 xl:block" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent from-[9rem] to-black to-[16rem] sm:from-[11rem] sm:to-[20rem] xl:hidden" />
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-black via-black/80 via-45% to-transparent to-70% xl:block" />
+          <div className="absolute inset-0 hidden bg-gradient-to-t from-black/60 via-transparent to-black/10 xl:block" />
 
           {/* Content */}
           <div className="relative z-10 grid grid-cols-1 xl:grid-cols-[1fr_auto] gap-8 p-6 pt-52 sm:p-8 sm:pt-72 xl:p-10 min-h-[340px] sm:min-h-[400px]">

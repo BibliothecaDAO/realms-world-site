@@ -73,11 +73,11 @@ export const games: Game[] = [
     backgroundImage: "/games/frontier/settlement-at-dawn.webp",
     genre: ["PvE", "Roguelite", "Free to play"],
     description:
-      "Your realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land and send home what they find. At the day's end the mist takes the map and every army. Your realm keeps all it earned. Free to play, and no other player can attack you.",
+      "Your Realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land and send home what they find. At the day's end the mist takes the map and every army. Your Realm keeps all it earned. Free to play, and no other player can attack you.",
     featureBlurb:
-      "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.",
+      "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.",
     featureDetail:
-      "Each player starts with their realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.",
+      "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.",
     statusLabel: "Season 0 - 3-6 November 2026",
     isLive: false,
     studio: "Realms Games",
@@ -234,7 +234,7 @@ export const games: Game[] = [
       "/games/zkrown/screenshots/3.webp"
     ],
     genre: ["Strategy", "PvP", "Casual"],
-    description: "zKrown is a strategy game based on Risk, focusing on conquest and realm defense. Players compete to dominate the map and win rewards. You can compete up to 6 players",
+    description: "zKrown is a strategy game based on Risk, focusing on conquest and Realm defense. Players compete to dominate the map and win rewards. You can compete up to 6 players",
     status: "development",
     isLive: true,
     studio: "zkorp",
@@ -278,7 +278,7 @@ export const games: Game[] = [
     ],
     genre: ["Turn-Based Combat", "Strategy"],
     description:
-      "Aiming to deliver a high-quality gaming experience, Blob Arena stands out for its gameplay dynamics and strategic focus. Players will navigate through exciting encounters, against other players or against AI, using their Bloberts' distinctive traits to outsmart and defeat opponents. The game's core mechanic revolves around an enhanced rock-paper-scissors style combat modified by each character's attributes such as Attack, Defence, Speed, and Strength, which are crucial for mastering the game.",
+      "Aiming to deliver a high-quality gaming experience, Blob Arena stands out for its gameplay dynamics and strategic focus. Players will navigate through exciting encounters, against other players or against AI, using their Bloberts' distinctive traits to outsmart and defeat opponents. The game's core mechanic revolves around an enhanced rock-paper-scissors style combat modified by each character's attributes such as Attack, Defense, Speed, and Strength, which are crucial for mastering the game.",
     status: "mainnet",
     isLive: true,
     studio: "Grugs Lair",

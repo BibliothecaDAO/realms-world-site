@@ -104,7 +104,7 @@ function IntroSectionContent() {
           >
             The Realms gaming ecosystem is focused on the development of fun,
             strategic and engaging AI-native onchain games. We develop games to
-            accept the use of AI and encourage all users to maximise their
+            accept the use of AI and encourage all users to maximize their
             gaming capabilities, bounded by the rules enforced by blockchain.
           </motion.p>
 

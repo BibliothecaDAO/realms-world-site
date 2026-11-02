@@ -1,7 +1,7 @@
 const daySteps = [
   {
     title: "Deploy",
-    text: "Barracks train troops at your realm. Deploy them on a tile beside it as an army.",
+    text: "Barracks train troops at your Realm. Deploy them on a tile beside it as an army.",
   },
   {
     title: "Explore",
@@ -13,7 +13,7 @@ const daySteps = [
   },
   {
     title: "Bring it home",
-    text: "What a reveal or a clear pays goes straight to your realm. An army never carries anything worth losing.",
+    text: "What a reveal or a clear pays goes straight to your Realm. An army never carries anything worth losing.",
   },
 ];
 
@@ -27,7 +27,7 @@ const mistLists = [
     ],
   },
   {
-    title: "Kept by your realm",
+    title: "Kept by your Realm",
     items: [
       "Its buildings, castle and research",
       "Its troops, wheat, labor and Essence",
@@ -37,9 +37,9 @@ const mistLists = [
 ];
 
 const costs = [
-  "Free to play. Your realm is founded free the first time you enter, on any day of the season.",
-  "Chests pay LORDS from the season's pool into your realm.",
-  "Refill tops up an army's stamina for 1 LORDS a missing point, paid from your realm's LORDS.",
+  "Free to play. Your Realm is founded free the first time you enter, on any day of the season.",
+  "Chests pay LORDS from the season's pool into your Realm.",
+  "Refill tops up an army's stamina for 1 LORDS a missing point, paid from your Realm's LORDS.",
 ];
 
 const blockClass =
@@ -74,11 +74,11 @@ export function FrontierGuide() {
 
       <section className={blockClass} aria-labelledby="frontier-mist">
         <h2 id="frontier-mist" className={headingClass}>
-          The mist forgets. Your realm remembers.
+          The mist forgets. Your Realm remembers.
         </h2>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#F4EBDC] sm:text-lg">
           At the day's end the mist takes the map and every army on it. Your
-          realm is raised again on the next map with everything it holds.
+          Realm is raised again on the next map with everything it holds.
         </p>
         <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
           {mistLists.map((list) => (

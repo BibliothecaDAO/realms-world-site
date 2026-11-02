@@ -16,9 +16,9 @@ const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
 const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
 const ETERNUM_ART = "/games/realms-eternum/alpine-war-council.webp";
 const FRONTIER_BLURB =
-  "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.";
+  "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.";
 const FRONTIER_DETAIL =
-  "Each player starts with their realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.";
+  "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.";
 const TAKEN_DOWN_SLUG = "eternum-agent-first-design";
 
 function read(relPath) {
@@ -47,14 +47,13 @@ async function loadRoute(path, app) {
 
 async function renderRoute(path, app) {
   const router = await loadRoute(path, app);
+  return renderTree(createElement(app.RouterProvider, { router }), app, path);
+}
 
+async function renderTree(element, app, name) {
   const errors = [];
   const { prelude } = await prerenderToNodeStream(
-    createElement(
-      app.QueryClientProvider,
-      { client: app.queryClient },
-      createElement(app.RouterProvider, { router })
-    ),
+    createElement(app.QueryClientProvider, { client: app.queryClient }, element),
     {
       // Without this, React moves large sections to the end of the document.
       progressiveChunkSize: Infinity,
@@ -66,8 +65,8 @@ async function renderRoute(path, app) {
   let html = "";
   for await (const chunk of prelude) html += chunk;
 
-  assert.deepEqual(errors, [], `Expected ${path} to render without errors`);
-  assert.doesNotMatch(html, /<template id="B:/, `Expected no unfinished section on ${path}`);
+  assert.deepEqual(errors, [], `Expected ${name} to render without errors`);
+  assert.doesNotMatch(html, /<template id="B:/, `Expected no unfinished section on ${name}`);
   return html;
 }
 
@@ -115,6 +114,9 @@ before(async () => {
     pages.blitz = await renderRoute("/games/blitz", app);
     pages.eternum = await renderRoute("/games/realms-eternum", app);
     pages.scroll = await renderRoute("/scroll", app);
+    // The home page mounts this section on scroll, so it renders on its own.
+    const { EconomicsSection } = await vite.ssrLoadModule("/src/components/sections/EconomicsSection.tsx");
+    pages.economics = await renderTree(createElement(EconomicsSection), app, "the economics section");
     takenDownRoute = (await loadRoute(`/scroll/${TAKEN_DOWN_SLUG}`, app)).state;
 
     // The same route when a newer post, with no art of its own, takes the slot.
@@ -287,8 +289,8 @@ test("The home page features Frontier with the blurb and exact pills, without th
   assert.ok(shown.includes(FRONTIER_BLURB), "Expected the blurb");
   assert.ok(!shown.includes(FRONTIER_DETAIL), "Expected the explainer to stay on /games");
   for (const [label, detail] of [
-    ["PvE Roguelite", "Explore, fight beasts, and upgrade your realm"],
-    ["Free to Play", "Found your realm for free"],
+    ["PvE Roguelite", "Explore, fight beasts, and upgrade your Realm"],
+    ["Free to Play", "Found your Realm for free"],
     ["Fully Onchain", "All actions verifiable onchain"],
     ["$LORDS Rewards", "Recover $LORDS from ruins; top players win a prize"],
   ]) {
@@ -372,7 +374,7 @@ test("No rendered page says test LORDS", () => {
   for (const [name, html] of Object.entries(pages)) {
     assert.doesNotMatch(decode(html), /test LORDS/i, `Expected no test LORDS on ${name}`);
   }
-  assert.ok(shownText(pages.frontier).includes("Chests pay LORDS from the season's pool into your realm."));
+  assert.ok(shownText(pages.frontier).includes("Chests pay LORDS from the season's pool into your Realm."));
   assert.ok(
     decode(pages.frontier).includes(
       "A normal day lasts 8 to 24 hours, or 4 to 12 in the Devcon season. The game shows when today ends and how long tomorrow lasts."
@@ -512,7 +514,7 @@ test("The hero states the approved position, and no page names a year after 2026
 
   assert.ok(
     decode(hero).includes(
-      ">The Realms gaming ecosystem is focused on the development of fun, strategic and engaging AI-native onchain games. We develop games to accept the use of AI and encourage all users to maximise their gaming capabilities, bounded by the rules enforced by blockchain.</p>"
+      ">The Realms gaming ecosystem is focused on the development of fun, strategic and engaging AI-native onchain games. We develop games to accept the use of AI and encourage all users to maximize their gaming capabilities, bounded by the rules enforced by blockchain.</p>"
     ),
     "Expected the approved paragraph in the hero"
   );
@@ -595,4 +597,51 @@ test("The taken-down post is not in what the site ships", () => {
   assert.equal(existsSync(join(ROOT, `content/scroll/2026-02-12-${TAKEN_DOWN_SLUG}.md`)), false);
   assert.doesNotMatch(read("src/generated/scroll-posts.ts"), /eternum-agent-first-design|Agents First|built for them/);
   assert.doesNotMatch(read("public/sitemap.xml"), /eternum-agent-first-design/);
+});
+
+test("The economics section keeps the flywheel and staking block, with no token supply panel", () => {
+  const text = shownText(pages.economics);
+  assert.ok(text.includes("Stake LORDS"));
+  assert.ok(text.includes("Lock LORDS as veLORDS and earn weekly staking rewards."));
+  assert.match(pages.economics, /<svg/);
+  for (const gone of ["TOKEN SUPPLY", "Total Supply", "Circulating", "Freely liquid"]) {
+    assert.equal(text.includes(gone), false, `Expected no "${gone}"`);
+  }
+});
+
+// What a visitor reads: text nodes, plus alt text, labels and page metadata. Links and art paths are not words.
+function readableWords(html) {
+  const attributes = [...html.matchAll(/\b(?:alt|title|aria-label|content)="([^"]*)"/g)].map(([, value]) => decode(value));
+  return [...shownText(html), ...attributes];
+}
+
+const VISITOR_PAGES = ["home", "economics", "games", "frontier", "scroll"];
+
+test("Realm is capitalized in everything these pages show", () => {
+  const lowercase = /(?<![/.-])\brealm(s|'s)?\b(?![.-])/;
+  for (const name of VISITOR_PAGES) {
+    // A post's tag is an identifier, shown as "#realms" beside "#lore" and "#loot".
+    const html = pages[name].replace(/#<!-- -->realms</g, "#<");
+    for (const words of readableWords(html)) {
+      assert.doesNotMatch(words, lowercase, `Expected a capital Realm on ${name}: "${words}"`);
+    }
+  }
+  // Not every game is listed on /games, but each has its own page.
+  for (const game of games) {
+    assert.doesNotMatch(JSON.stringify(game), lowercase, `Expected a capital Realm in ${game.slug}`);
+  }
+  assert.ok(shownText(pages.frontier).includes("The mist forgets. Your Realm remembers."));
+});
+
+test("Visitor copy uses American spelling", () => {
+  const british =
+    /\b(maximise|honour|defence|offence|civilisation|travellers?|centres|stabilised|destabilise|towards|outwards|colour|favour|grey|whilst|amongst|cancelled)\b/i;
+  for (const name of VISITOR_PAGES) {
+    for (const words of readableWords(pages[name])) {
+      assert.doesNotMatch(words, british, `Expected American spelling on ${name}: "${words}"`);
+    }
+  }
+  for (const path of ["src/components/lore/history-of-lost-worlds.html", "src/routes/terms.tsx", "src/data/games.ts"]) {
+    assert.doesNotMatch(read(path), british, `Expected American spelling in ${path}`);
+  }
 });
