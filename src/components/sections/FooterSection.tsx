@@ -66,9 +66,11 @@ export function FooterSection() {
             >
               <div>
                 <img
-                  src="/rw-logo.svg"
-                  alt="Realms World"
-                  className="w-16 mb-5 opacity-90"
+                  src="/brand/realms-contour-gold.png"
+                  alt="Realms"
+                  width={64}
+                  height={65}
+                  className="h-auto w-16 mb-5"
                 />
                 <h3 className="realm-title text-3xl mb-3">Realms World</h3>
                 <p className="text-muted-foreground leading-relaxed max-w-sm">
