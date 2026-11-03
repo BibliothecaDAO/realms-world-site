@@ -446,6 +446,7 @@
     position: relative;
     font-family: var(--font-title);
     letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .realm-nav-link::after {
