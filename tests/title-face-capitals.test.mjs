@@ -48,37 +48,80 @@ function cssRules(source) {
   return rules;
 }
 
-// Index of the first comma outside parentheses, or the text's length.
-function topLevelComma(text) {
+// Every custom property's declared values, from every CSS file and block: a property declared in :root and again in
+// .dark can take either value.
+const properties = new Map();
+for (const file of sourceFiles("src", /\.css$/))
+  for (const { body } of cssRules(read(file)))
+    for (const [, name, value] of body.matchAll(/(?:^|;)\s*(--[\w-]+)\s*:\s*([^;]*)/g))
+      properties.set(name, [...(properties.get(name) ?? []), value.trim()]);
+
+// The index after the parenthesis that closes the one at `open`, quotes skipped.
+function closing(value, open) {
   let depth = 0;
-  for (let i = 0; i < text.length; i++) {
-    if (text[i] === "(") depth++;
-    else if (text[i] === ")") depth--;
-    else if (text[i] === "," && depth === 0) return i;
+  let quote = "";
+  for (let i = open; i < value.length; i++) {
+    const c = value[i];
+    if (quote) {
+      if (c === "\\") i++;
+      else if (c === quote) quote = "";
+    } else if (c === '"' || c === "'") quote = c;
+    else if (c === "(") depth++;
+    else if (c === ")" && --depth === 0) return i + 1;
   }
-  return text.length;
+  return value.length;
 }
 
-// The family a font or font-family value draws first: the first in its list. When that is a var(), the variable
-// decides, or its fallback's first family when it is unset. Later families in the stack never count.
-function firstFamilies(value) {
-  let head = value.slice(0, topLevelComma(value));
-  const families = [];
-  for (let at = head.indexOf("var("); at !== -1; at = head.indexOf("var(")) {
-    let close = at + 4;
-    for (let depth = 1; depth > 0 && close < head.length; close++) depth += { "(": 1, ")": -1 }[head[close]] ?? 0;
-    const inner = head.slice(at + 4, close - 1);
-    const comma = topLevelComma(inner);
-    families.push(inner.slice(0, comma).trim());
-    if (comma < inner.length) families.push(...firstFamilies(inner.slice(comma + 1)));
-    head = head.slice(0, at) + head.slice(close);
+// The value's parts between commas outside parentheses and quotes.
+function topLevelParts(value) {
+  const parts = [];
+  let start = 0;
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] === "(") i = closing(value, i) - 1;
+    else if (value[i] === '"' || value[i] === "'") {
+      const end = value.indexOf(value[i], i + 1);
+      i = end < 0 ? value.length : end;
+    } else if (value[i] === ",") {
+      parts.push(value.slice(start, i).trim());
+      start = i + 1;
+    }
   }
-  return [head.trim(), ...families].filter(Boolean);
+  return [...parts, value.slice(start).trim()];
+}
+
+// Every value `value` can compute to: each var() becomes each declared value of its property, cycles left out, and its
+// fallback, since the table does not know where each declaration applies. A var() with neither stays as written.
+function resolveValue(value, seen = []) {
+  const at = value.search(/(?<![-\w])var\(/);
+  if (at < 0) return [value];
+  const end = closing(value, at + 3);
+  const [name, ...fallback] = topLevelParts(value.slice(at + 4, end - 1));
+  const declared = seen.includes(name) ? [] : (properties.get(name) ?? []);
+  const replacements = [
+    ...declared.flatMap((v) => resolveValue(v, [...seen, name])),
+    ...(fallback.length ? resolveValue(fallback.join(", "), seen) : []),
+  ];
+  if (!replacements.length) replacements.push(value.slice(at, end));
+  const rests = resolveValue(value.slice(end), seen);
+  return [...new Set(replacements.flatMap((r) => rests.map((rest) => value.slice(0, at) + r + rest)))];
+}
+
+// A font or font-family value sets a face when its first part names it once resolved: the first family, or for the font
+// shorthand the size and first family. Later families in the stack never count.
+function namesFace(value, pattern) {
+  return resolveValue(value).some((v) => pattern.test(topLevelParts(v)[0]));
 }
 
 function setsFace(body, pattern) {
-  return [...body.matchAll(/(?:^|;)\s*font(?:-family)?\s*:\s*([^;]+)/g)].some((m) => firstFamilies(m[1]).some((f) => pattern.test(f)));
+  return [...body.matchAll(/(?:^|;)\s*font(?:-family)?\s*:\s*([^;]+)/g)].some((m) => namesFace(m[1], pattern));
 }
+
+// The families markup sets: inline fontFamily styles, and arbitrary Tailwind classes such as font-[family-name:var(--x)]
+// and [font-family:var(--x)], "_" for a space.
+const markupFamilies = (line) => [
+  ...[...line.matchAll(/fontFamily:\s*(?:(["'`])(.*?)\1|([^,}]+))/g)].map((m) => m[2] ?? m[3]),
+  ...[...line.matchAll(/(?:font-\[(?:family-name:)?|\[font-family:)([^\]\s]+)\]/g)].map((m) => m[1].replaceAll("_", " ")),
+];
 
 for (const face of FACES) {
   test(`${face.name}: every CSS rule that sets it also sets text-transform: uppercase`, () => {
@@ -99,7 +142,9 @@ for (const face of FACES) {
     const offenders = [];
     for (const file of sourceFiles("src", /\.css$/)) {
       for (const { selector, body } of cssRules(read(file))) {
-        if (selector.startsWith("@theme") && new RegExp(`(?:^|;)\\s*${face.themeKey}\\s*:`).test(body)) offenders.push(file);
+        if (!selector.startsWith("@theme")) continue;
+        for (const [, key, value] of body.matchAll(/(?:^|;)\s*(--font-[\w-]+)\s*:\s*([^;]+)/g))
+          if (key === face.themeKey || namesFace(value, face.pattern)) offenders.push(`${file}: ${key}`);
       }
     }
     assert.deepEqual(offenders, [], `A ${face.themeKey} theme key creates a font utility that skips the capitals`);
@@ -116,7 +161,8 @@ for (const face of FACES) {
       read(file)
         .split("\n")
         .forEach((line, i) => {
-          if (face.pattern.test(line)) offenders.push(`${file}:${i + 1}: ${line.trim()}`);
+          if (face.pattern.test(line) || markupFamilies(line).some((v) => namesFace(v, face.pattern)))
+            offenders.push(`${file}:${i + 1}: ${line.trim()}`);
         });
     }
     assert.deepEqual(offenders, [], `Use the ${face.className} class, which sets the face with its capitals`);
