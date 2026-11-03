@@ -102,10 +102,10 @@ function IntroSectionContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.1, duration: 0.7, ease: "easeOut" }}
           >
-            The Realms gaming ecosystem is focused on the development of fun,
-            strategic and engaging AI-native onchain games. We develop games to
-            accept the use of AI and encourage all users to maximize their
-            gaming capabilities, bounded by the rules enforced by blockchain.
+            The AI era is here and fundamentally changing gaming as we know it.
+            The Realms Ecosystem is building for the new age, one where AI and
+            humans can build, strategize, collaborate, and compete. Together.
+            Onchain. Forever.
           </motion.p>
 
           {/* CTAs */}
