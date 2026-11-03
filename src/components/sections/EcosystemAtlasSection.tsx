@@ -167,7 +167,7 @@ export function EcosystemAtlasSection() {
             src={frontier.backgroundImage}
             alt=""
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-64 w-full object-cover object-[100%_18%] opacity-100 saturate-[0.95] contrast-110 scale-[1.02] transition-transform duration-700 group-hover:scale-[1.05] sm:h-80 xl:inset-0 xl:h-full"
+            className="absolute inset-x-0 top-0 h-64 w-full object-cover object-[100%_0%] opacity-100 saturate-[0.95] contrast-110 origin-top scale-[1.02] transition-transform duration-700 group-hover:scale-[1.05] sm:h-80 xl:inset-0 xl:h-full"
           />
 
           {/* Gradient overlay: the art sits above the text until the card is wide enough to sit beside it */}

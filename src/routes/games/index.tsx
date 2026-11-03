@@ -186,7 +186,7 @@ function GamesPage() {
                   <img
                     src={featuredGame.backgroundImage || featuredGame.image}
                     alt={featuredGame.title}
-                    className="absolute inset-0 h-full w-full object-cover object-[100%_50%] lg:object-[62%_50%] transition-transform duration-700 group-hover:scale-[1.04]"
+                    className="absolute inset-0 h-full w-full object-cover object-[100%_0%] lg:object-[62%_0%] origin-top transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent lg:bg-gradient-to-t lg:from-black/65 lg:via-black/20 lg:to-transparent" />
                 </div>
