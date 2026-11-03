@@ -171,7 +171,7 @@ function RootComponent() {
         <TopBar />
         <div
           className={cn(
-            "min-h-screen pt-28 md:pt-24 mx-1 sm:mx-2 md:mx-4"
+            "min-h-screen pt-12 sm:pt-16 md:pt-24 mx-1 sm:mx-2 md:mx-4"
           )}
         >
           <Outlet />

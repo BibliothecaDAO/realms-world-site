@@ -72,7 +72,7 @@ function IntroSectionContent() {
       </div>
 
       {/* Centered hero content */}
-      <div className="container mx-auto px-4 pb-16 pt-8 sm:pb-20 sm:pt-12 md:pb-24 md:pt-28">
+      <div className="container mx-auto px-4 pb-16 pt-24 sm:pb-20 sm:pt-24 md:pb-24 md:pt-28">
         <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
           {/* Banner */}
           <motion.p
