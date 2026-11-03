@@ -168,7 +168,6 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
-  --font-ui: var(--font-ui);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -388,8 +387,9 @@
   }
 
   .realm-banner {
-    @apply inline-flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-primary/90;
+    @apply inline-flex items-center gap-2 text-xs tracking-[0.28em] text-primary/90;
     font-family: var(--font-ui);
+    text-transform: uppercase;
     font-weight: 600;
     border: 1px solid color-mix(in oklab, var(--realm-border-etched) 72%, transparent);
     background: color-mix(in oklab, #070a0c 58%, transparent);
@@ -405,13 +405,19 @@
     text-transform: uppercase;
   }
 
+  .realm-label {
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+  }
+
   .realm-subtitle {
     @apply text-foreground/85;
   }
 
   .realm-sigil {
-    @apply inline-flex items-center text-[10px] uppercase tracking-[0.12em];
+    @apply inline-flex items-center text-[10px] tracking-[0.12em];
     font-family: var(--font-ui);
+    text-transform: uppercase;
     font-weight: 600;
     border: 1px solid color-mix(in oklab, var(--realm-border-etched) 68%, transparent);
     background: color-mix(in oklab, var(--realm-bg-smoke) 40%, transparent);
