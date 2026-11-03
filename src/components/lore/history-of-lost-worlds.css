@@ -47,6 +47,7 @@
 .lore-chronicle .chapter-label > p {
   font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
   font-weight: 400;
+  text-transform: uppercase;
 }
 .lore-chronicle h1 {
   font-size: clamp(4rem, 9vw, 9rem);
@@ -273,6 +274,7 @@
   font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
   font-size: 1.8rem;
   position: relative;
+  text-transform: uppercase;
 }
 .lore-chronicle .age-index a:last-child {
   border-right: 0;
@@ -306,6 +308,7 @@
   font-size: 0.75rem;
   color: #bdb6aa;
   letter-spacing: 0.03em;
+  text-transform: none;
 }
 .lore-chronicle .illustrated {
   grid-template-columns: 1fr 1fr;
@@ -689,7 +692,7 @@
     width: calc(100% - 3rem);
   }
   .lore-chronicle h1 {
-    font-size: clamp(3.8rem, 13vw, 6rem);
+    font-size: clamp(3.5rem, 13vw, 6rem);
   }
   .lore-chronicle .hero-bottom {
     left: 1.5rem;

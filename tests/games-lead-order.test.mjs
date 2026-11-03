@@ -333,6 +333,22 @@ test("Both Frontier features show the settlement at dawn, and the art it replace
   assert.ok(statSync(join(ROOT, `public${FRONTIER_ART}`)).size <= 256000);
 });
 
+test("Both Frontier features hold the top of the settlement art, so widening crops only the bottom", () => {
+  for (const art of [
+    between(homeGames(), "All Games", "Featured Game"),
+    between(gamesDirectory(), "realm-games-feature", "Featured Game"),
+  ]) {
+    const classes = art.match(/<img\b[^>]*>/)[0].match(/class="([^"]*)"/)[1].split(/\s+/);
+    const positions = classes.filter((name) => /(^|:)object-(?!cover$|contain$)/.test(name));
+    assert.ok(positions.length > 0, "Expected an explicit crop position");
+    for (const position of positions) {
+      assert.match(position, /object-(\[\d+%_0%\]|top|left-top|right-top)$/, `Expected ${position} to hold the top`);
+    }
+    // A zoom from the center would push the top out of the frame.
+    assert.ok(classes.includes("origin-top"), "Expected the art to scale from its top edge");
+  }
+});
+
 test("Blitz is an ordinary card, first under each feature", () => {
   const home = card(homeGames(), "article", "Realms: Blitz");
   const directory = card(gamesDirectory(), "button", "Realms: Blitz");
