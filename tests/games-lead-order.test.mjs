@@ -551,40 +551,40 @@ test("The hero states the approved position, and no page names a year after 2026
   }
 });
 
-test("Every header, footer and favicon shows the Realms globe, and the old crown and blurb stay gone", () => {
+test("Every header shows the lettered Realms mark at 64 px, scrolled or not, and the old crown and blurb stay gone", () => {
   const crown = /rw-logo|RealmsWorld\.svg/;
-  const attr = (attrs, name) => attrs.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
-  const marks = (html) =>
-    [...html.matchAll(/<img\b([^>]*)>/g)].map(([, attrs]) => [
-      attr(attrs, "src"),
-      attr(attrs, "class")?.split(/\s+/).includes("hidden") ? "hidden" : "shown",
-    ]);
+  const attr = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
+  const marks = (html) => [...html.matchAll(/<img\b[^>]*>/g)].map(([tag]) => [attr(tag, "src"), attr(tag, "width"), attr(tag, "height")]);
+  const lettered = ["/brand/realms-lettered-gold.png", "64", "59"];
+  const globe = ["/brand/realms-contour-gold.png", "64", "65"];
 
   for (const name of ["home", "games", "frontier", "blitz", "eternum", "scroll"]) {
     const html = pages[name];
-    assert.deepEqual(
-      marks(between(html, "<header", "</header>")),
-      [
-        ["/brand/realms-lettered-gold.png", "shown"],
-        ["/brand/realms-contour-gold.png", "hidden"],
-      ],
-      `Expected the lettered mark at the top of ${name}, with the globe ready for scrolling`
-    );
-    assert.match(between(html, "<header", "</header>"), /alt="Realms"/);
+    const header = between(html, "<header", "</header>");
+    assert.deepEqual(marks(header), [lettered], `Expected only the lettered mark, 64 px wide, in the header of ${name}`);
+    const [img] = header.match(/<img\b[^>]*>/);
+    assert.deepEqual(attr(img, "class").split(/\s+/).sort(), ["h-auto", "w-16"], `Expected the header mark on ${name} drawn 64 px wide`);
+    assert.equal(attr(img, "alt"), "Realms");
     assert.doesNotMatch(html, crown, `Expected no old crown on ${name}`);
     assert.ok(!decode(html).includes("The Realms gaming ecosystem is focused"), `Expected no old blurb on ${name}`);
   }
+
+  // The pages above render at the top. Scrolling changes the header only through isScrolled, which the mark never reads.
+  const homeButton = between(read("src/components/layout/TopBar.tsx"), 'aria-label="Go to homepage"', "</button>");
+  assert.equal(homeButton.match(/<img\b/g).length, 1);
+  assert.doesNotMatch(homeButton, /isScrolled/, "Expected the header mark to stay the same once scrolled");
 
   const footer = read("src/components/sections/FooterSection.tsx");
   assert.match(footer, /src="\/brand\/realms-contour-gold\.png"\s+alt="Realms"/);
   assert.doesNotMatch(footer, crown);
 
   const lore = read("src/components/lore/history-of-lost-worlds.html");
-  assert.deepEqual(marks(between(lore, "<header", "</header>")).map(([src]) => src), [
-    "/brand/realms-lettered-gold.png",
-    "/brand/realms-contour-gold.png",
-  ]);
-  assert.deepEqual(marks(between(lore, "<footer>", "</footer>")).map(([src]) => src), ["/brand/realms-contour-gold.png"]);
+  const loreCss = read("src/components/lore/history-of-lost-worlds.css");
+  assert.deepEqual(marks(between(lore, "<header", "</header>")), [lettered]);
+  assert.deepEqual(marks(between(lore, "<footer>", "</footer>")), [globe]);
+  assert.deepEqual([...loreCss.matchAll(/\.wordmark[^{]*\bimg[^{]*\{([^}]*)\}/g)].map(([, rule]) => rule.match(/width:\s*([^;]+)/)?.[1]).filter(Boolean), ["64px"]);
+  assert.doesNotMatch(loreCss, /\.topbar\.[\w-]/, "Expected the lore header to have no scrolled state");
+  assert.doesNotMatch(read("src/components/lore/HistoryOfLostWorlds.tsx"), /header\?*\.classList/, "Expected the lore header to stay the same once scrolled");
   assert.doesNotMatch(lore, crown);
 
   const index = read("index.html");

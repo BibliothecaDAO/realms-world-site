@@ -97,13 +97,6 @@
 .lore-chronicle .wordmark img {
   object-fit: contain;
 }
-.lore-chronicle .topbar .mark-contour,
-.lore-chronicle .topbar.compact .mark-lettered {
-  display: none;
-}
-.lore-chronicle .topbar.compact .mark-contour {
-  display: block;
-}
 .lore-chronicle .topbar nav {
   display: flex;
   gap: 2rem;
@@ -963,7 +956,6 @@
 .lore-chronicle .topbar nav a { font-size: inherit; }
 .lore-chronicle .wordmark { flex-shrink: 0; }
 .lore-chronicle .wordmark img { width: 64px; height: auto; }
-.lore-chronicle .wordmark .mark-lettered { width: 128px; }
 .lore-chronicle [id] { scroll-margin-top: var(--lore-header-offset, 6rem); }
 .lore-chronicle .sources ol { list-style: decimal; }
 .lore-chronicle summary { display: list-item; }
