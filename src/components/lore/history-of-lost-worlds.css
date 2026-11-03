@@ -48,22 +48,21 @@
   font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
   font-weight: 400;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 .lore-chronicle h1 {
-  font-size: clamp(4rem, 9vw, 9rem);
+  font-size: clamp(4rem, 8vw, 7.25rem);
   line-height: 1;
   letter-spacing: -0.035em;
   margin: 0 0 1.5rem;
-  text-wrap: balance;
 }
 .lore-chronicle h2 {
-  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  font-size: clamp(1.75rem, 3.4vw, 3.1rem);
   line-height: 1.13;
   margin-bottom: 1.5rem;
-  text-wrap: balance;
 }
 .lore-chronicle h3 {
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   line-height: 1.25;
   color: #efd4a4;
 }
@@ -231,7 +230,7 @@
   padding-top: 0.3rem;
 }
 .lore-chronicle .chapter-label > p {
-  font-size: 2.7rem;
+  font-size: 1.85rem;
   line-height: 1.15;
   margin: 1rem 0 0.65rem;
   color: #edd0a0;
@@ -272,7 +271,7 @@
   column-gap: 0.65rem;
   border-right: 1px solid var(--line);
   font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
-  font-size: 1.8rem;
+  font-size: 1.25rem;
   position: relative;
   text-transform: uppercase;
 }
@@ -692,7 +691,10 @@
     width: calc(100% - 3rem);
   }
   .lore-chronicle h1 {
-    font-size: clamp(3.5rem, 13vw, 6rem);
+    font-size: clamp(2.6rem, 11vw, 4.5rem);
+  }
+  .lore-chronicle h3 {
+    font-size: 1.3rem;
   }
   .lore-chronicle .hero-bottom {
     left: 1.5rem;
@@ -762,7 +764,7 @@
   }
   .lore-chronicle .age-index a {
     padding: 1.2rem 1rem;
-    font-size: 1.5rem;
+    font-size: 1.05rem;
     grid-template-columns: 1.5rem 1fr;
   }
   .lore-chronicle .age-index a:nth-child(2) {
