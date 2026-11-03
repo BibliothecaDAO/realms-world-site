@@ -25,18 +25,59 @@ function read(relPath) {
   return readFileSync(join(ROOT, relPath), "utf8");
 }
 
-// Innermost blocks only: a selector and its declarations, with nesting such as @layer and statements such as @import
-// left out.
-function cssRules(css) {
+// Every block with its own declarations, nested blocks left out: @layer, @theme, @media and nested rules included.
+function cssRules(source) {
   const rules = [];
-  for (const match of css.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(/([^{}]*)\{([^{}]*)\}/g)) {
-    rules.push({ selector: match[1].split(";").at(-1).trim(), body: match[2] });
+  const open = [];
+  const css = source.replace(/\/\*[\s\S]*?\*\//g, "");
+  let start = 0;
+  for (let i = 0; i < css.length; i++) {
+    if (css[i] !== "{" && css[i] !== "}") continue;
+    const text = css.slice(start, i);
+    if (css[i] === "{") {
+      if (open.length) open.at(-1).body += text.slice(0, text.lastIndexOf(";") + 1);
+      open.push({ selector: text.slice(text.lastIndexOf(";") + 1).trim(), body: "" });
+    } else {
+      const block = open.pop();
+      if (!block) throw new Error(`Unbalanced "}" in CSS at ${i}`);
+      block.body += text;
+      rules.push(block);
+    }
+    start = i + 1;
   }
   return rules;
 }
 
+// Index of the first comma outside parentheses, or the text's length.
+function topLevelComma(text) {
+  let depth = 0;
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === "(") depth++;
+    else if (text[i] === ")") depth--;
+    else if (text[i] === "," && depth === 0) return i;
+  }
+  return text.length;
+}
+
+// The family a font or font-family value draws first: the first in its list. When that is a var(), the variable
+// decides, or its fallback's first family when it is unset. Later families in the stack never count.
+function firstFamilies(value) {
+  let head = value.slice(0, topLevelComma(value));
+  const families = [];
+  for (let at = head.indexOf("var("); at !== -1; at = head.indexOf("var(")) {
+    let close = at + 4;
+    for (let depth = 1; depth > 0 && close < head.length; close++) depth += { "(": 1, ")": -1 }[head[close]] ?? 0;
+    const inner = head.slice(at + 4, close - 1);
+    const comma = topLevelComma(inner);
+    families.push(inner.slice(0, comma).trim());
+    if (comma < inner.length) families.push(...firstFamilies(inner.slice(comma + 1)));
+    head = head.slice(0, at) + head.slice(close);
+  }
+  return [head.trim(), ...families].filter(Boolean);
+}
+
 function setsFace(body, pattern) {
-  return [...body.matchAll(/(?:^|;)\s*font(?:-family)?\s*:\s*([^;]+)/g)].some((m) => pattern.test(m[1]));
+  return [...body.matchAll(/(?:^|;)\s*font(?:-family)?\s*:\s*([^;]+)/g)].some((m) => firstFamilies(m[1]).some((f) => pattern.test(f)));
 }
 
 for (const face of FACES) {
