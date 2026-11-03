@@ -50,6 +50,7 @@ export function TopBar() {
       setIsScrolled(window.scrollY > 20);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -179,24 +180,34 @@ export function TopBar() {
     <motion.header className="fixed top-0 left-0 right-0 z-50">
       <div
         className={cn(
-          "transition-all duration-300",
+          "transition-all duration-300 motion-reduce:transition-none",
           isScrolled
             ? "realm-header-shell border border-primary/25 bg-black/45 backdrop-blur-xl supports-[backdrop-filter]:bg-black/35"
             : "border border-transparent bg-transparent",
         )}
       >
-        <div className="py-3.5 sm:py-4">
-          <div className="container mx-auto px-3 sm:px-4">
+        <div className="py-4">
+          <div className="container mx-auto px-4">
             <div className="relative flex items-center justify-between gap-2 sm:gap-4">
               <button
                 className="flex items-center gap-2 sm:gap-3 text-left"
                 onClick={handleTitleClick}
                 aria-label="Go to homepage"
               >
+                {/* Both marks load with the page, so the switch on scroll never waits for an image. */}
                 <img
-                  src="/rw-logo.svg"
-                  alt="Realms.World"
-                  className="w-11 sm:w-13"
+                  src="/brand/realms-lettered-gold.png"
+                  alt="Realms"
+                  width={128}
+                  height={119}
+                  className={cn("h-auto w-32", isScrolled && "hidden")}
+                />
+                <img
+                  src="/brand/realms-contour-gold.png"
+                  alt="Realms"
+                  width={64}
+                  height={65}
+                  className={cn("h-auto w-16", !isScrolled && "hidden")}
                 />
               </button>
 

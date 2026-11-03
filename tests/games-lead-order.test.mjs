@@ -538,7 +538,7 @@ test("The hero states the approved position, and no page names a year after 2026
 
   assert.ok(
     decode(hero).includes(
-      ">The Realms gaming ecosystem is focused on the development of fun, strategic and engaging AI-native onchain games. We develop games to accept the use of AI and encourage all users to maximize their gaming capabilities, bounded by the rules enforced by blockchain.</p>"
+      ">The AI era is here and fundamentally changing gaming as we know it. The Realms Ecosystem is building for the new age, one where AI and humans can build, strategize, collaborate, and compete. Together. Onchain. Forever.</p>"
     ),
     "Expected the approved paragraph in the hero"
   );
@@ -548,6 +548,51 @@ test("The hero states the approved position, and no page names a year after 2026
   for (const path of ["src/data/games.ts", "src/components/game/FrontierGuide.tsx"]) {
     assert.doesNotMatch(read(path), laterYear, `Expected no later year in ${path}`);
   }
+});
+
+test("Every header, footer and favicon shows the Realms globe, and the old crown and blurb stay gone", () => {
+  const crown = /rw-logo|RealmsWorld\.svg/;
+  const attr = (attrs, name) => attrs.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
+  const marks = (html) =>
+    [...html.matchAll(/<img\b([^>]*)>/g)].map(([, attrs]) => [
+      attr(attrs, "src"),
+      attr(attrs, "class")?.split(/\s+/).includes("hidden") ? "hidden" : "shown",
+    ]);
+
+  for (const name of ["home", "games", "frontier", "blitz", "eternum", "scroll"]) {
+    const html = pages[name];
+    assert.deepEqual(
+      marks(between(html, "<header", "</header>")),
+      [
+        ["/brand/realms-lettered-gold.png", "shown"],
+        ["/brand/realms-contour-gold.png", "hidden"],
+      ],
+      `Expected the lettered mark at the top of ${name}, with the globe ready for scrolling`
+    );
+    assert.match(between(html, "<header", "</header>"), /alt="Realms"/);
+    assert.doesNotMatch(html, crown, `Expected no old crown on ${name}`);
+    assert.ok(!decode(html).includes("The Realms gaming ecosystem is focused"), `Expected no old blurb on ${name}`);
+  }
+
+  const footer = read("src/components/sections/FooterSection.tsx");
+  assert.match(footer, /src="\/brand\/realms-contour-gold\.png"\s+alt="Realms"/);
+  assert.doesNotMatch(footer, crown);
+
+  const lore = read("src/components/lore/history-of-lost-worlds.html");
+  assert.deepEqual(marks(between(lore, "<header", "</header>")).map(([src]) => src), [
+    "/brand/realms-lettered-gold.png",
+    "/brand/realms-contour-gold.png",
+  ]);
+  assert.deepEqual(marks(between(lore, "<footer>", "</footer>")).map(([src]) => src), ["/brand/realms-contour-gold.png"]);
+  assert.doesNotMatch(lore, crown);
+
+  const index = read("index.html");
+  assert.deepEqual(
+    [...index.matchAll(/<link rel="icon"[^>]*href="([^"]+)"/g)].map(([, href]) => href),
+    ["/favicon-32x32.png", "/favicon-16x16.png"]
+  );
+  assert.doesNotMatch(index, crown);
+  assert.equal(existsSync(join(ROOT, "public/rw-logo.svg")), false);
 });
 
 test("The home page has no hex section", () => {
