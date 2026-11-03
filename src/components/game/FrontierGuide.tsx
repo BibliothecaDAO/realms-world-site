@@ -45,7 +45,7 @@ const costs = [
 const blockClass =
   "rounded-lg border border-[#6238A0]/70 bg-[#14101D] p-5 sm:p-6";
 const headingClass =
-  "realm-title text-2xl leading-tight text-[#BE96FB] sm:text-3xl";
+  "realm-title text-balance text-xl leading-tight text-[#BE96FB] sm:text-3xl";
 const labelClass =
   "font-[family-name:var(--font-ui)] text-sm font-semibold tracking-[0.04em] text-[#F3D08A]";
 
