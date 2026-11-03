@@ -732,7 +732,7 @@
     gap: 0.4rem 1rem;
   }
   .lore-chronicle .illustrated .chapter-label > p {
-    font-size: 2.4rem;
+    font-size: 2rem;
   }
   .lore-chronicle .illustrated .age-theme {
     width: 100%;
@@ -763,9 +763,12 @@
     grid-template-columns: repeat(2, 1fr);
   }
   .lore-chronicle .age-index a {
-    padding: 1.2rem 1rem;
+    padding: 1.2rem 0.75rem;
     font-size: 1.05rem;
-    grid-template-columns: 1.5rem 1fr;
+    grid-template-columns: 1fr;
+  }
+  .lore-chronicle .age-index small {
+    grid-column: 1;
   }
   .lore-chronicle .age-index a:nth-child(2) {
     border-right: 0;
@@ -795,6 +798,15 @@
   .lore-chronicle .final-age {
     display: block;
     padding: 5rem 1.5rem;
+  }
+  .lore-chronicle .final-age .chapter-label > p {
+    font-size: 2.25rem;
+  }
+  .lore-chronicle .final-age h2 {
+    font-size: 2rem;
+  }
+  .lore-chronicle .sources h2 {
+    font-size: 2rem;
   }
   .lore-chronicle .sources ol {
     columns: 1;
