@@ -47,7 +47,7 @@ const blockClass =
 const headingClass =
   "realm-title text-balance text-xl leading-tight text-[#BE96FB] sm:text-3xl";
 const labelClass =
-  "font-[family-name:var(--font-ui)] text-sm font-semibold tracking-[0.04em] text-[#F3D08A]";
+  "realm-label text-sm font-semibold tracking-[0.04em] text-[#F3D08A]";
 
 export function FrontierGuide() {
   return (
