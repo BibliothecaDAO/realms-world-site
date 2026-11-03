@@ -25,10 +25,6 @@ export function HistoryOfLostWorlds() {
 
     const updateProgress = () => {
       frame = 0;
-      // The header compacts once the page leaves the top. Its change in height moves the page under it, so it grows
-      // back only near the top: one threshold would let that move flip it back and forth.
-      if (window.scrollY > 96) header?.classList.add("compact");
-      else if (window.scrollY <= 8) header?.classList.remove("compact");
       const length = document.documentElement.scrollHeight - window.innerHeight;
       if (progress) {
         progress.style.width = `${length > 0 ? Math.max(0, Math.min(100, (window.scrollY / length) * 100)) : 0}%`;
