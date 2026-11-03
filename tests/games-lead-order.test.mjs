@@ -29,7 +29,7 @@ let vite;
 let cacheDir;
 const pages = {};
 let takenDownRoute;
-const live = {};
+const notLive = {};
 let reorderSlugs = false;
 const blitzFirst = {};
 
@@ -125,18 +125,18 @@ before(async () => {
     pages.scrollPlain = await renderRoute("/scroll", app);
     scrollPosts.shift();
 
-    // The same pages with the one-line switch turned on, as while a season runs.
+    // The same pages with the one-line switch turned back, as before Frontier went live.
     const { games: appGames } = await vite.ssrLoadModule("/src/data/games.ts");
     const frontier = appGames.find((game) => game.slug === "frontier");
-    frontier.isLive = true;
-    live.home = await renderRoute("/", app);
-    live.frontier = await renderRoute("/games/frontier", app);
+    frontier.isLive = false;
+    notLive.home = await renderRoute("/", app);
+    notLive.frontier = await renderRoute("/games/frontier", app);
     // /games the same way, with Eternum on the one status no game has today.
     const eternum = appGames.find((game) => game.slug === "realms-eternum");
     eternum.status = "testnet";
-    live.games = await renderRoute("/games", app);
+    notLive.games = await renderRoute("/games", app);
     eternum.status = "development";
-    frontier.isLive = false;
+    frontier.isLive = true;
 
     // The same pages, freshly loaded, with another game first in the shared list.
     reorderSlugs = true;
@@ -249,17 +249,11 @@ test("Both pages lead with the first slug in the shared list", () => {
   assert.deepEqual(listing(blitzFirst.games.slice(blitzFirst.games.indexOf("</header>"))).slice(2, 5), lead);
 });
 
-test("Both features show Frontier's next season above the title, and no Live", () => {
+test("Both features show Frontier as Live, then its date, above the title", () => {
   for (const shown of [shownText(homeFeature()), shownText(gamesFeature())]) {
-    assert.ok(!shown.includes("Live"), `Expected no Live among ${shown}`);
-    assert.ok(shown.includes(FRONTIER_LABEL), `Expected the label among ${shown}`);
-    assert.ok(shown.indexOf(FRONTIER_LABEL) < shown.indexOf("Realms: Frontier"), `Expected the label before the title among ${shown}`);
-  }
-  for (const shown of [
-    shownText(homeFeature(between(live.home, 'id="games"', 'id="economics"'))),
-    shownText(between(gamesDirectory(live.games), "Featured Game", 'class="grid grid-cols-1 gap-5 md:grid-cols-2')),
-  ]) {
-    assert.ok(shown.indexOf(FRONTIER_LABEL) === shown.indexOf("Live") + 1, `Expected Live, then the label, while live among ${shown}`);
+    assert.ok(shown.includes("Live"), `Expected Live among ${shown}`);
+    assert.ok(shown.indexOf(FRONTIER_LABEL) === shown.indexOf("Live") + 1, `Expected Live, then the label, among ${shown}`);
+    assert.ok(shown.indexOf(FRONTIER_LABEL) < shown.indexOf("Realms: Frontier"), `Expected the chips before the title among ${shown}`);
   }
 });
 
@@ -304,21 +298,21 @@ test("The home page features Frontier with the blurb and exact pills, without th
 
 test("Frontier's primary actions follow isLive", () => {
   assert.deepEqual(links(homeFeature()), [
-    ["How to Play", "https://docs.realms.party/frontier"],
-    ["Learn More", "/games/frontier"],
-  ]);
-  assert.ok(shownText(homeFeature()).includes(FRONTIER_LABEL));
-  assert.ok(!shownText(homeFeature()).includes("Live"));
-  assert.doesNotMatch(pages.frontier, /Play Now/);
-
-  const during = homeFeature(between(live.home, 'id="games"', 'id="economics"'));
-  assert.deepEqual(links(during), [
     ["Enter Frontier", "https://play.realms.party"],
     ["Learn More", "/games/frontier"],
   ]);
-  assert.ok(shownText(during).includes("Live"));
-  assert.ok(shownText(during).includes(FRONTIER_LABEL));
-  assert.match(live.frontier, /Play Now/);
+  assert.ok(shownText(homeFeature()).includes("Live"));
+  assert.ok(shownText(homeFeature()).includes(FRONTIER_LABEL));
+  assert.match(pages.frontier, /Play Now/);
+
+  const before = homeFeature(between(notLive.home, 'id="games"', 'id="economics"'));
+  assert.deepEqual(links(before), [
+    ["How to Play", "https://docs.realms.party/frontier"],
+    ["Learn More", "/games/frontier"],
+  ]);
+  assert.ok(shownText(before).includes(FRONTIER_LABEL));
+  assert.ok(!shownText(before).includes("Live"));
+  assert.doesNotMatch(notLive.frontier, /Play Now/);
 });
 
 test("Both Frontier features show the settlement at dawn, and the art it replaced is gone", () => {
@@ -401,22 +395,22 @@ function actionClasses(html, label) {
 const GOLD = "bg-primary text-primary-foreground";
 
 test("Play Now is the gold action on a live game's page, and How to Play is gold without it", () => {
-  assert.ok(actionClasses(live.frontier, "Play Now").includes(GOLD), "Expected Play Now in gold");
-  assert.ok(!actionClasses(live.frontier, "How to Play").includes(GOLD), "Expected How to Play outlined beside Play Now");
-  assert.ok(actionClasses(pages.frontier, "How to Play").includes(GOLD), "Expected How to Play in gold without Play Now");
+  assert.ok(actionClasses(pages.frontier, "Play Now").includes(GOLD), "Expected Play Now in gold");
+  assert.ok(!actionClasses(pages.frontier, "How to Play").includes(GOLD), "Expected How to Play outlined beside Play Now");
+  assert.ok(actionClasses(notLive.frontier, "How to Play").includes(GOLD), "Expected How to Play in gold without Play Now");
 });
 
 test("The Live badge on a game's page does not animate", () => {
-  const badge = between(live.frontier, "</h1>", "Live<");
+  const badge = between(pages.frontier, "</h1>", "Live<");
   const tag = badge.slice(badge.lastIndexOf('<span class="inline-flex'));
   assert.match(tag, /^<span class="inline-flex[^"]*">/, `Expected a plain Live badge, got ${tag}`);
 });
 
-test("Frontier's page shows its date and no Live, and the date on its Game Status card", () => {
-  const chip = between(pages.frontier, "</h1>", "How to Play");
+test("Frontier's page shows Live beside its date, and the date on its Game Status card", () => {
+  const chip = between(pages.frontier, "</h1>", "Play Now");
   const statusCard = between(pages.frontier, "Game Status", 'id="frontier-day"');
 
-  assert.ok(!shownText(chip).includes("Live"), "Expected no Live in the page chips");
+  assert.ok(shownText(chip).includes("Live"), "Expected Live in the page chips");
   assert.ok(shownText(chip).includes(FRONTIER_LABEL), "Expected the label in the page chip");
   assert.ok(shownText(statusCard).includes(FRONTIER_LABEL), "Expected the label in the Game Status card");
 });
@@ -438,14 +432,14 @@ test("Every status chip on /games sits on the solid ground, whatever art is behi
   const SOLID = ["bg-black/80"];
   const expected = (...texts) => texts.map((text) => [text, SOLID]);
   const today = gamesDirectory();
-  const during = gamesDirectory(live.games);
+  const before = gamesDirectory(notLive.games);
 
   assert.deepEqual(chips(card(today, "button", "Realms: Eternum")), expected("development"));
   assert.deepEqual(chips(card(today, "button", "Realms: Blitz")), expected("Live", "mainnet"));
   assert.deepEqual(chips(card(today, "button", "zKube")), expected("Live", "mainnet"));
-  assert.deepEqual(chips(gamesFeature()), expected(FRONTIER_LABEL));
-  assert.deepEqual(chips(card(during, "button", "Realms: Eternum")), expected("testnet"));
-  assert.deepEqual(chips(between(during, "Featured Game", 'class="grid grid-cols-1 gap-5 md:grid-cols-2')), expected("Live", FRONTIER_LABEL));
+  assert.deepEqual(chips(gamesFeature()), expected("Live", FRONTIER_LABEL));
+  assert.deepEqual(chips(card(before, "button", "Realms: Eternum")), expected("testnet"));
+  assert.deepEqual(chips(between(before, "Featured Game", 'class="grid grid-cols-1 gap-5 md:grid-cols-2')), expected(FRONTIER_LABEL));
   assert.deepEqual(chips(today).filter(([, ground]) => ground.join() !== SOLID.join()), []);
 });
 
@@ -523,12 +517,12 @@ test("The footer does not call the ecosystem autonomous", () => {
   assert.doesNotMatch(read("src/components/sections/FooterSection.tsx"), /autonomous/i);
 });
 
-test("Frontier has its next season's label and is not live", () => {
+test("Frontier has its season label and is live", () => {
   const [frontier] = pickGames(["frontier"]);
 
   assert.equal(frontier.statusLabel, FRONTIER_LABEL);
   assert.equal(frontier.status, undefined);
-  assert.equal(frontier.isLive, false);
+  assert.equal(frontier.isLive, true);
   assert.equal(frontier.links.homepage, "https://play.realms.party");
 });
 
