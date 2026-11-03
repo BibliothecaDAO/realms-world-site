@@ -5,9 +5,13 @@ import { join } from "node:path";
 
 const ROOT = process.cwd();
 
-// IM Fell English SC is a small-caps face: mixed-case text shows a capital, then small capitals. Every title set in it
-// is shown in full capitals, by CSS, so the source keeps its case and screen readers read words.
-const TITLE_FACE = /--font-title|--realm-font-title|IM Fell English/;
+// IM Fell English SC (titles) and Cinzel (labels and buttons) draw lowercase as small capitals: mixed-case text shows a
+// capital, then small capitals. Everything set in either face is shown in full capitals, by CSS, so the source keeps its
+// case and screen readers read words. Markup reaches each face through one class that carries the capitals.
+const FACES = [
+  { name: "Title face", pattern: /--font-title|--realm-font-title|IM Fell English/, themeKey: "--font-title", className: "realm-title", rules: [".realm-title", ".lore-chronicle h1"] },
+  { name: "UI face", pattern: /--font-ui|Cinzel/, themeKey: "--font-ui", className: "realm-label", rules: [".realm-label", ".lore-chronicle .topbar nav"] },
+];
 
 function sourceFiles(dir, pattern) {
   const base = join(ROOT, dir);
@@ -31,48 +35,49 @@ function cssRules(css) {
   return rules;
 }
 
-function setsTitleFace(body) {
-  return [...body.matchAll(/(?:^|;)\s*font(?:-family)?\s*:\s*([^;]+)/g)].some((m) => TITLE_FACE.test(m[1]));
+function setsFace(body, pattern) {
+  return [...body.matchAll(/(?:^|;)\s*font(?:-family)?\s*:\s*([^;]+)/g)].some((m) => pattern.test(m[1]));
 }
 
-test("Title face: every CSS rule that sets IM Fell English also sets text-transform: uppercase", () => {
-  const found = [];
-  const missing = [];
-  for (const file of sourceFiles("src", /\.css$/)) {
-    for (const { selector, body } of cssRules(read(file))) {
-      if (selector.startsWith("@font-face") || !setsTitleFace(body)) continue;
-      found.push(selector);
-      if (!/(?:^|;)\s*text-transform\s*:\s*uppercase\b/.test(body)) missing.push(`${file}: ${selector}`);
+for (const face of FACES) {
+  test(`${face.name}: every CSS rule that sets it also sets text-transform: uppercase`, () => {
+    const found = [];
+    const missing = [];
+    for (const file of sourceFiles("src", /\.css$/)) {
+      for (const { selector, body } of cssRules(read(file))) {
+        if (selector.startsWith("@font-face") || !setsFace(body, face.pattern)) continue;
+        found.push(selector);
+        if (!/(?:^|;)\s*text-transform\s*:\s*uppercase\b/.test(body)) missing.push(`${file}: ${selector}`);
+      }
     }
-  }
-  assert.ok(found.includes(".realm-title"), "Expected .realm-title to set the title face");
-  assert.ok(found.some((s) => s.includes(".lore-chronicle h1")), "Expected the lore page's headings to set the title face");
-  assert.deepEqual(missing, [], "Each of these sets the title face without text-transform: uppercase");
-});
+    for (const rule of face.rules) assert.ok(found.some((s) => s.includes(rule)), `Expected ${rule} to set the face`);
+    assert.deepEqual(missing, [], "Each of these sets the face without text-transform: uppercase");
+  });
 
-test("Title face: no Tailwind theme key makes a title-font utility without capitals", () => {
-  const offenders = [];
-  for (const file of sourceFiles("src", /\.css$/)) {
-    for (const { selector, body } of cssRules(read(file))) {
-      if (selector.startsWith("@theme") && /(?:^|;)\s*--font-title\s*:/.test(body)) offenders.push(file);
+  test(`${face.name}: no Tailwind theme key makes a font utility without capitals`, () => {
+    const offenders = [];
+    for (const file of sourceFiles("src", /\.css$/)) {
+      for (const { selector, body } of cssRules(read(file))) {
+        if (selector.startsWith("@theme") && new RegExp(`(?:^|;)\\s*${face.themeKey}\\s*:`).test(body)) offenders.push(file);
+      }
     }
-  }
-  assert.deepEqual(offenders, [], "A --font-title theme key creates a font-title utility that skips the capitals");
-});
+    assert.deepEqual(offenders, [], `A ${face.themeKey} theme key creates a font utility that skips the capitals`);
+  });
 
-test("Title face: markup sets it only through a CSS class, never an arbitrary-value class or inline style", () => {
-  const files = [
-    ...sourceFiles("src", /\.(tsx?|jsx?|html|mdx?)$/),
-    ...sourceFiles("content", /\.(mdx?|mdoc|json|ya?ml)$/),
-    "index.html",
-  ];
-  const offenders = [];
-  for (const file of files) {
-    read(file)
-      .split("\n")
-      .forEach((line, i) => {
-        if (TITLE_FACE.test(line)) offenders.push(`${file}:${i + 1}: ${line.trim()}`);
-      });
-  }
-  assert.deepEqual(offenders, [], "Use the realm-title class, which sets the face with its capitals");
-});
+  test(`${face.name}: markup sets it only through a CSS class, never an arbitrary-value class or inline style`, () => {
+    const files = [
+      ...sourceFiles("src", /\.(tsx?|jsx?|html|mdx?)$/),
+      ...sourceFiles("content", /\.(mdx?|mdoc|json|ya?ml)$/),
+      "index.html",
+    ];
+    const offenders = [];
+    for (const file of files) {
+      read(file)
+        .split("\n")
+        .forEach((line, i) => {
+          if (face.pattern.test(line)) offenders.push(`${file}:${i + 1}: ${line.trim()}`);
+        });
+    }
+    assert.deepEqual(offenders, [], `Use the ${face.className} class, which sets the face with its capitals`);
+  });
+}
