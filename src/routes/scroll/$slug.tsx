@@ -20,6 +20,13 @@ export const Route = createFileRoute("/scroll/$slug")({
         replace: true,
       });
     }
+    if (params.slug === "eternum-agent-first-design") {
+      throw redirect({
+        to: "/scroll",
+        statusCode: 301,
+        replace: true,
+      });
+    }
     const post = getScrollPostBySlug(params.slug);
     if (!post) {
       throw new Error("Scroll post not found");

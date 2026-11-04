@@ -168,7 +168,6 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
-  --font-ui: var(--font-ui);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -388,8 +387,9 @@
   }
 
   .realm-banner {
-    @apply inline-flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-primary/90;
+    @apply inline-flex items-center gap-2 text-xs tracking-[0.28em] text-primary/90;
     font-family: var(--font-ui);
+    text-transform: uppercase;
     font-weight: 600;
     border: 1px solid color-mix(in oklab, var(--realm-border-etched) 72%, transparent);
     background: color-mix(in oklab, #070a0c 58%, transparent);
@@ -405,13 +405,19 @@
     text-transform: uppercase;
   }
 
+  .realm-label {
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+  }
+
   .realm-subtitle {
     @apply text-foreground/85;
   }
 
   .realm-sigil {
-    @apply inline-flex items-center text-[10px] uppercase tracking-[0.12em];
+    @apply inline-flex items-center text-[10px] tracking-[0.12em];
     font-family: var(--font-ui);
+    text-transform: uppercase;
     font-weight: 600;
     border: 1px solid color-mix(in oklab, var(--realm-border-etched) 68%, transparent);
     background: color-mix(in oklab, var(--realm-bg-smoke) 40%, transparent);
@@ -446,6 +452,7 @@
     position: relative;
     font-family: var(--font-title);
     letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .realm-nav-link::after {
@@ -1260,6 +1267,21 @@
       0 18px 34px color-mix(in oklab, black 40%, transparent);
   }
 
+  /* Fades the art itself into the panel, and keeps the figure and the orb in the crop at every width. */
+  .scroll-codex-feature-art {
+    object-position: 42% 44%;
+    mask-image: linear-gradient(to bottom, black 88%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, black 88%, transparent);
+  }
+
+  @media (min-width: 64rem) {
+    .scroll-codex-feature-art {
+      object-position: 20% 44%;
+      mask-image: linear-gradient(to right, transparent, rgb(0 0 0 / 0.12) 6%, rgb(0 0 0 / 0.5) 12%, black 18%);
+      -webkit-mask-image: linear-gradient(to right, transparent, rgb(0 0 0 / 0.12) 6%, rgb(0 0 0 / 0.5) 12%, black 18%);
+    }
+  }
+
   .scroll-codex-feed {
     align-items: stretch;
   }
@@ -1519,15 +1541,6 @@
   }
 }
 
-@keyframes hero-shimmer {
-  0% {
-    background-position: -200% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
-
 @keyframes hero-glow-pulse {
   0%, 100% {
     text-shadow:
@@ -1540,22 +1553,6 @@
       0 0 80px color-mix(in oklab, var(--primary) 25%, transparent),
       0 0 120px color-mix(in oklab, var(--primary) 10%, transparent);
   }
-}
-
-.hero-title-shimmer {
-  background: linear-gradient(
-    110deg,
-    var(--primary) 0%,
-    color-mix(in oklab, var(--realm-accent-brass) 100%, white) 25%,
-    color-mix(in oklab, var(--primary) 100%, white) 40%,
-    color-mix(in oklab, var(--realm-accent-ember) 85%, white) 55%,
-    var(--primary) 100%
-  );
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: hero-shimmer 4s ease-in-out infinite;
 }
 
 .hero-title-glow {
