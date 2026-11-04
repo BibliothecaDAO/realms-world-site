@@ -44,11 +44,6 @@ test("Hero narrative is world-first with mythic CTA language", () => {
 
   assert.match(
     intro,
-    /One Agent\./,
-    "Expected the headline to lead with a singular autonomous champion"
-  );
-  assert.match(
-    intro,
     /Every Realm\./,
     "Expected the headline to position coverage across the full world"
   );

@@ -2,9 +2,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Game } from "@/data/games";
+import { FrontierGuide } from "@/components/game/FrontierGuide";
+import { Game, gameStatusText } from "@/data/games";
 import { useNavigate } from "@tanstack/react-router";
 import {
+  BookOpen,
   DollarSign,
   Globe,
   Github,
@@ -23,15 +25,10 @@ import {
 
 function LiveIndicator() {
   return (
-    <motion.div
-      className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/35 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0.55, 1, 0.55] }}
-      transition={{ duration: 2, repeat: Infinity }}
-    >
+    <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/35 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
       <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
       Live
-    </motion.div>
+    </span>
   );
 }
 
@@ -130,6 +127,9 @@ function ScreenshotModal({
 }
 
 function statusChipClasses(status: Game["status"]) {
+  if (!status) {
+    return "border-[#F3D08A]/40 text-[#F3D08A] bg-[#F3D08A]/10";
+  }
   if (status === "mainnet") {
     return "border-emerald-400/40 text-emerald-300 bg-emerald-400/10";
   }
@@ -147,6 +147,7 @@ function openExternal(url?: string) {
 
 export function GameDetails({ game }: { game: Game }) {
   const navigate = useNavigate();
+  const statusText = gameStatusText(game);
   const [selectedScreenshot, setSelectedScreenshot] = useState<number | null>(
     null
   );
@@ -170,9 +171,6 @@ export function GameDetails({ game }: { game: Game }) {
       );
     }
   };
-
-  const statusLabel =
-    game.status.charAt(0).toUpperCase() + game.status.slice(1);
 
   return (
     <>
@@ -209,14 +207,16 @@ export function GameDetails({ game }: { game: Game }) {
 
                   <div className="mt-4 flex flex-wrap items-center gap-2">
                     {game.isLive ? <LiveIndicator /> : null}
-                    <Badge
-                      variant="outline"
-                      className={`uppercase tracking-[0.12em] ${statusChipClasses(
-                        game.status
-                      )}`}
-                    >
-                      {game.status}
-                    </Badge>
+                    {statusText ? (
+                      <Badge
+                        variant="outline"
+                        className={`uppercase tracking-[0.12em] ${statusChipClasses(
+                          game.status
+                        )}`}
+                      >
+                        {statusText}
+                      </Badge>
+                    ) : null}
                   </div>
                 </div>
 
@@ -228,12 +228,30 @@ export function GameDetails({ game }: { game: Game }) {
                   {game.isLive && game.links?.homepage ? (
                     <Button
                       size="lg"
-                      variant="rune"
+                      variant="war"
                       onClick={() => openExternal(game.links?.homepage)}
                       className="gap-2"
                     >
                       <Play className="h-4 w-4" />
                       Play Now
+                    </Button>
+                  ) : null}
+                  {game.howToPlay ? (
+                    <Button
+                      size="lg"
+                      variant={game.isLive && game.links?.homepage ? "rune" : "war"}
+                      className="gap-2"
+                      asChild
+                    >
+                      <a
+                        href={game.howToPlay}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <BookOpen className="h-4 w-4" />
+                        How to Play
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
                     </Button>
                   ) : null}
                   {game.whitepaper ? (
@@ -320,22 +338,26 @@ export function GameDetails({ game }: { game: Game }) {
               </article>
             ) : null}
 
-            <article className="realm-panel realm-games-detail-stat rounded-lg p-4">
-              <p className="inline-flex items-center gap-2 text-sm text-foreground/60">
-                <Gamepad2 className="h-4 w-4" />
-                Game Status
-              </p>
-              <div className="mt-3">
-                <span
-                  className={`inline-flex rounded-full border px-3 py-1 text-sm uppercase tracking-[0.12em] ${statusChipClasses(
-                    game.status
-                  )}`}
-                >
-                  {statusLabel}
-                </span>
-              </div>
-            </article>
+            {statusText ? (
+              <article className="realm-panel realm-games-detail-stat rounded-lg p-4">
+                <p className="inline-flex items-center gap-2 text-sm text-foreground/60">
+                  <Gamepad2 className="h-4 w-4" />
+                  Game Status
+                </p>
+                <div className="mt-3">
+                  <span
+                    className={`inline-flex rounded-full border px-3 py-1 text-sm uppercase tracking-[0.12em] ${statusChipClasses(
+                      game.status
+                    )}`}
+                  >
+                    {statusText.charAt(0).toUpperCase() + statusText.slice(1)}
+                  </span>
+                </div>
+              </article>
+            ) : null}
           </motion.section>
+
+          {game.slug === "frontier" ? <FrontierGuide /> : null}
 
           {game.dashboards?.length || game.backgroundImages?.length ? (
             <motion.section

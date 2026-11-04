@@ -6,6 +6,11 @@
       "source": "/scroll/a-history-of-lost-worlds",
       "destination": "/scroll/history-of-lost-worlds",
       "permanent": true
+    },
+    {
+      "source": "/scroll/eternum-agent-first-design",
+      "destination": "/scroll",
+      "permanent": true
     }
   ],
 

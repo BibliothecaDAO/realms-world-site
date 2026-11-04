@@ -35,8 +35,7 @@ export function GamesSection() {
           Realms To Conquer
         </motion.h2>
         <p className="text-sm sm:text-base text-foreground/75">
-          Explore the live and emerging worlds where the agent is rolling out
-          across games.
+          Explore the live and emerging worlds of the Realms ecosystem.
         </p>
       </div>
       <motion.div

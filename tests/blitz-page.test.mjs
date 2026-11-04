@@ -64,36 +64,6 @@ test("Blitz page: includes full-screen video stub section", () => {
   );
 });
 
-test("Blitz page: includes styled fake CLI agent interaction", () => {
-  const blitzRoute = read("src/routes/blitz.tsx");
-
-  assert.match(
-    blitzRoute,
-    /const \[command, setCommand\] = useState\(""\);/,
-    "Expected command input state for fake CLI"
-  );
-  assert.match(
-    blitzRoute,
-    /const \[terminalLines, setTerminalLines\] = useState/,
-    "Expected terminal output state for agent-style responses"
-  );
-  assert.match(
-    blitzRoute,
-    /placeholder="Type a command \(try: help\)"/,
-    "Expected explicit command input prompt"
-  );
-  assert.match(
-    blitzRoute,
-    /case "help":/,
-    "Expected a CLI help command response"
-  );
-  assert.match(
-    blitzRoute,
-    /className="realm-panel realm-grid-scan/,
-    "Expected CLI container to use themed styling"
-  );
-});
-
 test("Blitz page: includes multiple game-explainer sections", () => {
   const blitzRoute = read("src/routes/blitz.tsx");
 
@@ -104,11 +74,6 @@ test("Blitz page: includes multiple game-explainer sections", () => {
   );
   assert.match(
     blitzRoute,
-    /Agent Roles In Every Match/,
-    "Expected a section that explains each agent role"
-  );
-  assert.match(
-    blitzRoute,
     /Across The Realms Ecosystem/,
     "Expected a section describing cross-ecosystem integration"
   );
@@ -116,11 +81,6 @@ test("Blitz page: includes multiple game-explainer sections", () => {
     blitzRoute,
     /const blitzPhases = \[/,
     "Expected structured phase data for the game explainer"
-  );
-  assert.match(
-    blitzRoute,
-    /const agentRoles = \[/,
-    "Expected structured role data for the agent explainer"
   );
   assert.match(
     blitzRoute,

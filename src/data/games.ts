@@ -13,10 +13,14 @@ export interface Game {
   }[];
   genre?: string[];
   description: string;
-  status: "mainnet" | "testnet" | "development";
+  featureBlurb?: string;
+  featureDetail?: string;
+  status?: "mainnet" | "testnet" | "development";
+  statusLabel?: string;
   isLive: boolean;
   studio: string;
   whitepaper?: string;
+  howToPlay?: string;
   players?: number;
   tvl?: number;
   video?: string;
@@ -29,16 +33,28 @@ export interface Game {
   };
 }
 
+/** Realms' own games, in the order every games list leads with. */
+export const realmsGameSlugs = ["frontier", "blitz", "realms-eternum"];
+
+/** The status a game shows wherever one is rendered. */
+export function gameStatusText(game: Game) {
+  return game.statusLabel ?? game.status;
+}
+
+export function pickGames(slugs: string[]) {
+  return slugs.flatMap((slug) => games.find((game) => game.slug === slug) ?? []);
+}
+
 export const games: Game[] = [
   {
     id: 2,
     slug: "blitz",
     title: "Realms: Blitz",
-    image: "/brand/blitz-card.png",
-    backgroundImage: "/brand/blitz-card.png",
+    image: "/games/blitz/soldiers-in-rain.webp",
+    backgroundImage: "/games/blitz/soldiers-in-rain.webp",
     genre: ["Real-Time Strategy", "Free-for-All", "PvP", "Realms Games"],
     description:
-      "Blitz is a one-hour onchain RTS where humans and AI agents compete over territory, production, and tactical timing. Matches are fully verifiable on Starknet, and top-ranking players win a share of the $LORDS prize pool.",
+      "Blitz is a one-hour onchain RTS where players compete over territory, production, and tactical timing. Matches are fully verifiable on Starknet, and top-ranking players win a share of the $LORDS prize pool.",
     status: "mainnet",
     isLive: true,
     studio: "Realms Games",
@@ -50,11 +66,35 @@ export const games: Game[] = [
     },
   },
   {
+    id: 14,
+    slug: "frontier",
+    title: "Realms: Frontier",
+    image: "/games/frontier/cover.png",
+    backgroundImage: "/games/frontier/settlement-at-dawn.webp",
+    genre: ["PvE", "Roguelite", "Free to play"],
+    description:
+      "Your Realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land and send home what they find. At the day's end the mist takes the map and every army. Your Realm keeps all it earned. Free to play, and no other player can attack you.",
+    featureBlurb:
+      "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.",
+    featureDetail:
+      "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.",
+    statusLabel: "Season 0 - November 3-6, 2026",
+    isLive: true,
+    studio: "Realms Games",
+    howToPlay: "https://docs.realms.party/frontier",
+    links: {
+      homepage: "https://play.realms.party",
+      discord: "https://discord.gg/realmsworld",
+      twitter: "https://x.com/realmsgg",
+      github: "https://github.com/BibliothecaDAO/eternum",
+    },
+  },
+  {
     id: 9,
     slug: "realms-eternum",
     title: "Realms: Eternum",
-    image: "/games/realms-eternum/cover.png",
-    backgroundImage: "/games/realms-eternum/cover.png",
+    image: "/games/realms-eternum/alpine-war-council.webp",
+    backgroundImage: "/games/realms-eternum/alpine-war-council.webp",
     backgroundImages: [
       "/games/realms-eternum/screenshots/1.png",
       "/games/realms-eternum/screenshots/2.png",
@@ -194,7 +234,7 @@ export const games: Game[] = [
       "/games/zkrown/screenshots/3.webp"
     ],
     genre: ["Strategy", "PvP", "Casual"],
-    description: "zKrown is a strategy game based on Risk, focusing on conquest and realm defense. Players compete to dominate the map and win rewards. You can compete up to 6 players",
+    description: "zKrown is a strategy game based on Risk, focusing on conquest and Realm defense. Players compete to dominate the map and win rewards. You can compete up to 6 players",
     status: "development",
     isLive: true,
     studio: "zkorp",
@@ -238,7 +278,7 @@ export const games: Game[] = [
     ],
     genre: ["Turn-Based Combat", "Strategy"],
     description:
-      "Aiming to deliver a high-quality gaming experience, Blob Arena stands out for its gameplay dynamics and strategic focus. Players will navigate through exciting encounters, against other players or against AI, using their Bloberts' distinctive traits to outsmart and defeat opponents. The game's core mechanic revolves around an enhanced rock-paper-scissors style combat modified by each character's attributes such as Attack, Defence, Speed, and Strength, which are crucial for mastering the game.",
+      "Aiming to deliver a high-quality gaming experience, Blob Arena stands out for its gameplay dynamics and strategic focus. Players will navigate through exciting encounters, against other players or against AI, using their Bloberts' distinctive traits to outsmart and defeat opponents. The game's core mechanic revolves around an enhanced rock-paper-scissors style combat modified by each character's attributes such as Attack, Defense, Speed, and Strength, which are crucial for mastering the game.",
     status: "mainnet",
     isLive: true,
     studio: "Grugs Lair",

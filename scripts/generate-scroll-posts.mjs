@@ -22,11 +22,16 @@ const frontmatterSchema = z.object({
   published: z.boolean(),
   readingTimeMinutes: z.number().int().positive().optional(),
   coverImage: z.string().trim().min(1).optional(),
+  featureImage: z.string().trim().min(1).optional(),
+  featureImageAlt: z.string().trim().min(1).optional(),
   canonicalUrl: z.string().trim().url().optional(),
   externalUrl: z.string().trim().url().refine(
     (value) => /^https?:\/\//i.test(value),
     "externalUrl must use http or https"
   ).optional(),
+}).refine((data) => !data.featureImage || data.featureImageAlt, {
+  message: "featureImage needs featureImageAlt",
+  path: ["featureImageAlt"],
 });
 
 function isValidCalendarDate(value) {
@@ -148,6 +153,8 @@ export async function generate(rootDir = process.cwd()) {
       tags: parsed.data.tags,
       published: parsed.data.published,
       coverImage: parsed.data.coverImage,
+      featureImage: parsed.data.featureImage,
+      featureImageAlt: parsed.data.featureImageAlt,
       canonicalUrl: parsed.data.canonicalUrl,
       externalUrl: parsed.data.externalUrl,
       readingTimeMinutes: parsed.data.readingTimeMinutes ?? countReadingMinutes(content),
@@ -175,6 +182,8 @@ export interface ScrollPost {
   tags: string[];
   published: boolean;
   coverImage?: string;
+  featureImage?: string;
+  featureImageAlt?: string;
   canonicalUrl?: string;
   externalUrl?: string;
   readingTimeMinutes: number;
