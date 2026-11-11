@@ -7,5 +7,5 @@ author: "Realms World"
 tags: ["lore", "realms", "loot"]
 published: true
 coverImage: "/lore/history-of-lost-worlds/twilight-tundra.webp"
-readingTimeMinutes: 7
+readingTimeMinutes: 10
 ---

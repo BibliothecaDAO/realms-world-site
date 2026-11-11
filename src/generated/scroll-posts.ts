@@ -34,7 +34,7 @@ export const scrollPosts: ScrollPost[] = [
     ],
     "published": true,
     "coverImage": "/lore/history-of-lost-worlds/twilight-tundra.webp",
-    "readingTimeMinutes": 7,
+    "readingTimeMinutes": 10,
     "html": ""
   },
   {
