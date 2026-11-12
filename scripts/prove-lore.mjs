@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
 import { generate } from "./generate-scroll-posts.mjs";
+import { auditLoreTextLayout } from "./lore-text-layout.mjs";
 
 const output = resolve(process.env.LORE_PROOF_DIR ?? "artifacts/lore-proof");
 const chapters = [
@@ -53,6 +54,12 @@ try {
       await page.getByRole("link", { name: "Enter the chronicle" }).click();
       await page.waitForFunction(() => document.activeElement?.id === "story");
       assert.equal(new URL(page.url()).hash, "#story");
+      await page.waitForFunction(() => {
+        const story = document.getElementById("story");
+        const header = document.querySelector(".lore-chronicle .topbar");
+        return Math.abs(story.getBoundingClientRect().top - header.getBoundingClientRect().bottom - 16) < 3;
+      });
+      await page.screenshot({ path: resolve(output, `${name}-origins.png`) });
 
       for (const [id, title] of chapters) {
         await page.locator(`.age-index a[href="#${id}"]`).click();
@@ -76,6 +83,10 @@ try {
             const image = document.querySelector(".dialog-image");
             return image.complete && image.naturalWidth > 0;
           });
+          const dialogText = await page.evaluate(auditLoreTextLayout);
+          assert.deepEqual(dialogText.splitWords, [], "Words must stay intact with the artwork dialog open");
+          assert.deepEqual(dialogText.overflow, [], "Dialog text must fit its container");
+          assert.deepEqual(dialogText.clipped, [], "Dialog text must not be clipped");
           assert.equal(await page.locator(".art-close").evaluate((el) => el === document.activeElement), true);
           await page.keyboard.press("Escape");
           await page.waitForFunction(() => !document.querySelector(".art-dialog")?.open);
@@ -97,6 +108,31 @@ try {
       await page.locator("#notes").screenshot({ path: resolve(output, `${name}-notes.png`) });
       await writeFile(resolve(output, `${name}-transcript.txt`), await page.locator(".lore-chronicle main").innerText());
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, "Page overflows horizontally");
+
+      if (name === "desktop") {
+        const textLayouts = [];
+        for (const width of [320, 360, 361, 375, 390, 600, 760, 761, 820, 1024, 1050, 1051, 1280, 1440, 1920]) {
+          await page.setViewportSize({ width, height: 1000 });
+          const layout = await page.evaluate(auditLoreTextLayout);
+          textLayouts.push({ width, ...layout });
+          assert.ok(layout.wordCount > 1800, "The audit must include the complete chronicle and expanded notes");
+          assert.deepEqual(layout.splitWords, [], `Words split at ${width}px`);
+          assert.deepEqual(layout.overflow, [], `Text overflows at ${width}px`);
+          assert.deepEqual(layout.clipped, [], `Text is clipped at ${width}px`);
+          if ([320, 820, 1440].includes(width)) {
+            await page.getByRole("link", { name: "The ages", exact: true }).click();
+            await page.waitForFunction(() => {
+              const story = document.getElementById("story");
+              const header = document.querySelector(".lore-chronicle .topbar");
+              return Math.abs(story.getBoundingClientRect().top - header.getBoundingClientRect().bottom - 16) < 3;
+            });
+            await page.screenshot({ path: resolve(output, `text-layout-${width}-origins.png`) });
+            await page.locator(".age-index").screenshot({ path: resolve(output, `text-layout-${width}-index.png`) });
+          }
+        }
+        await writeFile(resolve(output, "text-layout.json"), JSON.stringify(textLayouts, null, 2));
+        await page.setViewportSize(viewport);
+      }
 
       await page.goto(`${origin}/scroll/history-of-lost-worlds#frontier`);
       await page.waitForFunction(() => {

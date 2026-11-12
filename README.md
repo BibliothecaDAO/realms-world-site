@@ -14,6 +14,10 @@ reduced motion. Google Fonts requests are blocked to verify that the chronicle's
 bundled brand fonts load independently. It saves chapter screenshots,
 reading transcripts and a result file in `artifacts/lore-proof/`, then closes its
 browser and server. Set `LORE_PROOF_DIR` to retain evidence in another directory.
+The proof also checks every rendered word, with the world notes expanded, at
+15 widths from 320 to 1920 pixels. `text-layout.json` records split words,
+overflow and clipping; origins and chapter-index screenshots cover representative
+mobile, tablet and desktop layouts. Dialog text is checked while each artwork is open.
 
 Review the captured text and screenshots together for narrative continuity and
 readability. The chronicle is static: it has no separate loading, empty or error

@@ -250,7 +250,7 @@
   padding: 5.5rem 3rem;
   border-top: 1px solid var(--line);
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: min-content minmax(0, 1fr);
   gap: 4rem;
   scroll-margin-top: 1rem;
 }
@@ -263,7 +263,7 @@
   padding-top: 0.3rem;
 }
 .lore-chronicle .chapter-label > p {
-  font-size: 2.7rem;
+  font-size: clamp(2rem, 6vw, 2.7rem);
   line-height: 1.15;
   margin: 1rem 0 0.65rem;
   color: var(--gold);
@@ -455,7 +455,7 @@
   margin-bottom: 2.5rem;
 }
 .lore-chronicle .final-age .chapter-label > p {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
 }
 .lore-chronicle .final-age .prose {
   margin: auto;
@@ -477,7 +477,7 @@
   font-size: 1.75rem;
 }
 .lore-chronicle .final-age h2 {
-  font-size: clamp(2.5rem, 5vw, 4.6rem);
+  font-size: clamp(2rem, 5vw, 4.6rem);
 }
 .lore-chronicle .wide-section {
   max-width: 1184px;
@@ -601,7 +601,7 @@
   padding-bottom: 3.5rem;
 }
 .lore-chronicle .sources h2 {
-  font-size: 2.3rem;
+  font-size: clamp(1.8rem, 3.4vw, 2.3rem);
 }
 .lore-chronicle .sources ol {
   padding-left: 1.5rem;
@@ -799,12 +799,6 @@
     font-size: 1.05rem;
     grid-template-columns: 1.25rem 1fr;
   }
-  .lore-chronicle .age-index a:nth-child(2) {
-    border-right: 0;
-  }
-  .lore-chronicle .age-index a:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--line);
-  }
   .lore-chronicle .parallel,
 .lore-chronicle .note-grid {
     grid-template-columns: 1fr;
@@ -950,19 +944,29 @@
 .lore-chronicle .illustrated .chapter-label > * {
   min-width: 0;
 }
-.lore-chronicle h1,
-.lore-chronicle h2,
-.lore-chronicle h3,
-.lore-chronicle .chapter-label > p,
-.lore-chronicle .age-index a {
-  overflow-wrap: anywhere;
-}
 .lore-chronicle .sources a {
   overflow-wrap: anywhere;
 }
-@media (max-width: 760px) {
+@media (max-width: 1050px) {
   .lore-chronicle .age-index {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lore-chronicle .age-index a:nth-child(2) {
+    border-right: 0;
+  }
+  .lore-chronicle .age-index a:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+}
+@media (max-width: 360px) {
+  .lore-chronicle .age-index {
+    grid-template-columns: 1fr;
+  }
+  .lore-chronicle .age-index a {
+    border-right: 0;
+  }
+  .lore-chronicle .age-index a:not(:last-child) {
+    border-bottom: 1px solid var(--line);
   }
 }
 
