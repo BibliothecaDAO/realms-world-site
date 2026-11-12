@@ -9,7 +9,9 @@ pnpm proof:lore
 The command starts the real Vite app on an available local port, opens the
 chronicle from the Scroll archive, and checks chapter navigation, direct links,
 keyboard access, illustration dialogs and focus restoration at desktop and
-mobile widths. The mobile run uses reduced motion. It saves chapter screenshots,
+mobile widths, including narrow and short-screen hero layouts. The mobile run uses
+reduced motion. Google Fonts requests are blocked to verify that the chronicle's
+bundled brand fonts load independently. It saves chapter screenshots,
 reading transcripts and a result file in `artifacts/lore-proof/`, then closes its
 browser and server. Set `LORE_PROOF_DIR` to retain evidence in another directory.
 

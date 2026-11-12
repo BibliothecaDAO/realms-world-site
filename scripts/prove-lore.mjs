@@ -29,6 +29,7 @@ try {
     ["mobile", { width: 390, height: 844 }, "reduce"],
   ]) {
     const context = await browser.newContext({ viewport, reducedMotion });
+    await context.route(/https:\/\/fonts\.(googleapis|gstatic)\.com\//, (route) => route.abort());
     const page = await context.newPage();
     page.setDefaultTimeout(15000);
     const errors = [];
@@ -38,8 +39,15 @@ try {
       assert.equal(response.status(), 200);
       await page.getByRole("link", { name: /A History of Lost Worlds/ }).first().click();
       await page.waitForURL("**/scroll/history-of-lost-worlds");
-      assert.equal(await page.locator(".lore-chronicle h1").innerText(), "A History of Lost Worlds");
+      assert.equal(await page.locator(".lore-chronicle h1").textContent(), "A History of Lost Worlds");
       await page.evaluate(() => document.fonts.ready);
+      const fonts = await page.evaluate(() => [...document.fonts]
+        .filter((font) => ["Exo 2 Local", "Cinzel Local", "IM Fell English SC", "Realms Titling"].includes(font.family.replaceAll('"', "")))
+        .filter((font) => font.status === "loaded")
+        .map((font) => font.family.replaceAll('"', "")));
+      for (const family of ["Exo 2 Local", "Cinzel Local", "IM Fell English SC", "Realms Titling"]) {
+        assert.ok(fonts.includes(family), `${family} must load without Google Fonts`);
+      }
       await page.screenshot({ path: resolve(output, `${name}-hero.png`) });
 
       await page.getByRole("link", { name: "Enter the chronicle" }).click();
@@ -54,7 +62,7 @@ try {
           return document.activeElement === target &&
             Math.abs(target.getBoundingClientRect().top - header.getBoundingClientRect().bottom - 16) < 3;
         }, id);
-        assert.equal(await page.locator(`#${id} h2`).innerText(), title);
+        assert.equal(await page.locator(`#${id} h2`).textContent(), title);
         assert.equal(await page.locator(`.age-index a[href="#${id}"]`).getAttribute("aria-current"), "location");
         assert.ok((await page.locator(`#${id} .prose`).innerText()).length > 300);
         await page.locator(`#${id}`).screenshot({ path: resolve(output, `${name}-${id}.png`) });
@@ -63,7 +71,7 @@ try {
           const artwork = page.locator(`#${id} .art-open`);
           await artwork.press("Enter");
           await page.waitForFunction(() => document.querySelector(".art-dialog")?.open);
-          assert.equal(await page.locator("#art-title").innerText(), id[0].toUpperCase() + id.slice(1));
+          assert.equal(await page.locator("#art-title").textContent(), id[0].toUpperCase() + id.slice(1));
           await page.waitForFunction(() => {
             const image = document.querySelector(".dialog-image");
             return image.complete && image.naturalWidth > 0;
@@ -102,8 +110,27 @@ try {
       assert.equal(await page.locator(".skip").evaluate((el) => el === document.activeElement), true);
       await page.keyboard.press("Enter");
       await page.waitForFunction(() => document.activeElement?.id === "story");
+      if (name === "mobile") {
+        for (const size of [{ width: 320, height: 700 }, { width: 390, height: 600 }]) {
+          await page.setViewportSize(size);
+          await page.goto(`${origin}/scroll/history-of-lost-worlds`);
+          await page.locator(".lore-chronicle h1").waitFor();
+          await page.evaluate(() => document.fonts.ready);
+          const layout = await page.evaluate(() => {
+            const copy = document.querySelector(".hero-copy").getBoundingClientRect();
+            const footer = document.querySelector(".hero-bottom").getBoundingClientRect();
+            const hero = document.querySelector(".hero").getBoundingClientRect();
+            return {
+              overflow: document.documentElement.scrollWidth > window.innerWidth,
+              clipped: copy.top < hero.top || copy.bottom > footer.top,
+            };
+          });
+          assert.deepEqual(layout, { overflow: false, clipped: false }, `Hero must fit at ${size.width}×${size.height}`);
+          await page.screenshot({ path: resolve(output, `mobile-${size.width}x${size.height}-hero.png`) });
+        }
+      }
       assert.deepEqual(errors, [], "Browser runtime errors");
-      results.push({ name, viewport, reducedMotion, result: "passed" });
+      results.push({ name, viewport, reducedMotion, fonts, result: "passed" });
     } finally {
       await context.close();
     }
