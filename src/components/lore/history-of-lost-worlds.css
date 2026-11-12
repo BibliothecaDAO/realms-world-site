@@ -1,9 +1,41 @@
+@font-face {
+  font-family: "Exo 2 Local";
+  src: url("/brand/exo2-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Exo 2 Local";
+  src: url("/brand/exo2-semibold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cinzel Local";
+  src: url("/brand/cinzel-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Realms Titling";
+  src: url("/brand/realms-titling-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 .lore-chronicle {
-  --ink: #0d1216;
-  --paper: #ede7dc;
-  --muted: #bcb8b0;
-  --gold: #daba80;
-  --line: #daba8038;
+  --ink: #130f0c;
+  --plate: #201a16;
+  --paper: #f4ebdc;
+  --muted: #b7a78a;
+  --gold: #f3d08a;
+  --action: #dfaa54;
+  --line: #46351c;
+  --font-body: "Exo 2 Local", sans-serif;
+  --font-ui: "Cinzel Local", serif;
 }
 .lore-chronicle * {
   box-sizing: border-box;
@@ -12,12 +44,8 @@
   margin: 0;
   background: var(--ink);
   color: var(--paper);
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    sans-serif;
-  font-size: 1rem;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
   line-height: 1.85;
 }
 .lore-chronicle a {
@@ -27,7 +55,7 @@
 .lore-chronicle a:focus-visible,
 .lore-chronicle button:focus-visible,
 .lore-chronicle summary:focus-visible {
-  outline: 2px solid #f4d296;
+  outline: 2px solid var(--gold);
   outline-offset: 6px;
 }
 .lore-chronicle button {
@@ -47,24 +75,25 @@
 .lore-chronicle .chapter-label > p {
   font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
   font-weight: 400;
+  text-transform: uppercase;
 }
 .lore-chronicle h1 {
-  font-size: clamp(4rem, 9vw, 9rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
+  font-size: clamp(3rem, 5.8vw, 5.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
   margin: 0 0 1.5rem;
   text-wrap: balance;
 }
 .lore-chronicle h2 {
-  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
   line-height: 1.13;
   margin-bottom: 1.5rem;
   text-wrap: balance;
 }
 .lore-chronicle h3 {
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   line-height: 1.25;
-  color: #efd4a4;
+  color: var(--gold);
 }
 .lore-chronicle p {
   margin-bottom: 1.35rem;
@@ -82,7 +111,7 @@
   justify-content: space-between;
   padding: 0.8rem 4vw;
   border-bottom: 1px solid var(--line);
-  background: #0d1216ed;
+  background: #130f0cf2;
   backdrop-filter: blur(16px);
   gap: 1.5rem;
 }
@@ -104,20 +133,21 @@
 }
 .lore-chronicle .topbar nav a {
   text-decoration: none;
-  color: #d6cec1;
+  color: var(--paper);
   min-height: 44px;
   display: flex;
   align-items: center;
 }
 .lore-chronicle .topbar nav a:hover {
-  color: #f4d296;
+  color: var(--gold);
 }
 .lore-chronicle .eyebrow,
 .lore-chronicle .number,
 .lore-chronicle .age-theme,
 .lore-chronicle .edition {
+  font-family: var(--font-ui);
   font-size: 0.75rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--gold);
 }
@@ -131,12 +161,12 @@
   height: 2px;
   width: 0;
   z-index: 8;
-  background: #edce94;
+  background: var(--gold);
   box-shadow: 0 0 10px #edce9466;
 }
 .lore-chronicle .hero {
-  height: min(900px, 88vh);
-  min-height: 690px;
+  min-height: clamp(42rem, 88svh, 56rem);
+  padding: 5rem 0 8rem;
   position: relative;
   display: flex;
   align-items: center;
@@ -158,43 +188,46 @@
   inset: 0;
   z-index: -2;
   background:
-    linear-gradient(90deg, #081017eb 0%, #0b101879 45%, #0b101820 85%),
-    linear-gradient(0deg, #0d1216, transparent 48%);
+    linear-gradient(90deg, #130f0cf5 0%, #130f0cb3 45%, #130f0c26 85%),
+    linear-gradient(0deg, var(--ink), transparent 65%);
 }
 .lore-chronicle .hero-copy {
   width: min(850px, 85%);
-  padding: 3rem 0 7rem;
+  padding: 0;
   margin-left: 7vw;
 }
 .lore-chronicle .eyebrow {
   margin-bottom: 1.6rem;
 }
 .lore-chronicle .lead {
-  font-family: Georgia, serif;
-  font-size: clamp(1.5rem, 2.7vw, 2.4rem);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
   line-height: 1.4;
-  color: #f1dfc2;
+  color: var(--paper);
 }
 .lore-chronicle .intro {
-  max-width: 420px;
-  color: #c8c9c6;
-  margin: 1.75rem 0 2.5rem;
-  font-size: 1.05rem;
+  max-width: 38ch;
+  color: var(--paper);
+  margin: 1rem 0 2rem;
+  font-size: 1.125rem;
+  text-wrap: pretty;
 }
 .lore-chronicle .read {
   display: inline-flex;
   min-height: 48px;
   align-items: center;
   padding: 0.6rem 1.3rem;
-  border: 1px solid #daba8088;
+  border: 1px solid var(--gold);
   text-decoration: none;
   font-size: 0.875rem;
-  color: #f3d9a6;
-  background: #10141955;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--action);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   transition: background 0.2s;
 }
 .lore-chronicle .read:hover {
-  background: #daba8022;
+  background: var(--gold);
 }
 .lore-chronicle .hero-bottom {
   position: absolute;
@@ -204,10 +237,10 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  border-top: 1px solid #daba8055;
+  border-top: 1px solid var(--line);
   padding-top: 1rem;
-  font-size: 0.75rem;
-  color: #d6c1a0;
+  font-size: 0.875rem;
+  color: var(--muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -217,7 +250,7 @@
   padding: 5.5rem 3rem;
   border-top: 1px solid var(--line);
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: min-content minmax(0, 1fr);
   gap: 4rem;
   scroll-margin-top: 1rem;
 }
@@ -230,29 +263,29 @@
   padding-top: 0.3rem;
 }
 .lore-chronicle .chapter-label > p {
-  font-size: 2.7rem;
+  font-size: clamp(2rem, 6vw, 2.7rem);
   line-height: 1.15;
   margin: 1rem 0 0.65rem;
-  color: #edd0a0;
+  color: var(--gold);
 }
 .lore-chronicle .age-theme {
   display: block;
   font-size: 0.7rem;
   line-height: 1.8;
   letter-spacing: 0.08em;
-  color: #bba786;
+  color: var(--muted);
 }
 .lore-chronicle .prose {
   max-width: 680px;
-  color: #c9c5bc;
+  color: var(--paper);
 }
 .lore-chronicle .prose h2 {
-  color: #f0e7d7;
+  color: var(--paper);
 }
 .lore-chronicle .emphasis {
-  color: #f4dcae;
+  color: var(--gold);
   font-size: 1.4rem;
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   line-height: 1.55;
 }
 .lore-chronicle .age-index {
@@ -270,8 +303,8 @@
   grid-template-columns: 2.3rem 1fr;
   column-gap: 0.65rem;
   border-right: 1px solid var(--line);
-  font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
-  font-size: 1.8rem;
+  font-family: var(--font-ui);
+  font-size: 1.35rem;
   position: relative;
 }
 .lore-chronicle .age-index a:last-child {
@@ -290,7 +323,7 @@
 }
 .lore-chronicle .age-index a:hover,
 .lore-chronicle .age-index a.active {
-  background: #daba800b;
+  background: #f3d08a0b;
 }
 .lore-chronicle .age-index a.active:after {
   transform: scaleX(1);
@@ -302,9 +335,9 @@
 }
 .lore-chronicle .age-index small {
   grid-column: 2;
-  font-family: system-ui, sans-serif;
-  font-size: 0.75rem;
-  color: #bdb6aa;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--muted);
   letter-spacing: 0.03em;
 }
 .lore-chronicle .illustrated {
@@ -324,6 +357,10 @@
 .lore-chronicle .illustrated .chapter-label > p {
   margin: 0;
   font-size: 2.8rem;
+}
+.lore-chronicle .illustrated .chapter-label > p {
+  font-family: "Realms Titling", var(--font-title, serif);
+  font-weight: 700;
 }
 .lore-chronicle .illustrated .age-theme {
   margin-left: auto;
@@ -346,7 +383,7 @@
   width: 100%;
   position: relative;
   padding: 0;
-  background: #182128;
+  background: var(--plate);
   border: 1px solid var(--line);
   cursor: zoom-in;
   overflow: hidden;
@@ -373,18 +410,18 @@
   position: absolute;
   right: 1rem;
   bottom: 1rem;
-  background: #0d1216ce;
+  background: #130f0ce6;
   backdrop-filter: blur(8px);
-  border: 1px solid #daba8055;
+  border: 1px solid var(--line);
   padding: 0.4rem 0.75rem;
   font-size: 0.7rem;
-  color: #f0d4a8;
+  color: var(--gold);
   letter-spacing: 0.06em;
 }
 .lore-chronicle .scene figcaption {
-  font-family: Georgia, serif;
-  font-style: italic;
-  color: #bba98d;
+  font-family: var(--font-body);
+  font-style: normal;
+  color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.6;
   margin: 1rem 0.1rem 0;
@@ -397,13 +434,13 @@
   grid-column: 2;
 }
 .lore-chronicle #blitz {
-  --line: #c99c6b38;
+  --line: #f4a64438;
 }
 .lore-chronicle #frontier {
-  --line: #72909538;
+  --line: #bb93f938;
 }
 .lore-chronicle #eternum {
-  --line: #e3c38948;
+  --line: #a0a0a048;
 }
 .lore-chronicle .final-age {
   max-width: none;
@@ -418,7 +455,7 @@
   margin-bottom: 2.5rem;
 }
 .lore-chronicle .final-age .chapter-label > p {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
 }
 .lore-chronicle .final-age .prose {
   margin: auto;
@@ -440,7 +477,7 @@
   font-size: 1.75rem;
 }
 .lore-chronicle .final-age h2 {
-  font-size: clamp(2.5rem, 5vw, 4.6rem);
+  font-size: clamp(2rem, 5vw, 4.6rem);
 }
 .lore-chronicle .wide-section {
   max-width: 1184px;
@@ -453,7 +490,7 @@
 }
 .lore-chronicle .allegory-intro {
   max-width: 760px;
-  color: #c9c5bc;
+  color: var(--paper);
 }
 .lore-chronicle .parallel {
   display: grid;
@@ -474,11 +511,11 @@
 }
 .lore-chronicle .parallel p,
 .lore-chronicle .note-grid p {
-  color: #c9c5bc;
+  color: var(--paper);
   font-size: 0.95rem;
 }
 .lore-chronicle .citation {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--gold);
 }
 .lore-chronicle .note-grid {
@@ -489,12 +526,12 @@
 }
 .lore-chronicle .note-grid article {
   padding: 0 0 1rem 1.5rem;
-  border-left: 1px solid #daba8055;
+  border-left: 1px solid var(--line);
 }
 .lore-chronicle details {
   border-top: 1px solid var(--line);
   padding: 1.4rem 0;
-  color: #c9c5bc;
+  color: var(--paper);
 }
 .lore-chronicle details:last-child {
   border-bottom: 1px solid var(--line);
@@ -503,16 +540,16 @@
   cursor: pointer;
   min-height: 44px;
   padding-right: 2rem;
-  color: #eee0c8;
+  color: var(--paper);
 }
 .lore-chronicle summary > span {
   font-size: 0.75rem;
   display: inline-block;
   min-width: 215px;
-  color: #baae97;
+  color: var(--muted);
 }
 .lore-chronicle summary strong {
-  font-weight: 500;
+  font-weight: 600;
 }
 .lore-chronicle details[open] > summary {
   margin-bottom: 1.4rem;
@@ -524,7 +561,7 @@
 .lore-chronicle .aspects {
   margin: 1rem 0 1.5rem;
   padding: 2rem 1.5rem;
-  background: linear-gradient(120deg, #daba800a, transparent);
+  background: linear-gradient(120deg, #f3d08a0a, transparent);
   border: 1px solid var(--line);
 }
 .lore-chronicle .aspect-grid {
@@ -534,7 +571,7 @@
   margin: 2.2rem 0 0.3rem;
 }
 .lore-chronicle .aspect-grid article {
-  border-top: 1px solid #daba8066;
+  border-top: 1px solid var(--line);
   padding-top: 1rem;
 }
 .lore-chronicle .aspect-grid article:nth-child(2) {
@@ -547,7 +584,7 @@
   border-color: #7ca5ae66;
 }
 .lore-chronicle .aspect-grid span {
-  color: #b6a487;
+  color: var(--muted);
   font-size: 0.7rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -564,7 +601,7 @@
   padding-bottom: 3.5rem;
 }
 .lore-chronicle .sources h2 {
-  font-size: 2.3rem;
+  font-size: clamp(1.8rem, 3.4vw, 2.3rem);
 }
 .lore-chronicle .sources ol {
   padding-left: 1.5rem;
@@ -580,12 +617,12 @@
   font-size: 0.875rem;
 }
 .lore-chronicle .sources li p {
-  font-size: 0.8rem;
-  color: #aaa59d;
+  font-size: 0.875rem;
+  color: var(--muted);
   margin: 0.4rem 0;
 }
 .lore-chronicle .sources li a {
-  color: #dac09a;
+  color: var(--gold);
 }
 .lore-chronicle footer {
   display: flex;
@@ -597,8 +634,8 @@
 }
 .lore-chronicle footer p,
 .lore-chronicle footer > a:last-child {
-  font-size: 0.8rem;
-  color: #bdb6aa;
+  font-size: 0.875rem;
+  color: var(--muted);
   margin: 0;
 }
 .lore-chronicle .skip {
@@ -606,7 +643,7 @@
   top: -100px;
   left: 1rem;
   z-index: 10;
-  background: #101419;
+  background: var(--ink);
   padding: 1rem;
 }
 .lore-chronicle .skip:focus {
@@ -616,9 +653,9 @@
   width: min(1200px, 94vw);
   max-height: 94vh;
   padding: 1rem;
-  background: #0d1216;
+  background: var(--ink);
   color: var(--paper);
-  border: 1px solid #daba8088;
+  border: 1px solid var(--gold);
   overflow: auto;
 }
 .lore-chronicle .art-dialog::backdrop {
@@ -681,15 +718,15 @@
 }
 @media (max-width: 760px) {
   .lore-chronicle .hero {
-    min-height: 590px;
-    height: 80vh;
+    min-height: 38rem;
+    padding: 3rem 0 7rem;
   }
   .lore-chronicle .hero-copy {
     margin: 0 1.5rem;
     width: calc(100% - 3rem);
   }
   .lore-chronicle h1 {
-    font-size: clamp(3.8rem, 13vw, 6rem);
+    font-size: clamp(2.5rem, 8.2vw, 3.75rem);
   }
   .lore-chronicle .hero-bottom {
     left: 1.5rem;
@@ -700,7 +737,7 @@
     bottom: 1.5rem;
   }
   .lore-chronicle .topbar {
-    padding: 0.6rem 1.5rem;
+    padding: 0.75rem 1.5rem;
     flex-wrap: wrap;
     gap: 0.25rem;
   }
@@ -759,14 +796,8 @@
   }
   .lore-chronicle .age-index a {
     padding: 1.2rem 1rem;
-    font-size: 1.5rem;
-    grid-template-columns: 1.5rem 1fr;
-  }
-  .lore-chronicle .age-index a:nth-child(2) {
-    border-right: 0;
-  }
-  .lore-chronicle .age-index a:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--line);
+    font-size: 1.05rem;
+    grid-template-columns: 1.25rem 1fr;
   }
   .lore-chronicle .parallel,
 .lore-chronicle .note-grid {
@@ -821,14 +852,8 @@
   .lore-chronicle .topbar .wordmark {
     margin-bottom: 0.25rem;
   }
-  .lore-chronicle .hero {
-    min-height: 600px;
-  }
-  .lore-chronicle .hero-copy {
-    padding-top: 1rem;
-  }
   .lore-chronicle .intro {
-    font-size: 0.95rem;
+    font-size: 1.0625rem;
   }
   .lore-chronicle .art-hint {
     padding: 0.3rem 0.6rem;
@@ -919,19 +944,29 @@
 .lore-chronicle .illustrated .chapter-label > * {
   min-width: 0;
 }
-.lore-chronicle h1,
-.lore-chronicle h2,
-.lore-chronicle h3,
-.lore-chronicle .chapter-label > p,
-.lore-chronicle .age-index a {
-  overflow-wrap: anywhere;
-}
 .lore-chronicle .sources a {
   overflow-wrap: anywhere;
 }
-@media (max-width: 760px) {
+@media (max-width: 1050px) {
   .lore-chronicle .age-index {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lore-chronicle .age-index a:nth-child(2) {
+    border-right: 0;
+  }
+  .lore-chronicle .age-index a:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+}
+@media (max-width: 360px) {
+  .lore-chronicle .age-index {
+    grid-template-columns: 1fr;
+  }
+  .lore-chronicle .age-index a {
+    border-right: 0;
+  }
+  .lore-chronicle .age-index a:not(:last-child) {
+    border-bottom: 1px solid var(--line);
   }
 }
 
@@ -955,7 +990,7 @@
 }
 .lore-chronicle .topbar nav a { font-size: inherit; }
 .lore-chronicle .wordmark { flex-shrink: 0; }
-.lore-chronicle .wordmark img { width: 52px; height: auto; }
+.lore-chronicle .wordmark img { width: 48px; height: 48px; }
 .lore-chronicle [id] { scroll-margin-top: var(--lore-header-offset, 6rem); }
 .lore-chronicle .sources ol { list-style: decimal; }
 .lore-chronicle summary { display: list-item; }
@@ -966,8 +1001,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.5rem;
-  font-size: 0.8rem;
-  color: #bdb6aa;
+  font-size: 0.875rem;
+  color: var(--muted);
 }
 @media (max-width: 760px) {
   .lore-chronicle .topbar nav {
