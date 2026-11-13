@@ -5,7 +5,6 @@ import { useNavigate, Link, useLocation } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { HEADER_SCROLL_OFFSET } from "@/lib/constants";
 import {
-  Bot,
   Coins,
   Compass,
   Gamepad2,
@@ -25,7 +24,6 @@ import {
 
 const homeSections = [
   { id: "hero", label: "Welcome", href: "#" },
-  { id: "agent-native", label: "Agents", href: "#agent-native" },
   { id: "games", label: "Games", href: "#games" },
   { id: "economics", label: "Economics", href: "#economics" },
   { id: "partners", label: "Partners", href: "#partners" },
@@ -33,7 +31,6 @@ const homeSections = [
 
 const railIcons: Record<string, LucideIcon> = {
   hero: Home,
-  "agent-native": Bot,
   games: Gamepad2,
   economics: Coins,
   partners: Handshake,
@@ -53,6 +50,7 @@ export function TopBar() {
       setIsScrolled(window.scrollY > 20);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -182,7 +180,7 @@ export function TopBar() {
     <motion.header className="fixed top-0 left-0 right-0 z-50">
       <div
         className={cn(
-          "transition-all duration-300",
+          "transition-all duration-300 motion-reduce:transition-none",
           isScrolled
             ? "realm-header-shell border border-primary/25 bg-black/45 backdrop-blur-xl supports-[backdrop-filter]:bg-black/35"
             : "border border-transparent bg-transparent",
@@ -197,9 +195,11 @@ export function TopBar() {
                 aria-label="Go to homepage"
               >
                 <img
-                  src="/rw-logo.svg"
-                  alt="Realms.World"
-                  className="w-11 sm:w-13"
+                  src="/brand/realms-lettered-gold.png"
+                  alt="Realms"
+                  width={64}
+                  height={59}
+                  className="h-auto w-16"
                 />
               </button>
 

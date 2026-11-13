@@ -100,7 +100,7 @@ function TermsPage() {
                 <p>
                   <strong>Irreversibility.</strong> Transactions submitted to
                   blockchain networks are irreversible. Once confirmed, they
-                  cannot be cancelled, reversed, or refunded. You are solely
+                  cannot be canceled, reversed, or refunded. You are solely
                   responsible for reviewing transaction details before
                   confirming.
                 </p>
