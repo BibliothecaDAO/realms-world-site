@@ -11,7 +11,7 @@ import { games, gameStatusText, pickGames } from "../src/data/games.ts";
 
 const ROOT = process.cwd();
 const APP_ENTRY = "virtual:site-render-test-app";
-const FRONTIER_LABEL = "Season 1 - from November 16, 2026";
+const FRONTIER_LABEL = "Season 1 - coming soon";
 const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
 const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
 const ETERNUM_ART = "/games/realms-eternum/alpine-war-council.webp";
