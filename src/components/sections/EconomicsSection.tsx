@@ -1,19 +1,10 @@
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import {
-  lordsInfoQueryOptions,
-  treasuryBalanceQueryOptions,
-} from "@/lib/query-options";
+import { lordsInfoQueryOptions } from "@/lib/query-options";
 import { useVelords } from "@/hooks/use-velords";
 import { StarknetProvider } from "@/hooks/starknet-provider";
-import { LORDS_TOTAL_SUPPLY } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
-import {
-  ExternalLink,
-  Coins,
-  Landmark,
-  TrendingUp,
-} from "lucide-react";
+import { ExternalLink, Coins } from "lucide-react";
 import { LordsFlywheel } from "@/components/ui/LordsFlywheel";
 
 export function EconomicsSection() {
@@ -27,14 +18,6 @@ export function EconomicsSection() {
 function EconomicsSectionContent() {
   const { currentAPY, averageWeeklyRewards, lordsLocked } = useVelords();
   const { data: lordsInfo } = useQuery(lordsInfoQueryOptions());
-  const { data: treasuryBalance } = useQuery(treasuryBalanceQueryOptions());
-
-  const treasuryLords = treasuryBalance?.LORDS.amount || 0;
-  const treasuryPercentage = (
-    (treasuryLords / LORDS_TOTAL_SUPPLY) *
-    100
-  ).toFixed(1);
-  const marketPercentage = (100 - parseFloat(treasuryPercentage)).toFixed(1);
 
   const parsedLordsPrice = Number.parseFloat(lordsInfo?.price?.rate ?? "");
   const lordsLockedUsd =
@@ -64,27 +47,6 @@ function EconomicsSectionContent() {
     },
   ];
 
-  const supplyStats = [
-    {
-      label: "Total Supply",
-      value: "300M",
-      sub: "$LORDS",
-      icon: Coins,
-    },
-    {
-      label: "Treasury",
-      value: treasuryLords > 0 ? `${treasuryPercentage}%` : "~40%",
-      sub: treasuryLords > 0 ? "Onchain" : "Estimated",
-      icon: Landmark,
-    },
-    {
-      label: "Circulating",
-      value: treasuryLords > 0 ? `${marketPercentage}%` : "~60%",
-      sub: "Freely liquid",
-      icon: TrendingUp,
-    },
-  ] as const;
-
   return (
     <section className="realm-section container mx-auto px-4 py-16 md:py-24">
       <motion.div
@@ -104,7 +66,7 @@ function EconomicsSectionContent() {
             ECONOMICS
           </p>
           <h2 className="realm-title text-2xl sm:text-3xl md:text-4xl">
-            $LORDS TOKEN & TREASURY
+            $LORDS TOKEN
           </h2>
           <p className="realm-subtitle text-base sm:text-lg">
             An ecosystem token designed for real-stakes gameplay economies and
@@ -159,38 +121,6 @@ function EconomicsSectionContent() {
         />
 
         <motion.div
-          className="realm-panel realm-edge-brackets mx-auto max-w-4xl rounded-lg border border-primary/20 bg-black/30 p-5 text-center backdrop-blur-sm sm:p-6"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
-          <div className="mx-auto space-y-4">
-            <h3 className="realm-banner mx-auto flex w-fit text-center">
-              TOKEN SUPPLY
-            </h3>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {supplyStats.map((item) => (
-                <div
-                  key={item.label}
-                  className="flex flex-col items-center rounded-lg border border-primary/15 bg-black/40 p-4 text-center"
-                >
-                  <div className="mb-2 flex items-center justify-center gap-1.5">
-                    <item.icon className="h-3 w-3 text-primary/60" />
-                    <p className="realm-sigil">{item.label}</p>
-                  </div>
-                  <p className="text-lg font-bold tabular-nums tracking-tight text-foreground/95">
-                    {item.value}
-                  </p>
-                  <p className="mt-1 text-[10px] text-foreground/60">
-                    {item.sub}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
           className="mx-auto flex max-w-4xl flex-col items-start justify-between gap-4 rounded-lg border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-5 backdrop-blur-sm sm:flex-row sm:items-center sm:p-6"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -208,7 +138,7 @@ function EconomicsSectionContent() {
               Lock LORDS as veLORDS and earn weekly staking rewards.
             </p>
           </div>
-          <div className="flex shrink-0 gap-3">
+          <div className="flex flex-wrap shrink-0 gap-3">
             <Button size="lg" variant="war" asChild>
               <a
                 href="https://account.realms.world/velords"
