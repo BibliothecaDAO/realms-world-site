@@ -16,9 +16,9 @@ const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
 const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
 const ETERNUM_ART = "/games/realms-eternum/alpine-war-council.webp";
 const FRONTIER_BLURB =
-  "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.";
+  "Frontier is a free-to-play, roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and descend into the ethereal plane to compete for glory. Work with others from your Aspect to build a hyperstructure and overcome the mist, winning a share of prize $LORDS based on your contribution.";
 const FRONTIER_DETAIL =
-  "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.";
+  "Every day is one expedition. Send armies of Knights, Crossbows, and Scouts across a fresh map to explore, clear the beasts that guard it, and send what they find home. Armies take Oaths and carry relics that sharpen the day's fights. When the day ends, the mist consumes the map and every army, and your Realm keeps all it earned, so each day can start a little stronger. Spires lead down to the Deep, a map every Realm shares, where armies fight armies for the sites that matter. Pick an Aspect, hold sites in the Deep with your mates, and build your Aspect's hyperstructure. The first to finish wins the age, and the prize $LORDS are shared by contribution, measured in Glory.";
 const TAKEN_DOWN_SLUG = "eternum-agent-first-design";
 
 function read(relPath) {
@@ -267,7 +267,7 @@ test("/games features Frontier with both texts and exactly its three tags", () =
   assert.ok(shown.includes(FRONTIER_DETAIL), "Expected the explainer");
   assert.deepEqual(
     [...feature.matchAll(/<span class="rounded-md[^"]*">([^<]*)</g)].map(([, tag]) => tag),
-    ["PvE", "Roguelite", "Free to play"]
+    ["Roguelite", "Strategy", "Free to play"]
   );
 });
 
@@ -276,7 +276,7 @@ test("Frontier's own page lists the same three tags", () => {
 
   assert.deepEqual(
     shownText(genres).filter(Boolean),
-    ["PvE", "Roguelite", "Free to play"]
+    ["Roguelite", "Strategy", "Free to play"]
   );
 });
 
@@ -288,10 +288,9 @@ test("The home page features Frontier with the blurb and exact pills, without th
   assert.ok(shown.includes(FRONTIER_BLURB), "Expected the blurb");
   assert.ok(!shown.includes(FRONTIER_DETAIL), "Expected the explainer to stay on /games");
   for (const [label, detail] of [
-    ["PvE Roguelite", "Explore, fight beasts, and upgrade your Realm"],
+    ["Roguelite Strategy", "Explore, fight beasts, and upgrade your Realm"],
     ["Free to Play", "Found your Realm for free"],
-    ["Fully Onchain", "All actions verifiable onchain"],
-    ["$LORDS Rewards", "Recover $LORDS from ruins; top players win a prize"],
+    ["Prize $LORDS", "Aspects share the prize by Glory"],
   ]) {
     assert.ok(shown.indexOf(detail) === shown.indexOf(label) + 1, `Expected ${label} with its detail among ${shown}`);
   }

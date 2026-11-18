@@ -87,13 +87,13 @@ export const games: Game[] = [
     title: "Realms: Frontier",
     image: "/games/frontier/cover.png",
     backgroundImage: "/games/frontier/settlement-at-dawn.webp",
-    genre: ["PvE", "Roguelite", "Free to play"],
+    genre: ["Roguelite", "Strategy", "Free to play"],
     description:
-      "Your Realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land and send home what they find. At the day's end the mist takes the map and every army. Your Realm keeps all it earned. Free to play, and no other player can attack you.",
+      "Your Realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land, and send home what they find. At the day's end the mist consumes the map and every army. Your Realm keeps all it earned. Free to play.",
     featureBlurb:
-      "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.",
+      "Frontier is a free-to-play, roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and descend into the ethereal plane to compete for glory. Work with others from your Aspect to build a hyperstructure and overcome the mist, winning a share of prize $LORDS based on your contribution.",
     featureDetail:
-      "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.",
+      "Every day is one expedition. Send armies of Knights, Crossbows, and Scouts across a fresh map to explore, clear the beasts that guard it, and send what they find home. Armies take Oaths and carry relics that sharpen the day's fights. When the day ends, the mist consumes the map and every army, and your Realm keeps all it earned, so each day can start a little stronger. Spires lead down to the Deep, a map every Realm shares, where armies fight armies for the sites that matter. Pick an Aspect, hold sites in the Deep with your mates, and build your Aspect's hyperstructure. The first to finish wins the age, and the prize $LORDS are shared by contribution, measured in Glory.",
     statusLabel: "Season 1 - coming soon",
     isLive: true,
     hideLiveStamp: true,
@@ -178,7 +178,7 @@ export const games: Game[] = [
     ],
     genre: ["Play to Die", "Roguelike"],
     description:
-      "Survivors is the first Loot adventure game exploring the Play2Die mechanic. It is a game of onchain survival where you must defeat beasts and collect gear in the fight to stay alive and make it to the top of the leaderboard.",
+      "Loot Survivor is the first Loot adventure game exploring the Play2Die mechanic. It is a game of onchain survival where you must defeat beasts and collect gear in the fight to stay alive and make it to the top of the leaderboard.",
     status: "mainnet",
     isLive: true,
     studio: "Provable Games",

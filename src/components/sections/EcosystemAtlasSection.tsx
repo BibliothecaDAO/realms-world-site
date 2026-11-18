@@ -8,7 +8,6 @@ import {
   Coins,
   ExternalLink,
   Gamepad2,
-  Shield,
   Swords,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ const otherStudioGames = pickGames(["loot-survivor", "zkube"]);
 const frontierFeatures = [
   {
     icon: Swords,
-    label: "PvE Roguelite",
+    label: "Roguelite Strategy",
     detail: "Explore, fight beasts, and upgrade your Realm",
   },
   {
@@ -29,14 +28,9 @@ const frontierFeatures = [
     detail: "Found your Realm for free",
   },
   {
-    icon: Shield,
-    label: "Fully Onchain",
-    detail: "All actions verifiable onchain",
-  },
-  {
     icon: Coins,
-    label: "$LORDS Rewards",
-    detail: "Recover $LORDS from ruins; top players win a prize",
+    label: "Prize $LORDS",
+    detail: "Aspects share the prize by Glory",
   },
 ];
 
@@ -143,8 +137,8 @@ export function EcosystemAtlasSection() {
             REALMS GAMES
           </h2>
           <p className="realm-subtitle text-base sm:text-lg">
-            Blitz, Frontier and Eternum share one world. Each has its own rules,
-            and those rules are verifiable onchain.
+            Blitz, Frontier, and Eternum share one world. Each has its own
+            rules.
           </p>
           <Link
             to="/games"
