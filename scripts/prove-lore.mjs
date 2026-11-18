@@ -99,7 +99,7 @@ try {
         await summary.press("Enter");
         assert.equal(await summary.evaluate((el) => el.parentElement.open), true);
       }
-      await page.getByRole("link", { name: "The world", exact: true }).click();
+      await page.getByRole("link", { name: "What endures", exact: true }).click();
       await page.waitForFunction(() => {
         const notes = document.getElementById("notes");
         const header = document.querySelector(".lore-chronicle .topbar");
