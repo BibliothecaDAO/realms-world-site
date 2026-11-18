@@ -361,7 +361,16 @@ test("Blitz is an ordinary card, first under each feature", () => {
     assert.match(blitz.match(/<img\b[^>]*>/)[0], /object-cover/);
     assert.ok(shownText(blitz).some((text) => text.startsWith("Blitz is a one-hour onchain RTS")));
   }
-  assert.match(home, /Play Now/);
+  assert.doesNotMatch(home, /Play Now/);
+});
+
+test("No page sends a visitor to Blitz from a Play Now action", () => {
+  for (const [name, html] of Object.entries(pages)) {
+    assert.doesNotMatch(html, /<a\b[^>]*href="https:\/\/blitz\.realms\.world[^"]*"[^>]*>\s*Play Now/, `Expected no Play Now link to Blitz on ${name}`);
+  }
+  assert.doesNotMatch(pages.blitz, /Play Now/);
+  assert.match(pages.frontier, /Play Now/);
+  assert.match(homeGames(), /Play Now/, "Expected the other live games to keep Play Now");
 });
 
 test("Blitz's own page shows the soldiers in rain, and nothing renders the old card", () => {

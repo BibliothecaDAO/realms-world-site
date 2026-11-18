@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { gameStatusText, pickGames, realmsGameSlugs, showsLiveStamp, type Game } from "@/data/games";
+import { gameStatusText, pickGames, playNowUrl, realmsGameSlugs, showsLiveStamp, type Game } from "@/data/games";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -98,9 +98,9 @@ function GameCard({ game, index }: { game: Game; index: number }) {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            {game.isLive && game.links?.homepage && (
+            {playNowUrl(game) && (
               <a
-                href={game.links.homepage}
+                href={playNowUrl(game)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center text-xs font-semibold text-primary hover:text-primary/80 transition-colors sm:min-h-6"
