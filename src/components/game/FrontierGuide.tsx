@@ -43,7 +43,7 @@ const cards = [
     id: "frontier-aspect",
     icon: "hyperstructure",
     title: "Pick an Aspect",
-    text: "Pick one of four Aspects, the teams of Frontier, and keep it all season. Hold the Hyperstructure archive in the Deep with your mates and every tick builds your Aspect's hyperstructure, in plain view on the race board. Rivals can stall it from a Bane altar. The first hyperstructure to be finished wins the age.",
+    text: "Pick one of four Aspects, the teams of Frontier: Luminary, Havoc, Prowess, or Insight. Keep it all season. Hold the Hyperstructure archive in the Deep with your mates and every tick builds your Aspect's Hyperstructure, in plain view on the race board. Rivals can stall it from a Bane altar. The first Hyperstructure to be finished wins the age.",
   },
   {
     id: "frontier-prize",

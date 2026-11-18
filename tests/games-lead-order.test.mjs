@@ -444,7 +444,7 @@ test("Frontier's page shows six illustrated cards, each with a picture, a title 
     ["One day, one expedition", "hourglass", "Each day a new map opens around your Realm."],
     ["The mist forgets. Your Realm remembers.", "realm-2", "At the day's end the mist consumes the map"],
     ["Go down to the Deep", "depth-3", "Spires lead down through the map to the Deep, the ethereal plane every Realm shares."],
-    ["Pick an Aspect", "hyperstructure", "Pick one of four Aspects, the teams of Frontier, and keep it all season."],
+    ["Pick an Aspect", "hyperstructure", "Pick one of four Aspects, the teams of Frontier: Luminary, Havoc, Prowess, or Insight. Keep it all season."],
     ["Share the prize", "crown", "Glory is your score."],
     ["Free to play", "realm-0", "Founding your Realm costs nothing."],
   ];
