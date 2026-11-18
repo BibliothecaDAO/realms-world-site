@@ -111,9 +111,9 @@ function EconomicsSectionContent() {
           transition={{ delay: 0.5, duration: 0.5 }}
         >
           <div>
-            <p className="text-lg font-bold sm:text-xl">Stake LORDS</p>
+            <p className="text-lg font-bold sm:text-xl">Lock LORDS as veLORDS</p>
             <p className="mt-1 text-sm text-foreground/60">
-              Lock LORDS as veLORDS.
+              Lock your LORDS to join the flywheel.
             </p>
           </div>
           <div className="flex flex-wrap shrink-0 gap-3">

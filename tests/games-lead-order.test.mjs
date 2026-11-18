@@ -731,8 +731,19 @@ test("The economics section keeps the flywheel and staking block, with no token 
   // Without the wrap, the two buttons run 41 px past a 390 px screen.
   assert.match(pages.economics, /class="flex flex-wrap shrink-0 gap-3"/);
   assert.ok(text.includes("Stake LORDS"));
-  assert.ok(text.includes("Lock LORDS as veLORDS."));
+  assert.ok(text.includes("Lock LORDS as veLORDS"));
+  assert.ok(text.includes("Lock your LORDS to join the flywheel."));
   assert.ok(text.includes("LORDS Price") && text.includes("Total Value Locked"));
+  for (const line of [
+    "The flywheel is how the games and the token are designed to feed each other.",
+    "Players take part in the games",
+    "The games earn fees",
+    "LORDS locked as veLORDS",
+    "A stronger ecosystem draws more players",
+    "The loop repeats",
+  ]) {
+    assert.ok(text.includes(line), `Expected the flywheel to say "${line}"`);
+  }
   assert.match(pages.economics, /<svg/);
   for (const gone of ["TOKEN SUPPLY", "Total Supply", "Circulating", "Freely liquid"]) {
     assert.equal(text.includes(gone), false, `Expected no "${gone}"`);
