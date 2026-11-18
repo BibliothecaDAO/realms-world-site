@@ -24,7 +24,7 @@ const cards = [
     id: "frontier-day",
     icon: "hourglass",
     title: "One day, one expedition",
-    text: "Each day a new map opens around your Realm. Send armies into the mist to reveal it, clear the beasts that guard the land, and send home what they find. Beat a band of wraiths and your army can take an Oath, a bonus that lasts for the day. Above the Deep, no other player can touch your Realm or your armies.",
+    text: "Each day a new map opens around your Realm and lasts 8 to 24 hours. Send armies into the mist to reveal it, clear the beasts that guard the land, and send home what they find. Beat a band of wraiths and your army can take an Oath, a bonus that lasts for the day. Above the Deep, no other player can touch your Realm or your armies.",
   },
   {
     id: "frontier-mist",

@@ -403,9 +403,10 @@ test("No rendered page says test LORDS", () => {
   }
   const frontier = shownText(pages.frontier).join(" ");
   assert.ok(frontier.includes("No $LORDS are found along the way."));
-  for (const gone of ["Chests pay LORDS", "a missing point", "Devcon", "8 to 24 hours", "on any day of the season"]) {
+  for (const gone of ["Chests pay LORDS", "a missing point", "Devcon", "on any day of the season"]) {
     assert.ok(!frontier.includes(gone), `Expected Frontier's page to drop "${gone}"`);
   }
+  assert.ok(frontier.includes("lasts 8 to 24 hours."));
 });
 
 // The classes of the button or link whose text is the given label.
@@ -441,7 +442,7 @@ test("Frontier's page shows its date with no Live stamp, and the date on its Gam
 
 test("Frontier's page shows six illustrated cards, each with a picture, a title in the title face and its text", () => {
   const CARDS = [
-    ["One day, one expedition", "hourglass", "Each day a new map opens around your Realm."],
+    ["One day, one expedition", "hourglass", "Each day a new map opens around your Realm and lasts 8 to 24 hours."],
     ["The mist forgets. Your Realm remembers.", "realm-2", "At the day's end the mist consumes the map"],
     ["Go down to the Deep", "depth-3", "Spires lead down through the map to the Deep, the ethereal plane every Realm shares."],
     ["Pick an Aspect", "hyperstructure", "Pick one of four Aspects, the teams of Frontier: Luminary, Havoc, Prowess, or Insight. Keep it all season."],
