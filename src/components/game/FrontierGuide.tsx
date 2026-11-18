@@ -37,7 +37,7 @@ const cards = [
     id: "frontier-deep",
     icon: "depth-3",
     title: "Go down to the Deep",
-    text: "Spires lead down through the map to the Deep, the ethereal plane every Realm shares. Armies fight armies there for four kinds of site: two pay essence and labor to your Realm, one raises your Aspect's hyperstructure, and one stops a rival's. A site is held for as long as its guards have troops left.",
+    text: "Spires lead down through the map to the Deep, the ethereal plane every Realm shares. Armies fight armies there for four kinds of site: two pay essence and labor to your Realm, one raises your Aspect's Hyperstructure, and one stops a rival's. A site is held for as long as its guards have troops left.",
   },
   {
     id: "frontier-aspect",
