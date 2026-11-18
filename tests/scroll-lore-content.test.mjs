@@ -26,3 +26,22 @@ test("Published lore resolves to the native history route with a bundled cover",
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("Each of the four Aspect cards shows its four Orders, crest and name", async () => {
+  const html = await readFile("src/components/lore/history-of-lost-worlds.html", "utf8");
+  const lists = [...html.matchAll(/<ul class="orders"[^>]*>([\s\S]*?)<\/ul>/g)].map(([, list]) =>
+    [...list.matchAll(/<li><img src="([^"]+)"[^>]*><b>([^<]+)<\/b><\/li>/g)].map(([, src, name]) => [src, name])
+  );
+  const names = lists.map((list) => list.map(([, name]) => name));
+
+  assert.deepEqual(names, [
+    ["Perfection", "Protection", "Enlightenment", "Brilliance"],
+    ["Fury", "Rage", "Vitriol", "Anger"],
+    ["Power", "Giants", "Titans", "Skill"],
+    ["The Twins", "Reflection", "The Fox", "Detection"],
+  ]);
+  for (const [src] of lists.flat()) {
+    assert.match(src, /^\/lore\/history-of-lost-worlds\/orders\/[a-z]+\.webp$/);
+    await access(join("public", src));
+  }
+});

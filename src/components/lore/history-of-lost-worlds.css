@@ -597,6 +597,36 @@
   font-size: 0.875rem;
   line-height: 1.75;
 }
+.lore-chronicle .aspect-grid .orders {
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.4rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--line);
+}
+.lore-chronicle .aspect-grid .orders li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.lore-chronicle .aspect-grid .orders img {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  object-fit: contain;
+}
+.lore-chronicle .aspect-grid .orders b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
 .lore-chronicle .sources {
   padding-top: 3.5rem;
   padding-bottom: 3.5rem;
