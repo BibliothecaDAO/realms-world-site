@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { games } from "@/data/games";
+import { games, showsLiveStamp } from "@/data/games";
 import { useNavigate } from "@tanstack/react-router";
 
 export function GamesSection() {
@@ -77,7 +77,7 @@ export function GamesSection() {
                   transition={{ duration: 0.5 }}
                 />
                 {/* Status Overlay - Top */}
-                {game.isLive && (
+                {showsLiveStamp(game) && (
                   <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex items-center space-x-2">
                     <motion.div
                       className="flex items-center bg-card/80 backdrop-blur-sm px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 rounded-full"

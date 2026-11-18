@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { gameStatusText, pickGames, realmsGameSlugs, type Game } from "@/data/games";
+import { gameStatusText, pickGames, realmsGameSlugs, showsLiveStamp, type Game } from "@/data/games";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -60,7 +60,7 @@ function GameCard({ game, index }: { game: Game; index: number }) {
       <div className="relative flex h-full flex-col justify-end p-4 pt-28 sm:p-5 sm:pt-28 lg:pt-12">
         {/* Status badge */}
         <div className="absolute top-3 right-3">
-          {game.isLive ? (
+          {showsLiveStamp(game) ? (
             <span className="realm-sigil bg-black/80 text-green-400 border-green-500/30">
               Live
             </span>
@@ -189,7 +189,7 @@ export function EcosystemAtlasSection() {
                     <Swords className="h-3.5 w-3.5" />
                     Featured Game
                   </p>
-                  {frontier.isLive ? (
+                  {showsLiveStamp(frontier) ? (
                     <span className="realm-sigil text-green-400 border-green-500/30">
                       Live
                     </span>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FrontierGuide } from "@/components/game/FrontierGuide";
-import { Game, gameStatusText } from "@/data/games";
+import { Game, gameStatusText, showsLiveStamp } from "@/data/games";
 import { useNavigate } from "@tanstack/react-router";
 import {
   BookOpen,
@@ -206,7 +206,7 @@ export function GameDetails({ game }: { game: Game }) {
                   </motion.h1>
 
                   <div className="mt-4 flex flex-wrap items-center gap-2">
-                    {game.isLive ? <LiveIndicator /> : null}
+                    {showsLiveStamp(game) ? <LiveIndicator /> : null}
                     {statusText ? (
                       <Badge
                         variant="outline"
