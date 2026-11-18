@@ -712,7 +712,8 @@ test("The economics section keeps the flywheel and staking block, with no token 
   // Without the wrap, the two buttons run 41 px past a 390 px screen.
   assert.match(pages.economics, /class="flex flex-wrap shrink-0 gap-3"/);
   assert.ok(text.includes("Stake LORDS"));
-  assert.ok(text.includes("Lock LORDS as veLORDS and earn weekly staking rewards."));
+  assert.ok(text.includes("Lock LORDS as veLORDS."));
+  assert.ok(text.includes("LORDS Price") && text.includes("Total Value Locked"));
   assert.match(pages.economics, /<svg/);
   for (const gone of ["TOKEN SUPPLY", "Total Supply", "Circulating", "Freely liquid"]) {
     assert.equal(text.includes(gone), false, `Expected no "${gone}"`);
@@ -726,6 +727,18 @@ function readableWords(html) {
 }
 
 const VISITOR_PAGES = ["home", "economics", "games", "frontier", "blitz", "eternum", "scroll"];
+
+test("No page shows an APY, a yield or a reward rate, and the hero lists no APY tile", () => {
+  for (const name of VISITOR_PAGES) {
+    const words = readableWords(pages[name]).join(" ");
+    assert.doesNotMatch(words, /\bAPY\b|\byield|staking rewards|weekly rewards|%\*/i, `Expected no return figure on ${name}`);
+  }
+  const hero = between(pages.home, 'id="hero"', 'id="games"');
+  assert.deepEqual(
+    shownText(hero).filter((text) => ["Realms Games", "LORDS Price", "Staking APY"].includes(text)),
+    ["Realms Games", "LORDS Price"]
+  );
+});
 
 // A link or file path stays as written. Any other lowercase "realm", wherever it sits in a sentence, is a word.
 const NOT_A_WORD = /^(?:[a-z]+:\/\/\S+|(?:[a-z0-9-]+\.)*realms\.(?:world|party)(?:\/\S*)?|(?:\/[\w-]+)+(?:\.\w+)?)$/;

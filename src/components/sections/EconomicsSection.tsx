@@ -16,7 +16,7 @@ export function EconomicsSection() {
 }
 
 function EconomicsSectionContent() {
-  const { currentAPY, averageWeeklyRewards, lordsLocked } = useVelords();
+  const { lordsLocked } = useVelords();
   const { data: lordsInfo } = useQuery(lordsInfoQueryOptions());
 
   const parsedLordsPrice = Number.parseFloat(lordsInfo?.price?.rate ?? "");
@@ -32,11 +32,6 @@ function EconomicsSectionContent() {
         ? `$${parsedLordsPrice.toFixed(4)}`
         : "—",
       highlight: false,
-    },
-    {
-      label: "Staking APY",
-      value: typeof currentAPY === "number" ? `${currentAPY.toFixed(1)}%*` : "—",
-      highlight: true,
     },
     {
       label: "Total Value Locked",
@@ -75,7 +70,7 @@ function EconomicsSectionContent() {
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-3 overflow-hidden rounded-lg border border-primary/20 bg-black/30 backdrop-blur-sm"
+          className="grid grid-cols-2 overflow-hidden rounded-lg border border-primary/20 bg-black/30 backdrop-blur-sm"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
@@ -99,23 +94,12 @@ function EconomicsSectionContent() {
           ))}
         </motion.div>
 
-        <p className="mx-auto max-w-3xl text-center text-xs leading-relaxed text-foreground/55">
-          * APY and fee figures use rolling 4-week averages from completed
-          weekly epochs.
-        </p>
-
         <LordsFlywheel
           metrics={{
-            weeklyRewards: averageWeeklyRewards
-              ? `${averageWeeklyRewards.toLocaleString(undefined, { maximumFractionDigits: 0 })} LORDS`
-              : undefined,
             lordsLocked: lordsLocked
               ? lordsLocked.toLocaleString(undefined, {
                   maximumFractionDigits: 0,
                 })
-              : undefined,
-            currentAPY: typeof currentAPY === "number"
-              ? `${currentAPY.toFixed(1)}%*`
               : undefined,
           }}
         />
@@ -127,15 +111,9 @@ function EconomicsSectionContent() {
           transition={{ delay: 0.5, duration: 0.5 }}
         >
           <div>
-            <p className="text-lg font-bold sm:text-xl">
-              Earn{" "}
-              <span className="text-primary">
-                {typeof currentAPY === "number" ? `${currentAPY.toFixed(1)}%*` : "—"}
-              </span>{" "}
-              APY
-            </p>
+            <p className="text-lg font-bold sm:text-xl">Stake LORDS</p>
             <p className="mt-1 text-sm text-foreground/60">
-              Lock LORDS as veLORDS and earn weekly staking rewards.
+              Lock LORDS as veLORDS.
             </p>
           </div>
           <div className="flex flex-wrap shrink-0 gap-3">

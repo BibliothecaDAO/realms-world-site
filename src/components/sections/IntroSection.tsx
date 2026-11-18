@@ -6,18 +6,11 @@ import {
   ChevronDown,
   Coins,
   Gamepad2,
-  TrendingUp,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { realmsGameSlugs } from "@/data/games";
 import { useQuery } from "@tanstack/react-query";
 import { lordsInfoQueryOptions } from "@/lib/query-options";
-
-const HeroApyValue = lazy(() =>
-  import("@/components/sections/HeroApyValue").then((module) => ({
-    default: module.HeroApyValue,
-  }))
-);
 
 const RealmSceneBackground = lazy(() =>
   import("@/components/RealmSceneBackground").then((module) => ({
@@ -47,11 +40,6 @@ function IntroSectionContent() {
       icon: Coins,
       label: "LORDS Price",
       value: lordsPrice,
-    },
-    {
-      icon: TrendingUp,
-      label: "Staking APY",
-      value: null as string | null,
     },
   ];
 
@@ -132,12 +120,12 @@ function IntroSectionContent() {
 
           {/* Ecosystem Ticker */}
           <motion.div
-            className="w-full max-w-3xl"
+            className="w-full max-w-xl"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.7, duration: 0.7, ease: "easeOut" }}
           >
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {tickerStats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -155,26 +143,13 @@ function IntroSectionContent() {
                     {stat.label}
                   </p>
                   <p className="text-sm font-semibold text-foreground leading-tight">
-                    {stat.label === "Staking APY" ? (
-                      <Suspense
-                        fallback={
-                          <span className="text-foreground/40">&mdash;</span>
-                        }
-                      >
-                        <HeroApyValue />
-                      </Suspense>
-                    ) : (
-                      stat.value ?? (
-                        <span className="text-foreground/40">&mdash;</span>
-                      )
+                    {stat.value ?? (
+                      <span className="text-foreground/40">&mdash;</span>
                     )}
                   </p>
                 </motion.div>
               ))}
             </div>
-            <p className="mt-3 text-[11px] leading-relaxed text-foreground/50">
-              * Rolling 4-week average from completed weekly epochs.
-            </p>
           </motion.div>
         </div>
       </div>

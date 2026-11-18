@@ -25,7 +25,7 @@ const STEPS = [
   {
     icon: Coins,
     label: "Fees",
-    detail: "4w avg weekly revenue",
+    detail: "Fees from play",
     metricKey: "weeklyRewards" as keyof FlywheelMetrics | null,
   },
   {
@@ -36,8 +36,8 @@ const STEPS = [
   },
   {
     icon: RefreshCw,
-    label: "Earn",
-    detail: "4w avg staking yield",
+    label: "Repeat",
+    detail: "The loop restarts",
     metricKey: "currentAPY" as keyof FlywheelMetrics | null,
   },
 ];
@@ -266,8 +266,7 @@ export function LordsFlywheel({ metrics }: FlywheelProps) {
       <div className="text-center mb-6 sm:mb-8">
         <p className="realm-banner mb-3">The LORDS Flywheel</p>
         <p className="text-base sm:text-lg text-foreground/65 max-w-xl mx-auto leading-relaxed">
-          A self-reinforcing loop — game activity drives staking rewards,
-          staking rewards incentivize more play.
+          A self-reinforcing loop of play, fees and staking.
         </p>
       </div>
 
@@ -458,7 +457,7 @@ export function LordsFlywheel({ metrics }: FlywheelProps) {
           <div className="flex items-center gap-2.5 pl-[3.25rem] text-sm text-primary/55">
             <RefreshCw className="h-3.5 w-3.5" />
             <span className="uppercase tracking-[0.12em]">
-              Cycle repeats weekly
+              Cycle repeats
             </span>
           </div>
         </div>
