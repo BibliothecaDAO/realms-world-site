@@ -28,7 +28,7 @@ export const scrollPosts: ScrollPost[] = [
     "excerpt": "Kingdoms rise. Worlds fall. Follow the four ages of Blitz, Frontier, Eternum and Dominion, from the struggle for ancient power to the first spark of a new world.",
     "date": "2026-10-16",
     "type": "lore",
-    "author": "Realms World",
+    "author": "Realms.World",
     "tags": [
       "lore",
       "realms",
@@ -47,7 +47,7 @@ export const scrollPosts: ScrollPost[] = [
     "excerpt": "Onchain games need more than smart contracts. Here's what the modern stack looks like and why it matters.",
     "date": "2026-02-12",
     "type": "thought-piece",
-    "author": "Realms World",
+    "author": "Realms.World",
     "tags": [
       "infrastructure",
       "thought-piece",
@@ -65,7 +65,7 @@ export const scrollPosts: ScrollPost[] = [
     "excerpt": "Onchain games become more durable when systems are legible, forkable, and owned by their communities.",
     "date": "2026-02-11",
     "type": "thought-piece",
-    "author": "Realms World",
+    "author": "Realms.World",
     "tags": [
       "thought-piece",
       "design",
@@ -82,7 +82,7 @@ export const scrollPosts: ScrollPost[] = [
     "excerpt": "A quick pulse check on what shipped this week across Realms ecosystem games and tooling.",
     "date": "2026-02-10",
     "type": "update",
-    "author": "Realms World",
+    "author": "Realms.World",
     "tags": [
       "ecosystem",
       "updates",

@@ -3,7 +3,7 @@ title: "Ecosystem Roundup: Builders Shipping Faster"
 excerpt: "A quick pulse check on what shipped this week across Realms ecosystem games and tooling."
 date: "2026-02-10"
 type: "update"
-author: "Realms World"
+author: "Realms.World"
 coverImage: "/og.jpg"
 tags:
   - ecosystem

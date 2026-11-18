@@ -71,7 +71,7 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: generateMetaTags({
-      title: "Realms World | Blitz, Frontier, and Eternum",
+      title: "Realms.World | Blitz, Frontier, and Eternum",
       description:
         "Blitz and Eternum are AI-native onchain games, Frontier is a free-to-play roguelite strategy game, and $LORDS is the token of their ecosystem.",
       path: "/",

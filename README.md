@@ -33,9 +33,9 @@ content states. Existing content tests run with `node --test tests/*.test.mjs`;
 | Sources | **Sources** in the page navigation |
 | Keyboard reading | **Tab** to **Skip to the story**, then **Enter**; chapter links and dialogs restore focus |
 
-## Contributing Your Game to Realms World
+## Contributing Your Game to Realms.World
 
-Welcome developers! We'd love to feature your game on the Realms World site. Follow this guide to add your game to our showcase.
+Welcome developers! We'd love to feature your game on the Realms.World site. Follow this guide to add your game to our showcase.
 
 ### Prerequisites
 

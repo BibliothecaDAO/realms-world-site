@@ -15,7 +15,7 @@ export const Route = createFileRoute("/scroll/history-of-lost-worlds")({
   head: ({ loaderData: post }) => ({
     meta: post
       ? generateMetaTags({
-          title: `Realms World | Scroll | ${post.title}`,
+          title: `Realms.World | Scroll | ${post.title}`,
           description: post.excerpt,
           image: post.coverImage,
           path: "/scroll/history-of-lost-worlds",

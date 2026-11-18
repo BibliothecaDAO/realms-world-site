@@ -3,7 +3,7 @@ title: "The Infrastructure Stack Powering Autonomous Worlds"
 excerpt: "Onchain games need more than smart contracts. Here's what the modern stack looks like and why it matters."
 date: "2026-02-12"
 type: "thought-piece"
-author: "Realms World"
+author: "Realms.World"
 coverImage: "/og.jpg"
 tags:
   - infrastructure

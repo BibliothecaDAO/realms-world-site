@@ -817,12 +817,12 @@ test("The home and games descriptions call only Blitz and Eternum AI-native, and
   for (const [path, title, description] of [
     [
       "src/routes/index.tsx",
-      "Realms World | Blitz, Frontier, and Eternum",
+      "Realms.World | Blitz, Frontier, and Eternum",
       "Blitz and Eternum are AI-native onchain games, Frontier is a free-to-play roguelite strategy game, and $LORDS is the token of their ecosystem.",
     ],
     [
       "src/routes/games/index.tsx",
-      "Realms World | Games",
+      "Realms.World | Games",
       "Blitz and Eternum, the AI-native onchain games of Realms, plus Frontier and games from other studios in the ecosystem.",
     ],
   ]) {

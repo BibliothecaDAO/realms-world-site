@@ -47,7 +47,7 @@ export const Route = createFileRoute("/scroll/$slug")({
 
     return {
       meta: generateMetaTags({
-        title: `Realms World | Scroll | ${post.title}`,
+        title: `Realms.World | Scroll | ${post.title}`,
         description: post.excerpt,
         image: post.coverImage,
         path: `/scroll/${post.slug}`,

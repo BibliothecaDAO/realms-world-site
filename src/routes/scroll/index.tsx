@@ -29,7 +29,7 @@ export const Route = createFileRoute("/scroll/")({
   component: ScrollIndexPage,
   head: () => ({
     meta: generateMetaTags({
-      title: "Realms World | Scroll",
+      title: "Realms.World | Scroll",
       description: "Ecosystem updates, thought pieces, and lore from the Realms.",
       path: "/scroll",
     }),
