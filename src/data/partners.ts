@@ -7,7 +7,7 @@ export const partners = [
   },
   {
     id: 2,
-    name: "Starkware",
+    name: "StarkWare",
     logo: "/partners/Starkware.svg",
     url: "https://starkware.co",
   },

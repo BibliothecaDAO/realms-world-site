@@ -94,7 +94,7 @@ export const games: Game[] = [
       "Frontier is a free-to-play, roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and descend into the ethereal plane to compete for glory. Work with others from your Aspect to build a hyperstructure and overcome the mist, winning a share of prize $LORDS based on your contribution.",
     featureDetail:
       "Every day is one expedition. Send armies of Knights, Crossbows, and Scouts across a fresh map to explore, clear the beasts that guard it, and send what they find home. Armies take Oaths and carry relics that sharpen the day's fights. When the day ends, the mist consumes the map and every army, and your Realm keeps all it earned, so each day can start a little stronger. Spires lead down to the Deep, a map every Realm shares, where armies fight armies for the sites that matter. Pick an Aspect, hold sites in the Deep with your mates, and build your Aspect's hyperstructure. The first to finish wins the age, and the prize $LORDS are shared by contribution, measured in Glory.",
-    statusLabel: "Season 1 - coming soon",
+    statusLabel: "Season 1: coming soon",
     isLive: true,
     hideLiveStamp: true,
     studio: "Realms Games",
@@ -119,7 +119,7 @@ export const games: Game[] = [
     ],
     dashboards: [
       {
-        title: "Eternum Season One",
+        title: "Eternum Season 1",
         subtitle: "Revenue & Rewards Dashboard",
         image: "/games/realms-eternum/dashboards/eternum-stats-dashboard.svg",
         href: "https://eternum-stats-mu.vercel.app/",
@@ -127,7 +127,7 @@ export const games: Game[] = [
     ],
     genre: ["Grand Strategy", "Economic Sim", "PvP", "Realms Games"],
     description:
-      "Eternum is the seasonal grand-strategy world of the Realms ecosystem: a living economy of settlements, trade, alliances, raiding, and territory control. Season 1 has concluded, and the next public campaign is being prepared.",
+      "Eternum is the seasonal grand-strategy world of the Realms ecosystem: a living economy of settlements, trade, alliances, raiding, and territory control. Eternum Season 1 has concluded, and the next public campaign is being prepared.",
     status: "development",
     isLive: false,
     studio: "Realms Games",
@@ -204,9 +204,9 @@ export const games: Game[] = [
       "/games/pistols/screenshots/05.jpg",
       "/games/pistols/screenshots/06.jpg",
     ],
-    genre: ["Social", "Casual", "Strategy", "PVP"],
+    genre: ["Social", "Casual", "Strategy", "PvP"],
     description:
-      'Kill or be killed — not just a game, but a showdown of souls. Challenge a friend or a foe in an atmospheric, on-chain duel where every choice, bluff, and bullet is forever etched in the blockchain. Pick your cards. Choose your moment. Fire… or don\'t! Each duel tells a story — make yours legendary.',
+      'Kill or be killed: not just a game, but a showdown of souls. Challenge a friend or a foe in an atmospheric, onchain duel where every choice, bluff, and bullet is forever etched in the blockchain. Pick your cards. Choose your moment. Fire… or don\'t! Each duel tells a story: make yours legendary.',
     status: "development",
     isLive: false,
     studio: "Underware",

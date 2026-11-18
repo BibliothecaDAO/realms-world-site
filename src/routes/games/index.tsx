@@ -16,9 +16,9 @@ export const Route = createFileRoute("/games/")({
   component: GamesPage,
   head: () => ({
     meta: generateMetaTags({
-      title: "Games - Realms World",
+      title: "Realms World | Games",
       description:
-        "Blitz, Frontier and Eternum, the AI-native onchain games of Realms, and games from other studios in the ecosystem.",
+        "Blitz and Eternum, the AI-native onchain games of Realms, plus Frontier and games from other studios in the ecosystem.",
       path: "/games",
     }),
   }),
@@ -143,7 +143,7 @@ function GamesPage() {
                 </h1>
                 <p className="mt-3 text-base text-foreground/80 sm:text-lg">
                   Browse live and in-development games shipping across the
-                  Realms.World ecosystem. Access more information, socials and
+                  Realms World ecosystem. Access more information, socials, and
                   gameplay links on individual game pages.
                 </p>
               </div>

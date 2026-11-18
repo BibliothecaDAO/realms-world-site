@@ -11,7 +11,7 @@ import { games, gameStatusText, pickGames } from "../src/data/games.ts";
 
 const ROOT = process.cwd();
 const APP_ENTRY = "virtual:site-render-test-app";
-const FRONTIER_LABEL = "Season 1 - coming soon";
+const FRONTIER_LABEL = "Season 1: coming soon";
 const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
 const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
 const ETERNUM_ART = "/games/realms-eternum/alpine-war-council.webp";
@@ -235,7 +235,7 @@ test("The home page features Frontier, then Blitz and Eternum, above other studi
     "Realms: Frontier",
     "Realms: Blitz",
     "Realms: Eternum",
-    "GAMES FROM OTHER STUDIOS",
+    "Games from Other Studios",
     "Loot Survivor",
     "zKube",
   ]);
@@ -547,7 +547,7 @@ test("The hero has two actions and a still gold title", () => {
   const title = hero.match(/<h1\b[^>]*class="([^"]*)"[^>]*>([^<]*)<\/h1>/);
 
   assert.deepEqual(actions, ["Explore Games", "Stake veLORDS"]);
-  assert.equal(title[2], "THE NEW FRONTIER OF GAMING");
+  assert.equal(title[2], "The New Frontier of Gaming");
   assert.ok(title[1].split(/\s+/).includes("text-[#F3D08A]"));
   assert.doesNotMatch(read("src/index.css"), /hero-shimmer|hero-title-shimmer/);
 });
@@ -594,7 +594,7 @@ test("The hero states the approved position, and no page names a year after 2026
 
   assert.ok(
     decode(hero).includes(
-      ">The AI era is here and fundamentally changing gaming as we know it. The Realms Ecosystem is building for the new age, one where AI and humans can build, strategize, collaborate, and compete. Together. Onchain. Forever.</p>"
+      ">The AI era is here and fundamentally changing gaming as we know it. The Realms ecosystem is building for the new age, one where AI and humans can build, strategize, collaborate, and compete. Together. Onchain. Forever.</p>"
     ),
     "Expected the approved paragraph in the hero"
   );
@@ -726,7 +726,7 @@ test("The taken-down post is not in what the site ships", () => {
 
 test("The economics section keeps the flywheel and staking block, with no token supply panel", () => {
   const text = shownText(pages.economics);
-  assert.ok(text.includes("$LORDS TOKEN"));
+  assert.ok(text.includes("$LORDS Token"));
   assert.equal(text.includes("TREASURY"), false);
   // Without the wrap, the two buttons run 41 px past a 390 px screen.
   assert.match(pages.economics, /class="flex flex-wrap shrink-0 gap-3"/);
@@ -809,5 +809,24 @@ test("Visitor copy uses American spelling", () => {
   }
   for (const path of ["src/components/lore/history-of-lost-worlds.html", "src/routes/terms.tsx", "src/data/games.ts"]) {
     assert.doesNotMatch(read(path), british, `Expected American spelling in ${path}`);
+  }
+});
+
+test("The home and games descriptions call only Blitz and Eternum AI-native, and titles use a bar", () => {
+  for (const [path, title, description] of [
+    [
+      "src/routes/index.tsx",
+      "Realms World | Blitz, Frontier, and Eternum",
+      "Blitz and Eternum are AI-native onchain games, Frontier is a free-to-play roguelite strategy game, and $LORDS is the token of their ecosystem.",
+    ],
+    [
+      "src/routes/games/index.tsx",
+      "Realms World | Games",
+      "Blitz and Eternum, the AI-native onchain games of Realms, plus Frontier and games from other studios in the ecosystem.",
+    ],
+  ]) {
+    const source = read(path);
+    assert.ok(source.includes(`title: "${title}"`), `Expected the title ${title} in ${path}`);
+    assert.ok(source.includes(`"${description}"`), `Expected the description in ${path}`);
   }
 });

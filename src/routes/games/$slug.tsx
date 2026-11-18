@@ -26,7 +26,7 @@ export const Route = createFileRoute("/games/$slug")({
     return {
       meta: [
         {
-          title: `${game.title} - Realms World`,
+          title: `Realms World | ${game.title}`,
         },
         {
           name: "description",
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/games/$slug")({
         },
         {
           property: "og:title",
-          content: `${game.title} - Realms World`,
+          content: `Realms World | ${game.title}`,
         },
         {
           property: "og:description",
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/games/$slug")({
         },
         {
           name: "twitter:title",
-          content: `${game.title} - Realms World`,
+          content: `Realms World | ${game.title}`,
         },
         {
           name: "twitter:description",

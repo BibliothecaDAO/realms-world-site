@@ -29,7 +29,7 @@ export function FooterSection() {
           icon: ExternalLink,
         },
         {
-          label: "Twitter",
+          label: "X",
           href: "https://x.com/LootRealms",
           icon: ExternalLink,
         },

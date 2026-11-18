@@ -47,7 +47,7 @@ export const Route = createFileRoute("/scroll/$slug")({
 
     return {
       meta: generateMetaTags({
-        title: `${post.title} - Scroll - Realms World`,
+        title: `Realms World | Scroll | ${post.title}`,
         description: post.excerpt,
         image: post.coverImage,
         path: `/scroll/${post.slug}`,
@@ -130,14 +130,14 @@ function ScrollPostPage() {
                 className="realm-panel scroll-detail-neighbor-card block rounded-lg p-4"
               >
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
-                  Newer Entry
+                  Newer post
                 </p>
                 <p className="mt-2 text-lg font-semibold text-foreground/90">{newer.title}</p>
               </ScrollPostLink>
             ) : (
               <div className="realm-panel scroll-detail-neighbor-card rounded-lg p-4 opacity-55">
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
-                  Newer Entry
+                  Newer post
                 </p>
                 <p className="mt-2 text-sm text-foreground/60">No newer post</p>
               </div>
@@ -149,14 +149,14 @@ function ScrollPostPage() {
                 className="realm-panel scroll-detail-neighbor-card block rounded-lg p-4"
               >
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
-                  Older Entry
+                  Older post
                 </p>
                 <p className="mt-2 text-lg font-semibold text-foreground/90">{older.title}</p>
               </ScrollPostLink>
             ) : (
               <div className="realm-panel scroll-detail-neighbor-card rounded-lg p-4 opacity-55">
                 <p className="text-xs uppercase tracking-[0.13em] text-foreground/55">
-                  Older Entry
+                  Older post
                 </p>
                 <p className="mt-2 text-sm text-foreground/60">No older post</p>
               </div>

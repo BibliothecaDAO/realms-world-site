@@ -58,10 +58,10 @@ function EconomicsSectionContent() {
         >
           <p className="realm-banner mx-auto flex w-fit">
             <Coins className="h-3.5 w-3.5" />
-            ECONOMICS
+            Economics
           </p>
           <h2 className="realm-title text-2xl sm:text-3xl md:text-4xl">
-            $LORDS TOKEN
+            $LORDS Token
           </h2>
           <p className="realm-subtitle text-base sm:text-lg">
             An ecosystem token designed for real-stakes gameplay economies and

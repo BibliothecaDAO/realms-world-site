@@ -278,7 +278,7 @@ export function EcosystemAtlasSection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          <p className="realm-banner mx-auto flex w-fit text-center">GAMES FROM OTHER STUDIOS</p>
+          <p className="realm-banner mx-auto flex w-fit text-center">Games from Other Studios</p>
         </motion.div>
 
         {/* ── Other studios grid ── */}

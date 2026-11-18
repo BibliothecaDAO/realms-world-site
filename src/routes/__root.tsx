@@ -79,7 +79,7 @@ export const Route = createRootRoute({
     return {
       meta: [
         {
-          title: "Realms World - Onchain Games Powered by $LORDS",
+          title: "Realms World | Onchain Games Powered by $LORDS",
         },
         {
           name: "description",
@@ -88,7 +88,7 @@ export const Route = createRootRoute({
         },
         {
           property: "og:title",
-          content: "Realms World - Onchain Games Powered by $LORDS",
+          content: "Realms World | Onchain Games Powered by $LORDS",
         },
         {
           property: "og:description",
@@ -113,7 +113,7 @@ export const Route = createRootRoute({
         },
         {
           name: "twitter:title",
-          content: "Realms World - Onchain Games Powered by $LORDS",
+          content: "Realms World | Onchain Games Powered by $LORDS",
         },
         {
           name: "twitter:description",

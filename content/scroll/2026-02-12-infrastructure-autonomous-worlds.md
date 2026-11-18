@@ -3,7 +3,7 @@ title: "The Infrastructure Stack Powering Autonomous Worlds"
 excerpt: "Onchain games need more than smart contracts. Here's what the modern stack looks like and why it matters."
 date: "2026-02-12"
 type: "thought-piece"
-author: "Realms Team"
+author: "Realms World"
 coverImage: "/og.jpg"
 tags:
   - infrastructure
@@ -23,7 +23,7 @@ The Realms ecosystem runs on infrastructure that has matured significantly over 
 
 Games cannot compete for blockspace with DeFi traders. They need dedicated execution environments optimized for game-specific workloads.
 
-[Cartridge's Slot](https://cartridge.gg) provides application-specific rollups that handle this. Games like Eternum run on infrastructure where every action — movement, combat, resource transfers — executes with game-appropriate latency and cost.
+[Cartridge's Slot](https://cartridge.gg) provides application-specific rollups that handle this. Games like Eternum run on infrastructure where every action (movement, combat, resource transfers) executes with game-appropriate latency and cost.
 
 The key insight: games need their own chains, not shared ones.
 
@@ -39,7 +39,7 @@ The Realms ecosystem was an early adopter of Dojo, and that bet has paid off in 
 
 Players should not need to understand gas fees or transaction signing. [Cartridge Controller](https://cartridge.gg) handles account abstraction so onboarding feels like creating any game account.
 
-Session keys let players perform actions without constant wallet popups. This is not optional for real games — it is table stakes.
+Session keys let players perform actions without constant wallet popups. This is not optional for real games: it is table stakes.
 
 ### Indexing: State You Can Query
 

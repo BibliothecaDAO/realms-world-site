@@ -3,7 +3,7 @@ title: "Thought Piece: Designing Worlds That Outlast Teams"
 excerpt: "Onchain games become more durable when systems are legible, forkable, and owned by their communities."
 date: "2026-02-11"
 type: "thought-piece"
-author: "Realms Team"
+author: "Realms World"
 coverImage: "/og.jpg"
 tags:
   - thought-piece

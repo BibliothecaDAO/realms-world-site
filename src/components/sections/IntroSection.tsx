@@ -70,7 +70,7 @@ function IntroSectionContent() {
             transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
           >
             <Castle className="h-3.5 w-3.5" />
-            WELCOME TO THE REALMS
+            Welcome to the Realms
           </motion.p>
 
           {/* Title */}
@@ -80,7 +80,7 @@ function IntroSectionContent() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.4, duration: 0.9, ease: "easeOut" }}
           >
-            THE NEW FRONTIER OF GAMING
+            The New Frontier of Gaming
           </motion.h1>
 
           {/* Subtitle */}
@@ -91,7 +91,7 @@ function IntroSectionContent() {
             transition={{ delay: 1.1, duration: 0.7, ease: "easeOut" }}
           >
             The AI era is here and fundamentally changing gaming as we know it.
-            The Realms Ecosystem is building for the new age, one where AI and
+            The Realms ecosystem is building for the new age, one where AI and
             humans can build, strategize, collaborate, and compete. Together.
             Onchain. Forever.
           </motion.p>

@@ -374,7 +374,7 @@ export function GameDetails({ game }: { game: Game }) {
                       <h2 className="realm-title mt-3 text-2xl sm:text-3xl">Dashboards</h2>
                     </div>
                     <span className="realm-sigil">
-                      {game.dashboards.length} dashboard
+                      {game.dashboards.length} {game.dashboards.length === 1 ? "dashboard" : "dashboards"}
                     </span>
                   </header>
 
@@ -414,7 +414,7 @@ export function GameDetails({ game }: { game: Game }) {
                       </h2>
                     </div>
                     <span className="realm-sigil">
-                      {game.backgroundImages.length} captures
+                      {game.backgroundImages.length} {game.backgroundImages.length === 1 ? "screenshot" : "screenshots"}
                     </span>
                   </header>
 
@@ -489,7 +489,7 @@ export function GameDetails({ game }: { game: Game }) {
                     className="gap-2 border-primary/35 bg-black/30 hover:bg-black/45"
                   >
                     <Twitter className="h-4 w-4" />
-                    Twitter
+                    X
                     <ExternalLink className="h-3 w-3" />
                   </Button>
                 ) : null}
