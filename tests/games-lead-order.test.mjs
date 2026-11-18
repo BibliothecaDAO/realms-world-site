@@ -401,12 +401,11 @@ test("No rendered page says test LORDS", () => {
   for (const [name, html] of Object.entries(pages)) {
     assert.doesNotMatch(decode(html), /test LORDS/i, `Expected no test LORDS on ${name}`);
   }
-  assert.ok(shownText(pages.frontier).includes("Chests pay LORDS from the season's pool into your Realm."));
-  assert.ok(
-    decode(pages.frontier).includes(
-      "A normal day lasts 8 to 24 hours, or 4 to 12 in the Devcon season. The game shows when today ends and how long tomorrow lasts."
-    )
-  );
+  const frontier = shownText(pages.frontier).join(" ");
+  assert.ok(frontier.includes("No $LORDS are found along the way."));
+  for (const gone of ["Chests pay LORDS", "a missing point", "Devcon", "8 to 24 hours", "on any day of the season"]) {
+    assert.ok(!frontier.includes(gone), `Expected Frontier's page to drop "${gone}"`);
+  }
 });
 
 // The classes of the button or link whose text is the given label.
@@ -442,12 +441,12 @@ test("Frontier's page shows its date with no Live stamp, and the date on its Gam
 
 test("Frontier's page shows six illustrated cards, each with a picture, a title in the title face and its text", () => {
   const CARDS = [
-    ["Deploy", "barracks", "Barracks train troops at your Realm."],
-    ["Explore", "map", "The map is hidden until an army walks it."],
-    ["Clear", "beast-troll", "Trolls, rifts, ruins and beasts guard their sites."],
-    ["Bring it home", "chest", "What a reveal or a clear pays goes straight to your Realm."],
-    ["The mist forgets. Your Realm remembers.", "realm-2", "At the day's end the mist takes the map"],
-    ["What It Costs", "stamina", "Free to play."],
+    ["One day, one expedition", "hourglass", "Each day a new map opens around your Realm."],
+    ["The mist forgets. Your Realm remembers.", "realm-2", "At the day's end the mist consumes the map"],
+    ["Go down to the Deep", "depth-3", "Spires lead down through the map to the Deep, the ethereal plane every Realm shares."],
+    ["Pick an Aspect", "hyperstructure", "Pick one of four Aspects, the teams of Frontier, and keep it all season."],
+    ["Share the prize", "crown", "Glory is your score."],
+    ["Free to play", "realm-0", "Founding your Realm costs nothing."],
   ];
   const html = decode(pages.frontier);
 
