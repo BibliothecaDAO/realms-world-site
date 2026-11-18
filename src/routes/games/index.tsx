@@ -191,7 +191,25 @@ function GamesPage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent lg:bg-gradient-to-t lg:from-black/65 lg:via-black/20 lg:to-transparent" />
                 </div>
                 <div className="p-5 sm:p-6 lg:py-7">
-                  <p className="realm-banner">Featured Game</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="realm-banner">Featured Game</p>
+                    {featuredGame.isLive ? (
+                      <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/80 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
+                        <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                        Live
+                      </span>
+                    ) : null}
+                    {gameStatusText(featuredGame) ? (
+                      <span
+                        className={
+                          "rounded-full border px-2 py-1 text-[11px] uppercase tracking-[0.12em] " +
+                          statusChipClasses(featuredGame.status)
+                        }
+                      >
+                        {gameStatusText(featuredGame)}
+                      </span>
+                    ) : null}
+                  </div>
                   <h3 className="realm-title mt-3 text-3xl leading-tight transition-colors group-hover:text-primary sm:text-4xl lg:text-5xl">
                     {featuredGame.title}
                   </h3>
@@ -218,24 +236,6 @@ function GamesPage() {
                     <span className="realm-sigil realm-studio-tag ml-auto shrink-0 text-[11px]">
                       {featuredGame.studio}
                     </span>
-                  </div>
-                  <div className="mt-5 flex flex-wrap items-center gap-2">
-                    {featuredGame.isLive ? (
-                      <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/80 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
-                        <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                        Live
-                      </span>
-                    ) : null}
-                    {gameStatusText(featuredGame) ? (
-                      <span
-                        className={
-                          "rounded-full border px-2 py-1 text-[11px] uppercase tracking-[0.12em] " +
-                          statusChipClasses(featuredGame.status)
-                        }
-                      >
-                        {gameStatusText(featuredGame)}
-                      </span>
-                    ) : null}
                   </div>
                 </div>
               </div>

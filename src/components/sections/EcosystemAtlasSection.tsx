@@ -193,7 +193,8 @@ export function EcosystemAtlasSection() {
                     <span className="realm-sigil text-green-400 border-green-500/30">
                       Live
                     </span>
-                  ) : frontierStatus ? (
+                  ) : null}
+                  {frontierStatus ? (
                     <span className="realm-sigil text-foreground/85">
                       {frontierStatus}
                     </span>

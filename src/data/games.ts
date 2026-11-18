@@ -79,7 +79,7 @@ export const games: Game[] = [
     featureDetail:
       "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.",
     statusLabel: "Season 0 - November 3-6, 2026",
-    isLive: false,
+    isLive: true,
     studio: "Realms Games",
     howToPlay: "https://docs.realms.party/frontier",
     links: {

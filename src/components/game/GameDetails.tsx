@@ -25,15 +25,10 @@ import {
 
 function LiveIndicator() {
   return (
-    <motion.div
-      className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/35 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0.55, 1, 0.55] }}
-      transition={{ duration: 2, repeat: Infinity }}
-    >
+    <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/35 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
       <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
       Live
-    </motion.div>
+    </span>
   );
 }
 
@@ -233,7 +228,7 @@ export function GameDetails({ game }: { game: Game }) {
                   {game.isLive && game.links?.homepage ? (
                     <Button
                       size="lg"
-                      variant="rune"
+                      variant="war"
                       onClick={() => openExternal(game.links?.homepage)}
                       className="gap-2"
                     >
@@ -242,7 +237,12 @@ export function GameDetails({ game }: { game: Game }) {
                     </Button>
                   ) : null}
                   {game.howToPlay ? (
-                    <Button size="lg" variant="war" className="gap-2" asChild>
+                    <Button
+                      size="lg"
+                      variant={game.isLive && game.links?.homepage ? "rune" : "war"}
+                      className="gap-2"
+                      asChild
+                    >
                       <a
                         href={game.howToPlay}
                         target="_blank"
