@@ -441,6 +441,27 @@ test("Frontier's page shows its date with no Live stamp, and the date on its Gam
   assert.ok(shownText(statusCard).includes(FRONTIER_LABEL), "Expected the label in the Game Status card");
 });
 
+test("Frontier's page shows six illustrated cards, each with a picture, a title in the title face and its text", () => {
+  const CARDS = [
+    ["Deploy", "barracks", "Barracks train troops at your Realm."],
+    ["Explore", "map", "The map is hidden until an army walks it."],
+    ["Clear", "beast-troll", "Trolls, rifts, ruins and beasts guard their sites."],
+    ["Bring it home", "chest", "What a reveal or a clear pays goes straight to your Realm."],
+    ["The mist forgets. Your Realm remembers.", "realm-2", "At the day's end the mist takes the map"],
+    ["What It Costs", "stamina", "Free to play."],
+  ];
+  const html = decode(pages.frontier);
+
+  for (const [title, art, text] of CARDS) {
+    const picture = html.indexOf(`<img src="/games/frontier/${art}.webp"`);
+    const heading = html.indexOf(`>${title}</h`);
+    assert.ok(picture !== -1 && heading > picture && heading - picture < 400, `Expected ${art} directly before the ${title} card title`);
+    assert.match(html.slice(html.lastIndexOf("<h", heading), heading), /class="realm-title /, `Expected ${title} in the title face`);
+    assert.ok(html.indexOf(text, heading) > heading, `Expected the text of ${title}`);
+    assert.ok(statSync(join(ROOT, `public/games/frontier/${art}.webp`)).size <= 12000, `Expected ${art} to stay small`);
+  }
+});
+
 test("Other games keep their own status on the same surfaces", () => {
   assert.ok(shownText(card(homeGames(), "article", "Realms: Eternum")).includes("development"));
   assert.ok(shownText(card(gamesDirectory(), "button", "Realms: Eternum")).includes("development"));
