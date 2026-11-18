@@ -65,11 +65,11 @@ test("The lore names the four Aspects Luminary, Havoc, Prowess and Insight, and 
   assert.doesNotMatch(html, /\b(?:Enlightenment|Rage|Skill|Detection) Aspect/);
 });
 
-test("The lore says Aspects raise Hyperstructures, and the world below is the ethereal plane", async () => {
+test("The lore story says Orders raise Hyperstructures, and the world below is the ethereal plane", async () => {
   const html = (await readFile("src/components/lore/history-of-lost-worlds.html", "utf8")).replace(/\s+/g, " ");
 
-  assert.match(html, /raised Hyperstructures in the name of their Aspects\./);
-  assert.match(html, /establish Hyperstructures for their Aspects\./);
+  assert.match(html, /raised Hyperstructures in the name of their Orders\./);
+  assert.match(html, /establish Hyperstructures for their Orders\./);
   assert.match(html, /Spires lead down to the Deep, the ethereal plane where the armies of all four Aspects meet/);
   assert.doesNotMatch(html, /ethereal layer/);
   assert.doesNotMatch(html, /chests of \$LORDS|an Order’s score/);
