@@ -47,22 +47,22 @@
 .lore-chronicle .chapter-label > p {
   font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
   font-weight: 400;
+  text-transform: uppercase;
+  text-wrap: balance;
 }
 .lore-chronicle h1 {
-  font-size: clamp(4rem, 9vw, 9rem);
+  font-size: clamp(4rem, 8vw, 7.25rem);
   line-height: 1;
   letter-spacing: -0.035em;
   margin: 0 0 1.5rem;
-  text-wrap: balance;
 }
 .lore-chronicle h2 {
-  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  font-size: clamp(1.75rem, 3.4vw, 3.1rem);
   line-height: 1.13;
   margin-bottom: 1.5rem;
-  text-wrap: balance;
 }
 .lore-chronicle h3 {
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   line-height: 1.25;
   color: #efd4a4;
 }
@@ -230,7 +230,7 @@
   padding-top: 0.3rem;
 }
 .lore-chronicle .chapter-label > p {
-  font-size: 2.7rem;
+  font-size: 1.85rem;
   line-height: 1.15;
   margin: 1rem 0 0.65rem;
   color: #edd0a0;
@@ -271,8 +271,9 @@
   column-gap: 0.65rem;
   border-right: 1px solid var(--line);
   font-family: var(--font-title, "IM Fell English SC", Georgia, serif);
-  font-size: 1.8rem;
+  font-size: 1.25rem;
   position: relative;
+  text-transform: uppercase;
 }
 .lore-chronicle .age-index a:last-child {
   border-right: 0;
@@ -306,6 +307,7 @@
   font-size: 0.75rem;
   color: #bdb6aa;
   letter-spacing: 0.03em;
+  text-transform: none;
 }
 .lore-chronicle .illustrated {
   grid-template-columns: 1fr 1fr;
@@ -689,7 +691,10 @@
     width: calc(100% - 3rem);
   }
   .lore-chronicle h1 {
-    font-size: clamp(3.8rem, 13vw, 6rem);
+    font-size: clamp(2.6rem, 11vw, 4.5rem);
+  }
+  .lore-chronicle h3 {
+    font-size: 1.3rem;
   }
   .lore-chronicle .hero-bottom {
     left: 1.5rem;
@@ -727,7 +732,7 @@
     gap: 0.4rem 1rem;
   }
   .lore-chronicle .illustrated .chapter-label > p {
-    font-size: 2.4rem;
+    font-size: 2rem;
   }
   .lore-chronicle .illustrated .age-theme {
     width: 100%;
@@ -758,9 +763,12 @@
     grid-template-columns: repeat(2, 1fr);
   }
   .lore-chronicle .age-index a {
-    padding: 1.2rem 1rem;
-    font-size: 1.5rem;
-    grid-template-columns: 1.5rem 1fr;
+    padding: 1.2rem 0.75rem;
+    font-size: 1.05rem;
+    grid-template-columns: 1fr;
+  }
+  .lore-chronicle .age-index small {
+    grid-column: 1;
   }
   .lore-chronicle .age-index a:nth-child(2) {
     border-right: 0;
@@ -790,6 +798,15 @@
   .lore-chronicle .final-age {
     display: block;
     padding: 5rem 1.5rem;
+  }
+  .lore-chronicle .final-age .chapter-label > p {
+    font-size: 2.25rem;
+  }
+  .lore-chronicle .final-age h2 {
+    font-size: 2rem;
+  }
+  .lore-chronicle .sources h2 {
+    font-size: 2rem;
   }
   .lore-chronicle .sources ol {
     columns: 1;
@@ -955,7 +972,7 @@
 }
 .lore-chronicle .topbar nav a { font-size: inherit; }
 .lore-chronicle .wordmark { flex-shrink: 0; }
-.lore-chronicle .wordmark img { width: 52px; height: auto; }
+.lore-chronicle .wordmark img { width: 64px; height: auto; }
 .lore-chronicle [id] { scroll-margin-top: var(--lore-header-offset, 6rem); }
 .lore-chronicle .sources ol { list-style: decimal; }
 .lore-chronicle summary { display: list-item; }

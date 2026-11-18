@@ -129,34 +129,51 @@ function ScrollIndexPage() {
         {featuredPost ? (
           <ScrollPostLink
             post={featuredPost}
-            className="scroll-codex-feature realm-panel realm-grid-scan block rounded-lg p-5 sm:p-7 transition-transform duration-300 hover:-translate-y-1"
+            className={`scroll-codex-feature realm-panel realm-grid-scan rounded-lg transition-transform duration-300 hover:-translate-y-1 ${
+              featuredPost.featureImage
+                ? "flex flex-col lg:min-h-[max(26rem,25vw)] lg:justify-center"
+                : "block"
+            }`}
           >
-            <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.13em] text-foreground/60">
-              <span>{scrollTypeLabel(featuredPost.type)}</span>
-              <span>•</span>
-              <span>{formatScrollDate(featuredPost.date)}</span>
-              <span>•</span>
-              <span>{scrollReadingLabel(featuredPost)}</span>
+            <div className={`p-5 sm:p-7 ${featuredPost.featureImage ? "lg:w-2/5" : ""}`}>
+              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.13em] text-foreground/60">
+                <span>{scrollTypeLabel(featuredPost.type)}</span>
+                <span>•</span>
+                <span>{formatScrollDate(featuredPost.date)}</span>
+                <span>•</span>
+                <span>{scrollReadingLabel(featuredPost)}</span>
+              </div>
+
+              <h2 className="realm-title mt-3 text-2xl sm:text-3xl lg:text-4xl leading-tight">
+                {featuredPost.title}
+              </h2>
+
+              <p className="mt-3 text-foreground/80 text-base sm:text-lg max-w-3xl">
+                {featuredPost.excerpt}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {featuredPost.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-md border border-primary/25 bg-black/35 px-2 py-1 text-xs text-foreground/78"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <h2 className="realm-title mt-3 text-2xl sm:text-3xl lg:text-4xl leading-tight">
-              {featuredPost.title}
-            </h2>
-
-            <p className="mt-3 text-foreground/80 text-base sm:text-lg max-w-3xl">
-              {featuredPost.excerpt}
-            </p>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {featuredPost.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-md border border-primary/25 bg-black/35 px-2 py-1 text-xs text-foreground/78"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
+            {featuredPost.featureImage ? (
+              <img
+                src={featuredPost.featureImage}
+                alt={featuredPost.featureImageAlt}
+                width={1536}
+                height={1024}
+                decoding="async"
+                className="scroll-codex-feature-art order-first aspect-[5/4] w-full object-cover sm:aspect-video md:aspect-[2/1] lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:h-full lg:w-3/5"
+              />
+            ) : null}
           </ScrollPostLink>
         ) : null}
 

@@ -32,6 +32,8 @@ Posts are authored as `.md` files in-repo and compiled at build time into static
   - `published: boolean`
 - Optional frontmatter:
   - `coverImage: string` (public path, e.g. `/content/scroll/my-cover.jpg`)
+  - `featureImage: string` (public path; the art shown when the post fills the `/scroll` feature block)
+  - `featureImageAlt: string` (required with `featureImage`)
   - `canonicalUrl: string` (SEO canonical only; does not change the link destination)
   - `externalUrl: string` (absolute HTTP(S) destination for a hosted article or chronicle)
   - `readingTimeMinutes: positive integer` (override for a custom presentation whose prose lives outside the markdown body)

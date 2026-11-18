@@ -66,13 +66,15 @@ export function FooterSection() {
             >
               <div>
                 <img
-                  src="/rw-logo.svg"
-                  alt="Realms World"
-                  className="w-16 mb-5 opacity-90"
+                  src="/brand/realms-contour-gold.png"
+                  alt="Realms"
+                  width={64}
+                  height={65}
+                  className="h-auto w-16 mb-5"
                 />
                 <h3 className="realm-title text-3xl mb-3">Realms World</h3>
                 <p className="text-muted-foreground leading-relaxed max-w-sm">
-                  The autonomous onchain gaming ecosystem powered by $LORDS.
+                  The onchain gaming ecosystem powered by $LORDS.
                   Built by BibliothecaDAO.
                 </p>
               </div>
@@ -112,10 +114,7 @@ export function FooterSection() {
                 transition={{ duration: 0.5, delay: 0.1 + sectionIndex * 0.08 }}
                 viewport={{ once: true }}
               >
-                <h4
-                  className="text-[11px] uppercase tracking-[0.2em] text-[var(--realm-accent-brass)]/70 mb-4"
-                  style={{ fontFamily: "var(--font-ui)" }}
-                >
+                <h4 className="realm-label text-[11px] tracking-[0.2em] text-[var(--realm-accent-brass)]/70 mb-4">
                   {section.title}
                 </h4>
                 <ul className="space-y-2.5">
@@ -144,10 +143,7 @@ export function FooterSection() {
         {/* Bottom Bar */}
         <div className="py-5 border-t border-[var(--realm-border-etched)]/40">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div
-              className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground/60"
-              style={{ fontFamily: "var(--font-ui)" }}
-            >
+            <div className="realm-label flex items-center gap-2 text-[11px] tracking-[0.14em] text-muted-foreground/60">
               <span>&copy; {new Date().getFullYear()} BibliothecaDAO</span>
               <span className="hidden md:inline text-[var(--realm-border-etched)]">
                 /

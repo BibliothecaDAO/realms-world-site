@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as FrontierRouteImport } from './routes/frontier'
 import { Route as EternumRouteImport } from './routes/eternum'
 import { Route as BlitzRouteImport } from './routes/blitz'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,6 +29,11 @@ const TermsRoute = TermsRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FrontierRoute = FrontierRouteImport.update({
+  id: '/frontier',
+  path: '/frontier',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EternumRoute = EternumRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blitz': typeof BlitzRoute
   '/eternum': typeof EternumRoute
+  '/frontier': typeof FrontierRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/games/$slug': typeof GamesSlugRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blitz': typeof BlitzRoute
   '/eternum': typeof EternumRoute
+  '/frontier': typeof FrontierRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/games/$slug': typeof GamesSlugRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/blitz': typeof BlitzRoute
   '/eternum': typeof EternumRoute
+  '/frontier': typeof FrontierRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/games/$slug': typeof GamesSlugRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blitz'
     | '/eternum'
+    | '/frontier'
     | '/privacy'
     | '/terms'
     | '/games/$slug'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blitz'
     | '/eternum'
+    | '/frontier'
     | '/privacy'
     | '/terms'
     | '/games/$slug'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blitz'
     | '/eternum'
+    | '/frontier'
     | '/privacy'
     | '/terms'
     | '/games/$slug'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlitzRoute: typeof BlitzRoute
   EternumRoute: typeof EternumRoute
+  FrontierRoute: typeof FrontierRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
   GamesSlugRoute: typeof GamesSlugRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/frontier': {
+      id: '/frontier'
+      path: '/frontier'
+      fullPath: '/frontier'
+      preLoaderRoute: typeof FrontierRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eternum': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlitzRoute: BlitzRoute,
   EternumRoute: EternumRoute,
+  FrontierRoute: FrontierRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
   GamesSlugRoute: GamesSlugRoute,

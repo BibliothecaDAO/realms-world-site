@@ -9,14 +9,9 @@ function read(relPath) {
   return readFileSync(join(ROOT, relPath), "utf8");
 }
 
-test("Homepage route includes agent-native and atlas section anchors", () => {
+test("Homepage route includes atlas section anchor", () => {
   const homeRoute = read("src/routes/index.tsx");
 
-  assert.match(
-    homeRoute,
-    /id="agent-native"/,
-    "Expected homepage to include an agent-native section anchor"
-  );
   assert.match(
     homeRoute,
     /id="ecosystem-atlas"/,
@@ -29,23 +24,13 @@ test("Homepage route includes agent-native and atlas section anchors", () => {
   );
 });
 
-test("Intro hero derives live game count from shared games data", () => {
+test("Intro hero derives the Realms game count from shared games data", () => {
   const intro = read("src/components/sections/IntroSection.tsx");
 
   assert.match(
     intro,
-    /games\.filter\(\(game\) => game\.isLive\)\.length/,
-    "Expected live game count to be derived from the games dataset"
-  );
-});
-
-test("Agent rollout message is present in hero copy", () => {
-  const intro = read("src/components/sections/IntroSection.tsx");
-
-  assert.match(
-    intro,
-    /rolling out across games/i,
-    "Expected rollout wording in hero copy"
+    /realmsGameSlugs\.length/,
+    "Expected the Realms game count to be derived from the shared list"
   );
 });
 
@@ -66,11 +51,6 @@ test("Header keeps only Games/Scroll while section links move to right rail", ()
     topBar,
     /Section rail navigation/,
     "Expected a right-side vertical section rail"
-  );
-  assert.match(
-    topBar,
-    /Agent Native/,
-    "Expected section rail to include Agent Native"
   );
   assert.match(
     topBar,
@@ -189,26 +169,6 @@ test("Partners section uses shared partner data source", () => {
   );
 });
 
-test("Agent native section surfaces rollout snapshot metrics", () => {
-  const agentNative = read("src/components/sections/AgentNativeSection.tsx");
-
-  assert.match(
-    agentNative,
-    /Rollout Snapshot/,
-    "Expected a rollout snapshot block for at-a-glance adoption signals"
-  );
-  assert.match(
-    agentNative,
-    /games\.filter\(\(game\) => game\.isLive\)\.length/,
-    "Expected live rollout count to derive from shared games data"
-  );
-  assert.match(
-    agentNative,
-    /new Set\(games\.map\(\(game\) => game\.studio\)\)\.size/,
-    "Expected studio coverage metric to derive from shared games data"
-  );
-});
-
 test("Ecosystem atlas section promotes discovery signals", () => {
   const atlas = read("src/components/sections/EcosystemAtlasSection.tsx");
 
@@ -316,15 +276,5 @@ test("Treasury section includes governance pulse summary", () => {
     treasury,
     /Governance Pulse/,
     "Expected governance pulse summary block in treasury section"
-  );
-});
-
-test("Agent native section clips decorative overflow", () => {
-  const agentNative = read("src/components/sections/AgentNativeSection.tsx");
-
-  assert.match(
-    agentNative,
-    /<section className="[^"]*overflow-hidden[^"]*"/,
-    "Expected agent native section root to include overflow-hidden to prevent horizontal page overflow"
   );
 });

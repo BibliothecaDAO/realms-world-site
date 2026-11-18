@@ -3,16 +3,6 @@ import { ReactNode, Suspense, lazy, useEffect, useRef, useState } from "react";
 import { IntroSection } from "@/components/sections/IntroSection";
 import { generateMetaTags } from "@/lib/og-image";
 
-const HexExplorerSection = lazy(() =>
-  import("@/components/hex-explorer/HexExplorerSection").then((module) => ({
-    default: module.HexExplorerSection,
-  }))
-);
-const AgentNativeSection = lazy(() =>
-  import("@/components/sections/AgentNativeSection").then((module) => ({
-    default: module.AgentNativeSection,
-  }))
-);
 const EcosystemAtlasSection = lazy(() =>
   import("@/components/sections/EcosystemAtlasSection").then((module) => ({
     default: module.EcosystemAtlasSection,
@@ -81,9 +71,9 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: generateMetaTags({
-      title: "Realms World - Onchain Games for Humans and Agents",
+      title: "Realms World - Blitz, Frontier and Eternum",
       description:
-        "Explore onchain strategy games where humans and AI agents compete through verifiable rules and $LORDS-powered economies.",
+        "Blitz, Frontier and Eternum are AI-native onchain games, and LORDS is the token of their ecosystem.",
       path: "/",
     }),
   }),
@@ -102,17 +92,6 @@ function HomePage() {
     <>
       <div id="hero">
         <IntroSection />
-      </div>
-      <div id="hex-explorer">
-        <DeferredSection eager>
-          <HexExplorerSection />
-        </DeferredSection>
-      </div>
-      <SectionDivider />
-      <div id="agent-native">
-        <DeferredSection eager>
-          <AgentNativeSection />
-        </DeferredSection>
       </div>
       <SectionDivider />
       <div id="games">

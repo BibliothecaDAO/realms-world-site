@@ -115,26 +115,18 @@ test("TopBar: header and rail adopt realm utility classes", () => {
 
 test("Landing sections adopt realm wrappers", () => {
   const intro = read("src/components/sections/IntroSection.tsx");
-  const agent = read("src/components/sections/AgentNativeSection.tsx");
   const atlas = read("src/components/sections/EcosystemAtlasSection.tsx");
   const partners = read("src/components/sections/PartnersSection.tsx");
 
   assert.match(intro, /realm-section/, "Expected intro section themed wrapper");
-  assert.match(agent, /realm-panel/, "Expected agent section themed panel");
   assert.match(atlas, /realm-sigil/, "Expected atlas section sigil metadata");
   assert.match(partners, /realm-panel/, "Expected partners section to use themed panel wrappers");
 });
 
 test("Landing sections apply next-gen utility classes", () => {
-  const agent = read("src/components/sections/AgentNativeSection.tsx");
   const atlas = read("src/components/sections/EcosystemAtlasSection.tsx");
   const partners = read("src/components/sections/PartnersSection.tsx");
 
-  assert.match(
-    agent,
-    /realm-edge-brackets/,
-    "Expected agent section to use edge bracket framing"
-  );
   assert.match(
     atlas,
     /realm-grid-scan/,
@@ -148,15 +140,9 @@ test("Landing sections apply next-gen utility classes", () => {
 });
 
 test("Landing sections use world-map narrative flow patterns", () => {
-  const agent = read("src/components/sections/AgentNativeSection.tsx");
   const atlas = read("src/components/sections/EcosystemAtlasSection.tsx");
   const partners = read("src/components/sections/PartnersSection.tsx");
 
-  assert.match(
-    agent,
-    /realm-journey-map/,
-    "Expected agent section to present rollout as a connected journey map"
-  );
   assert.match(
     atlas,
     /realm-world-node/,
