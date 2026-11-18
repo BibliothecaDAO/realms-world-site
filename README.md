@@ -1,3 +1,38 @@
+## History of Lost Worlds proof
+
+Run `pnpm install` and `pnpm exec playwright install chromium` once, then run:
+
+```bash
+pnpm proof:lore
+```
+
+The command starts the real Vite app on an available local port, opens the
+chronicle from the Scroll archive, and checks chapter navigation, direct links,
+keyboard access, illustration dialogs and focus restoration at desktop and
+mobile widths, including narrow and short-screen hero layouts. The mobile run uses
+reduced motion. Google Fonts requests are blocked to verify that the chronicle's
+bundled brand fonts load independently. It saves chapter screenshots,
+reading transcripts and a result file in `artifacts/lore-proof/`, then closes its
+browser and server. Set `LORE_PROOF_DIR` to retain evidence in another directory.
+The proof also checks every rendered word, with the world notes expanded, at
+15 widths from 320 to 1920 pixels. `text-layout.json` records split words,
+overflow and clipping; origins and chapter-index screenshots cover representative
+mobile, tablet and desktop layouts. Dialog text is checked while each artwork is open.
+
+Review the captured text and screenshots together for narrative continuity and
+readability. The chronicle is static: it has no separate loading, empty or error
+content states. Existing content tests run with `node --test tests/*.test.mjs`;
+`pnpm build` checks the production build.
+
+| Feature | How to reach it |
+| --- | --- |
+| Chronicle | `/scroll` → **A History of Lost Worlds**, or `/scroll/history-of-lost-worlds` |
+| Origins and four ages | **Enter the chronicle**, then an age in the chapter index; direct links use `#story`, `#blitz`, `#frontier`, `#eternum` and `#dominion` |
+| Full illustrations | Select a chapter illustration; close with **Close** or **Escape** |
+| Allegory and world notes | **Allegory** and **The world** in the page navigation; expand the notes with a click or **Enter** |
+| Sources | **Sources** in the page navigation |
+| Keyboard reading | **Tab** to **Skip to the story**, then **Enter**; chapter links and dialogs restore focus |
+
 ## Contributing Your Game to Realms World
 
 Welcome developers! We'd love to feature your game on the Realms World site. Follow this guide to add your game to our showcase.
