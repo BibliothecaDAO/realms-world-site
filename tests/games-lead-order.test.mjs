@@ -7,7 +7,7 @@ import { createElement } from "react";
 import { prerenderToNodeStream } from "react-dom/static";
 import { createServer } from "vite";
 import { generate } from "../scripts/generate-scroll-posts.mjs";
-import { games, gameStatusText, pickGames } from "../src/data/games.ts";
+import { games, gameStatusText, pagePlayNowUrl, pickGames, playNowUrl } from "../src/data/games.ts";
 
 const ROOT = process.cwd();
 const APP_ENTRY = "virtual:site-render-test-app";
@@ -363,12 +363,22 @@ test("Blitz is an ordinary card, first under each feature", () => {
   assert.doesNotMatch(home, /Play Now/);
 });
 
+test("Blitz's page has one Play Now to play.realms.party, and its cards have none", () => {
+  const [blitz] = pickGames(["blitz"]);
+
+  assert.equal(pagePlayNowUrl(blitz), "https://play.realms.party");
+  assert.equal(playNowUrl(blitz), undefined);
+  assert.match(pages.blitz, /Play Now/);
+  assert.equal(pages.blitz.match(/Play Now/g).length, 1);
+  assert.doesNotMatch(card(homeGames(), "article", "Realms: Blitz"), /Play Now/);
+  assert.doesNotMatch(card(gamesDirectory(), "button", "Realms: Blitz"), /Play Now/);
+});
+
 test("No page links to the Blitz website, and Blitz's page has no Website button", () => {
   for (const [name, html] of Object.entries(pages)) {
     assert.doesNotMatch(html, /blitz\.realms\.world/, `Expected no link to the Blitz website on ${name}`);
   }
   assert.doesNotMatch(pages.blitz, />\s*Website\s*</);
-  assert.doesNotMatch(pages.blitz, /Play Now/);
   assert.match(pages.frontier, /Play Now/);
   assert.match(homeGames(), /Play Now/, "Expected the other live games to keep Play Now");
 });

@@ -28,6 +28,8 @@ export interface Game {
   video?: string;
   links?: {
     homepage?: string;
+    /** Where the Play Now button on the game's own page goes, for a game with no website of its own. */
+    play?: string;
     discord?: string;
     twitter?: string;
     telegram?: string;
@@ -46,6 +48,11 @@ export function showsLiveStamp(game: Game) {
 /** Where a Play Now action goes, or nothing when the game has none. */
 export function playNowUrl(game: Game) {
   return game.isLive ? game.links?.homepage : undefined;
+}
+
+/** Where the Play Now button on a game's own page goes. */
+export function pagePlayNowUrl(game: Game) {
+  return game.isLive ? (game.links?.play ?? game.links?.homepage) : undefined;
 }
 
 /** The status a game shows wherever one is rendered. */
@@ -72,6 +79,7 @@ export const games: Game[] = [
     hideLiveStamp: true,
     studio: "Realms Games",
     links: {
+      play: "https://play.realms.party",
       discord: "https://discord.gg/realmsworld",
       twitter: "https://x.com/realmsgg",
       github: "https://github.com/BibliothecaDAO/eternum",

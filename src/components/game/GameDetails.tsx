@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FrontierGuide } from "@/components/game/FrontierGuide";
-import { Game, gameStatusText, playNowUrl, showsLiveStamp } from "@/data/games";
+import { Game, gameStatusText, pagePlayNowUrl, showsLiveStamp } from "@/data/games";
 import { useNavigate } from "@tanstack/react-router";
 import {
   BookOpen,
@@ -225,11 +225,11 @@ export function GameDetails({ game }: { game: Game }) {
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  {playNowUrl(game) ? (
+                  {pagePlayNowUrl(game) ? (
                     <Button
                       size="lg"
                       variant="war"
-                      onClick={() => openExternal(playNowUrl(game))}
+                      onClick={() => openExternal(pagePlayNowUrl(game))}
                       className="gap-2"
                     >
                       <Play className="h-4 w-4" />
@@ -239,7 +239,7 @@ export function GameDetails({ game }: { game: Game }) {
                   {game.howToPlay ? (
                     <Button
                       size="lg"
-                      variant={playNowUrl(game) ? "rune" : "war"}
+                      variant={pagePlayNowUrl(game) ? "rune" : "war"}
                       className="gap-2"
                       asChild
                     >
