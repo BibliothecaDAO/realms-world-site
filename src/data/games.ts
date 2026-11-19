@@ -20,8 +20,6 @@ export interface Game {
   isLive: boolean;
   /** Keeps the game live (its Play action, the live count, the sort) but shows no Live stamp. */
   hideLiveStamp?: boolean;
-  /** Keeps the game's website link but sends no visitor to it from a Play Now action. */
-  hidePlayNow?: boolean;
   studio: string;
   whitepaper?: string;
   howToPlay?: string;
@@ -47,7 +45,7 @@ export function showsLiveStamp(game: Game) {
 
 /** Where a Play Now action goes, or nothing when the game has none. */
 export function playNowUrl(game: Game) {
-  return game.isLive && !game.hidePlayNow ? game.links?.homepage : undefined;
+  return game.isLive ? game.links?.homepage : undefined;
 }
 
 /** The status a game shows wherever one is rendered. */
@@ -72,10 +70,8 @@ export const games: Game[] = [
     status: "mainnet",
     isLive: true,
     hideLiveStamp: true,
-    hidePlayNow: true,
     studio: "Realms Games",
     links: {
-      homepage: "https://blitz.realms.world/",
       discord: "https://discord.gg/realmsworld",
       twitter: "https://x.com/realmsgg",
       github: "https://github.com/BibliothecaDAO/eternum",

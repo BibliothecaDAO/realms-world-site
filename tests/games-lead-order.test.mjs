@@ -363,10 +363,11 @@ test("Blitz is an ordinary card, first under each feature", () => {
   assert.doesNotMatch(home, /Play Now/);
 });
 
-test("No page sends a visitor to Blitz from a Play Now action", () => {
+test("No page links to the Blitz website, and Blitz's page has no Website button", () => {
   for (const [name, html] of Object.entries(pages)) {
-    assert.doesNotMatch(html, /<a\b[^>]*href="https:\/\/blitz\.realms\.world[^"]*"[^>]*>\s*Play Now/, `Expected no Play Now link to Blitz on ${name}`);
+    assert.doesNotMatch(html, /blitz\.realms\.world/, `Expected no link to the Blitz website on ${name}`);
   }
+  assert.doesNotMatch(pages.blitz, />\s*Website\s*</);
   assert.doesNotMatch(pages.blitz, /Play Now/);
   assert.match(pages.frontier, /Play Now/);
   assert.match(homeGames(), /Play Now/, "Expected the other live games to keep Play Now");
