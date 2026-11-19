@@ -29,7 +29,7 @@ content states. Existing content tests run with `node --test tests/*.test.mjs`;
 | Chronicle | `/scroll` → **A History of Lost Worlds**, or `/scroll/history-of-lost-worlds` |
 | Origins and four ages | **Enter the chronicle**, then an age in the chapter index; direct links use `#story`, `#blitz`, `#frontier`, `#eternum` and `#dominion` |
 | Full illustrations | Select a chapter illustration; close with **Close** or **Escape** |
-| Allegory and world notes | **Allegory** and **The world** in the page navigation; expand the notes with a click or **Enter** |
+| Allegory and world notes | **Allegory** and **What endures** in the page navigation; expand the notes with a click or **Enter** |
 | Sources | **Sources** in the page navigation |
 | Keyboard reading | **Tab** to **Skip to the story**, then **Enter**; chapter links and dialogs restore focus |
 
