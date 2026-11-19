@@ -7,7 +7,7 @@ import { createElement } from "react";
 import { prerenderToNodeStream } from "react-dom/static";
 import { createServer } from "vite";
 import { generate } from "../scripts/generate-scroll-posts.mjs";
-import { games, gameStatusText, pagePlayNowUrl, pickGames, playNowUrl } from "../src/data/games.ts";
+import { games, gameStatusText, pagePlayNowUrl, pickGames, playNowUrl, showsLiveStamp } from "../src/data/games.ts";
 
 const ROOT = process.cwd();
 const APP_ENTRY = "virtual:site-render-test-app";
@@ -583,14 +583,15 @@ test("Frontier has its season label and is live", () => {
   assert.equal(frontier.links.homepage, "https://play.realms.party");
 });
 
-test("Hiding the Live stamp on Frontier and Blitz keeps both live and counted", () => {
+test("Hiding the Live stamp on Frontier and Blitz keeps both live, and Live Games counts only the stamps shown", () => {
   const [frontier, blitz] = pickGames(["frontier", "blitz"]);
   const listed = pickGames(["frontier", "blitz", "realms-eternum", "loot-survivor", "zkube", "pistols-at-dawn"]);
   const count = between(gamesDirectory(), "Live Games</p>", "</article>").match(/>(\d+)</)[1];
 
   assert.equal(frontier.isLive && blitz.isLive, true);
   assert.deepEqual(games.filter((game) => game.hideLiveStamp).map((game) => game.slug), ["blitz", "frontier"]);
-  assert.equal(count, String(listed.filter((game) => game.isLive).length));
+  assert.equal(count, String(listed.filter(showsLiveStamp).length));
+  assert.equal(count, "2");
 });
 
 test("Only Frontier has a status label, and other games keep their status", () => {

@@ -123,7 +123,7 @@ function GamesPage() {
 
   const orderedGames = [...realmsGames, ...otherGames];
   const [featuredGame, ...otherRealmsGames] = realmsGames;
-  const liveGamesCount = orderedGames.filter((game) => game.isLive).length;
+  const liveGamesCount = orderedGames.filter(showsLiveStamp).length;
   const studiosCount = new Set(orderedGames.map((game) => game.studio)).size;
 
   return (
