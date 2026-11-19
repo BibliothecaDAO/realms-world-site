@@ -113,7 +113,7 @@ function EconomicsSectionContent() {
           <div>
             <p className="text-lg font-bold sm:text-xl">Lock LORDS as veLORDS</p>
             <p className="mt-1 text-sm text-foreground/60">
-              Lock your LORDS to join the flywheel.
+              veLORDS holders receive a share of the fees the games earn.
             </p>
           </div>
           <div className="flex flex-wrap shrink-0 gap-3">

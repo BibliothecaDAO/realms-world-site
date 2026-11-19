@@ -745,7 +745,7 @@ test("The economics section keeps the flywheel and staking block, with no token 
   assert.match(pages.economics, /class="flex flex-wrap shrink-0 gap-3"/);
   assert.ok(text.includes("Stake LORDS"));
   assert.ok(text.includes("Lock LORDS as veLORDS"));
-  assert.ok(text.includes("Lock your LORDS to join the flywheel."));
+  assert.ok(text.includes("veLORDS holders receive a share of the fees the games earn."));
   assert.ok(text.includes("LORDS Price") && text.includes("Total Value Locked"));
   for (const line of [
     "The flywheel is how the games and the token are designed to feed each other.",
