@@ -410,7 +410,7 @@ export function LordsFlywheel({ metrics }: FlywheelProps) {
                       {metricValue}
                     </p>
                   )}
-                  <p className="text-[11px] text-foreground/50 leading-snug mt-1">
+                  <p className="text-sm text-foreground/70 leading-snug mt-1">
                     {step.detail}
                   </p>
                 </div>
