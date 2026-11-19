@@ -853,14 +853,28 @@ test("The site is named Realms.World in every tracked source, handler, content a
   ]);
   const tracked = execFileSync(
     "git",
-    ["ls-files", "--", "src", "api", "content", "index.html", "public/*.html", "public/*.json", "public/*.xml", "public/*.txt"],
+    ["ls-files", "-z", "--", "src", "api", "content", "index.html", "public/*.html", "public/*.json", "public/*.xml", "public/*.txt"],
     { cwd: ROOT, encoding: "utf8" },
   )
-    .split("\n")
+    .split("\0")
     .filter(Boolean);
-  assert.ok(tracked.length > 0, "Expected tracked files to scan");
+  for (const path of [
+    "api/og.tsx",
+    "index.html",
+    "src/routes/__root.tsx",
+    "src/components/sections/FooterSection.tsx",
+  ]) {
+    assert.ok(tracked.includes(path), `Expected the scan to include ${path}`);
+  }
+  assert.ok(
+    tracked.some((path) => /^content\/scroll\/.+\.md$/.test(path)),
+    "Expected the scan to include a content/scroll post",
+  );
+  for (const path of exceptions.keys()) {
+    assert.ok(tracked.includes(path), `Expected the exception ${path} to be tracked`);
+  }
   for (const path of tracked) {
-    if (exceptions.has(path) || !existsSync(join(ROOT, path))) continue;
+    if (exceptions.has(path)) continue;
     assert.doesNotMatch(read(path), /Realms World/, `Expected ${path} to say Realms.World`);
   }
 });
