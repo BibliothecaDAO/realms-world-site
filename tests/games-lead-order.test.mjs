@@ -1,4 +1,5 @@
 import test, { after, before } from "node:test";
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -841,5 +842,25 @@ test("The home and games descriptions call only Blitz and Eternum AI-native, and
     const source = read(path);
     assert.ok(source.includes(`title: "${title}"`), `Expected the title ${title} in ${path}`);
     assert.ok(source.includes(`"${description}"`), `Expected the description in ${path}`);
+  }
+});
+
+test("The site is named Realms.World in every tracked source, handler, content and public text file", () => {
+  const exceptions = new Map([
+    ["src/routes/terms.tsx", "legal page, left as written until the legal copy is reviewed"],
+    ["src/routes/privacy.tsx", "legal page, left as written until the legal copy is reviewed"],
+    ["src/data/games/realms-eternum.mdoc", "names the game world, not the site"],
+  ]);
+  const tracked = execFileSync(
+    "git",
+    ["ls-files", "--", "src", "api", "content", "index.html", "public/*.html", "public/*.json", "public/*.xml", "public/*.txt"],
+    { cwd: ROOT, encoding: "utf8" },
+  )
+    .split("\n")
+    .filter(Boolean);
+  assert.ok(tracked.length > 0, "Expected tracked files to scan");
+  for (const path of tracked) {
+    if (exceptions.has(path) || !existsSync(join(ROOT, path))) continue;
+    assert.doesNotMatch(read(path), /Realms World/, `Expected ${path} to say Realms.World`);
   }
 });

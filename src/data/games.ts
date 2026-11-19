@@ -18,7 +18,7 @@ export interface Game {
   status?: "mainnet" | "testnet" | "development";
   statusLabel?: string;
   isLive: boolean;
-  /** Keeps the game live (its Play action, the live count, the sort) but shows no Live stamp. */
+  /** Keeps the game live (its Play action, the sort) but shows no Live stamp. */
   hideLiveStamp?: boolean;
   studio: string;
   whitepaper?: string;

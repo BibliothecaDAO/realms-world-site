@@ -7,7 +7,7 @@ export const config = {
 export default async function handler(request: Request) {
   try {
     // Get dynamic parameters with safer parsing
-    let title = "Realms World";
+    let title = "Realms.World";
     let description = "The future of gaming is onchain";
     let path = "";
 
@@ -106,7 +106,7 @@ export default async function handler(request: Request) {
                 color: "white",
               }}
             >
-              Realms World
+              Realms.World
             </span>
           </div>
 
