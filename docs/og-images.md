@@ -160,7 +160,7 @@ VITE_BASE_URL=https://your-domain.com
 4. The system will automatically generate OG images with:
    - Dynamic titles and descriptions
    - Consistent branding
-   - Dark theme with Realms World styling
+   - Dark theme with Realms.World styling
    - Path information
 
 ## Usage Examples
@@ -169,7 +169,7 @@ VITE_BASE_URL=https://your-domain.com
 
 ```typescript
 generateMetaTags({
-  title: "Realms World - Onchain Gaming Powered by $LORDS",
+  title: "Realms.World - Onchain Gaming Powered by $LORDS",
   description: "The future of gaming is onchain.",
   path: "/",
 });
@@ -179,7 +179,7 @@ generateMetaTags({
 
 ```typescript
 generateMetaTags({
-  title: `${game.title} - Realms World`,
+  title: `${game.title} - Realms.World`,
   description: game.description,
   path: `/games/${game.slug}`,
   image: game.ogImage || game.image, // Use game's OG image or screenshot
@@ -190,7 +190,7 @@ generateMetaTags({
 
 ```typescript
 generateMetaTags({
-  title: "Treasury - Realms World",
+  title: "Treasury - Realms.World",
   description: "DAO Treasury and Governance",
   image: "/og-treasury.png", // Custom static image
 });
