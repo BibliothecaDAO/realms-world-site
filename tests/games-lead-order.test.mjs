@@ -863,6 +863,7 @@ test("The site is named Realms.World in every tracked source, handler, content a
     "index.html",
     "src/routes/__root.tsx",
     "src/components/sections/FooterSection.tsx",
+    "public/robots.txt",
   ]) {
     assert.ok(tracked.includes(path), `Expected the scan to include ${path}`);
   }
