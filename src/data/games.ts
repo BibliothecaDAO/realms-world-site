@@ -26,6 +26,8 @@ export interface Game {
   players?: number;
   tvl?: number;
   video?: string;
+  /** The game's page hero frame ratio when `image` is not 16:9, so the picture shows whole. */
+  imageAspect?: string;
   links?: {
     homepage?: string;
     /** Where the Play Now button on the game's own page goes, for a game with no website of its own. */
@@ -89,7 +91,8 @@ export const games: Game[] = [
     id: 14,
     slug: "frontier",
     title: "Realms: Frontier",
-    image: "/games/frontier/cover.png",
+    image: "/games/frontier/painted-logo.webp",
+    imageAspect: "3 / 2",
     backgroundImage: "/games/frontier/settlement-at-dawn.webp",
     genre: ["Roguelite", "Strategy", "Free to play"],
     description:

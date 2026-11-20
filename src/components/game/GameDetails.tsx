@@ -291,6 +291,7 @@ export function GameDetails({ game }: { game: Game }) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.15 }}
                 className="realm-games-detail-media relative aspect-video overflow-hidden rounded-lg border border-primary/25"
+                style={game.imageAspect ? { aspectRatio: game.imageAspect } : undefined}
               >
                 {game.video ? (
                   <iframe
