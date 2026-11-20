@@ -89,7 +89,7 @@ export function FrontierGuide() {
                     height={160}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-contain brightness-125"
                   />
                 ))}
               </div>
