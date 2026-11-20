@@ -472,7 +472,8 @@ test("Frontier's page shows six illustrated cards, each with a picture, a title 
     assert.match(html.slice(html.lastIndexOf("<h", heading), heading), /class="realm-title /, `Expected ${title} in the title face`);
     assert.ok(html.indexOf(text, heading) > heading, `Expected the text of ${title}`);
     for (const file of files) {
-      assert.ok(statSync(join(ROOT, `public/games/frontier/${file}.webp`)).size <= 16000, `Expected ${file} to stay small`);
+      const cap = file.startsWith("aspect-") ? 16000 : 12000;
+      assert.ok(statSync(join(ROOT, `public/games/frontier/${file}.webp`)).size <= cap, `Expected ${file} to stay under ${cap} bytes`);
     }
     if (files.length > 1) {
       const grid = html.slice(html.lastIndexOf("<div", pictures[0]), pictures[0]);
