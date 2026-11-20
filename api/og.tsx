@@ -50,15 +50,8 @@ export default async function handler(request: Request) {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundImage: `
-                repeating-linear-gradient(
-                  45deg,
-                  transparent,
-                  transparent 10px,
-                  rgba(255, 255, 255, 0.02) 10px,
-                  rgba(255, 255, 255, 0.02) 20px
-                )
-              `,
+              backgroundImage:
+                "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px)",
             }}
           />
 
