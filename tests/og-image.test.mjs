@@ -14,6 +14,7 @@ before(async () => {
     logLevel: "silent",
     server: { middlewareMode: true },
     esbuild: { jsx: "automatic" },
+    optimizeDeps: { noDiscovery: true, include: [] },
   });
   handler = (await vite.ssrLoadModule("/api/og.tsx")).default;
 });
