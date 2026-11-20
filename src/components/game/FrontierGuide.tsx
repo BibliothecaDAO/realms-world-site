@@ -41,7 +41,7 @@ const cards = [
   },
   {
     id: "frontier-aspect",
-    icon: "hyperstructure",
+    icons: ["aspect-luminary", "aspect-havoc", "aspect-prowess", "aspect-insight"],
     title: "Pick an Aspect",
     text: "Pick one of four Aspects, the teams of Frontier: Luminary, Havoc, Prowess, or Insight. Keep it all season. Hold the Hyperstructure archive in the Deep with your mates and every tick builds your Aspect's Hyperstructure, in plain view on the race board. Rivals can stall it from a Bane altar. The first Hyperstructure to be finished wins the age.",
   },
@@ -75,15 +75,35 @@ export function FrontierGuide() {
           aria-labelledby={card.id}
         >
           <div className="flex items-center gap-4">
-            <img
-              src={art(card.icon)}
-              alt=""
-              width={128}
-              height={128}
-              loading="lazy"
-              decoding="async"
-              className="h-16 w-16 shrink-0 object-contain sm:h-20 sm:w-20"
-            />
+            {card.icons ? (
+              <div
+                className="grid h-16 w-16 shrink-0 grid-cols-2 gap-1 sm:h-20 sm:w-20"
+                aria-hidden="true"
+              >
+                {card.icons.map((icon) => (
+                  <img
+                    key={icon}
+                    src={art(icon)}
+                    alt=""
+                    width={160}
+                    height={160}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-contain"
+                  />
+                ))}
+              </div>
+            ) : (
+              <img
+                src={art(card.icon)}
+                alt=""
+                width={128}
+                height={128}
+                loading="lazy"
+                decoding="async"
+                className="h-16 w-16 shrink-0 object-contain sm:h-20 sm:w-20"
+              />
+            )}
             <h2 id={card.id} className={cardTitleClass}>
               {card.title}
             </h2>

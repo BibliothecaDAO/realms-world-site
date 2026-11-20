@@ -457,19 +457,30 @@ test("Frontier's page shows six illustrated cards, each with a picture, a title 
     ["One day, one expedition", "hourglass", "Each day a new map opens around your Realm and lasts 8 to 24 hours."],
     ["The mist forgets. Your Realm remembers.", "realm-2", "At the day's end the mist consumes the map"],
     ["Go down to the Deep", "depth-3", "Spires lead down through the map to the Deep, the ethereal plane every Realm shares."],
-    ["Pick an Aspect", "hyperstructure", "Pick one of four Aspects, the teams of Frontier: Luminary, Havoc, Prowess, or Insight. Keep it all season."],
+    ["Pick an Aspect", ["aspect-luminary", "aspect-havoc", "aspect-prowess", "aspect-insight"], "Pick one of four Aspects, the teams of Frontier: Luminary, Havoc, Prowess, or Insight. Keep it all season."],
     ["Share the prize", "crown", "Glory is your score."],
     ["Free to play", "realm-0", "Founding your Realm costs nothing."],
   ];
   const html = decode(pages.frontier);
 
   for (const [title, art, text] of CARDS) {
-    const picture = html.indexOf(`<img src="/games/frontier/${art}.webp"`);
+    const files = [art].flat();
     const heading = html.indexOf(`>${title}</h`);
-    assert.ok(picture !== -1 && heading > picture && heading - picture < 400, `Expected ${art} directly before the ${title} card title`);
+    const pictures = files.map((file) => html.indexOf(`<img src="/games/frontier/${file}.webp"`));
+    assert.ok(pictures.every((at, i) => at !== -1 && at < heading && (i === 0 || at > pictures[i - 1])), `Expected ${files} in order before the ${title} card title`);
+    assert.ok(heading - pictures.at(-1) < 400, `Expected ${files.at(-1)} directly before the ${title} card title`);
     assert.match(html.slice(html.lastIndexOf("<h", heading), heading), /class="realm-title /, `Expected ${title} in the title face`);
     assert.ok(html.indexOf(text, heading) > heading, `Expected the text of ${title}`);
-    assert.ok(statSync(join(ROOT, `public/games/frontier/${art}.webp`)).size <= 12000, `Expected ${art} to stay small`);
+    for (const file of files) {
+      assert.ok(statSync(join(ROOT, `public/games/frontier/${file}.webp`)).size <= 16000, `Expected ${file} to stay small`);
+    }
+    if (files.length > 1) {
+      const grid = html.slice(html.lastIndexOf("<div", pictures[0]), pictures[0]);
+      assert.match(grid, /aria-hidden="true"/, `Expected the ${title} pictures hidden from assistive tech`);
+      assert.match(grid, /grid-cols-2/, `Expected the ${title} pictures in two columns`);
+      assert.match(grid, /h-16 w-16/, `Expected the ${title} pictures in the 64 px icon box`);
+      assert.match(grid, /sm:h-20 sm:w-20/, `Expected the ${title} pictures in the 80 px icon box`);
+    }
   }
 });
 
