@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { gameStatusText, pickGames, realmsGameSlugs, type Game } from "@/data/games";
+import { gameStatusText, pickGames, playNowUrl, realmsGameSlugs, showsLiveStamp, type Game } from "@/data/games";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -8,7 +8,6 @@ import {
   Coins,
   ExternalLink,
   Gamepad2,
-  Shield,
   Swords,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ const otherStudioGames = pickGames(["loot-survivor", "zkube"]);
 const frontierFeatures = [
   {
     icon: Swords,
-    label: "PvE Roguelite",
+    label: "Roguelite Strategy",
     detail: "Explore, fight beasts, and upgrade your Realm",
   },
   {
@@ -29,14 +28,9 @@ const frontierFeatures = [
     detail: "Found your Realm for free",
   },
   {
-    icon: Shield,
-    label: "Fully Onchain",
-    detail: "All actions verifiable onchain",
-  },
-  {
     icon: Coins,
-    label: "$LORDS Rewards",
-    detail: "Recover $LORDS from ruins; top players win a prize",
+    label: "Prize $LORDS",
+    detail: "Aspects share the prize by Glory",
   },
 ];
 
@@ -60,7 +54,7 @@ function GameCard({ game, index }: { game: Game; index: number }) {
       <div className="relative flex h-full flex-col justify-end p-4 pt-28 sm:p-5 sm:pt-28 lg:pt-12">
         {/* Status badge */}
         <div className="absolute top-3 right-3">
-          {game.isLive ? (
+          {showsLiveStamp(game) ? (
             <span className="realm-sigil bg-black/80 text-green-400 border-green-500/30">
               Live
             </span>
@@ -98,9 +92,9 @@ function GameCard({ game, index }: { game: Game; index: number }) {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            {game.isLive && game.links?.homepage && (
+            {playNowUrl(game) && (
               <a
-                href={game.links.homepage}
+                href={playNowUrl(game)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center text-xs font-semibold text-primary hover:text-primary/80 transition-colors sm:min-h-6"
@@ -143,8 +137,8 @@ export function EcosystemAtlasSection() {
             REALMS GAMES
           </h2>
           <p className="realm-subtitle text-base sm:text-lg">
-            Blitz, Frontier and Eternum share one world. Each has its own rules,
-            and those rules are verifiable onchain.
+            Blitz, Frontier, and Eternum share one world. Each has its own
+            rules.
           </p>
           <Link
             to="/games"
@@ -189,7 +183,7 @@ export function EcosystemAtlasSection() {
                     <Swords className="h-3.5 w-3.5" />
                     Featured Game
                   </p>
-                  {frontier.isLive ? (
+                  {showsLiveStamp(frontier) ? (
                     <span className="realm-sigil text-green-400 border-green-500/30">
                       Live
                     </span>
@@ -284,7 +278,7 @@ export function EcosystemAtlasSection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          <p className="realm-banner mx-auto flex w-fit text-center">GAMES FROM OTHER STUDIOS</p>
+          <p className="realm-banner mx-auto flex w-fit text-center">Games from Other Studios</p>
         </motion.div>
 
         {/* ── Other studios grid ── */}

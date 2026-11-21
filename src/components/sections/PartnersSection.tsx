@@ -4,7 +4,7 @@ import { partners } from "@/data/partners";
 
 const partnerRoles: Record<string, string> = {
   Starknet: "Execution Layer",
-  Starkware: "ZK Infrastructure",
+  StarkWare: "ZK Infrastructure",
   Cartridge: "Account Stack",
   Dojo: "Engine Framework",
 };

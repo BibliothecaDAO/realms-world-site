@@ -6,9 +6,7 @@ import { Gamepad2, Coins, Lock, RefreshCw } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 interface FlywheelMetrics {
-  weeklyRewards?: string;
   lordsLocked?: string;
-  currentAPY?: string;
 }
 
 interface FlywheelProps {
@@ -19,26 +17,26 @@ const STEPS = [
   {
     icon: Gamepad2,
     label: "Play",
-    detail: "LORDS spent in matches",
+    detail: "Players take part in the games",
     metricKey: null as keyof FlywheelMetrics | null,
   },
   {
     icon: Coins,
     label: "Fees",
-    detail: "4w avg weekly revenue",
-    metricKey: "weeklyRewards" as keyof FlywheelMetrics | null,
+    detail: "The games earn fees",
+    metricKey: null as keyof FlywheelMetrics | null,
   },
   {
     icon: Lock,
     label: "Stake",
-    detail: "Locked as veLORDS",
+    detail: "LORDS locked as veLORDS",
     metricKey: "lordsLocked" as keyof FlywheelMetrics | null,
   },
   {
     icon: RefreshCw,
-    label: "Earn",
-    detail: "4w avg staking yield",
-    metricKey: "currentAPY" as keyof FlywheelMetrics | null,
+    label: "Grow",
+    detail: "A stronger ecosystem draws more players",
+    metricKey: null as keyof FlywheelMetrics | null,
   },
 ];
 
@@ -266,8 +264,7 @@ export function LordsFlywheel({ metrics }: FlywheelProps) {
       <div className="text-center mb-6 sm:mb-8">
         <p className="realm-banner mb-3">The LORDS Flywheel</p>
         <p className="text-base sm:text-lg text-foreground/65 max-w-xl mx-auto leading-relaxed">
-          A self-reinforcing loop — game activity drives staking rewards,
-          staking rewards incentivize more play.
+          The flywheel is how the games and the token are designed to feed each other.
         </p>
       </div>
 
@@ -413,7 +410,7 @@ export function LordsFlywheel({ metrics }: FlywheelProps) {
                       {metricValue}
                     </p>
                   )}
-                  <p className="text-[11px] text-foreground/50 leading-snug mt-1">
+                  <p className="text-sm text-foreground/70 leading-snug mt-1">
                     {step.detail}
                   </p>
                 </div>
@@ -458,7 +455,7 @@ export function LordsFlywheel({ metrics }: FlywheelProps) {
           <div className="flex items-center gap-2.5 pl-[3.25rem] text-sm text-primary/55">
             <RefreshCw className="h-3.5 w-3.5" />
             <span className="uppercase tracking-[0.12em]">
-              Cycle repeats weekly
+              The loop repeats
             </span>
           </div>
         </div>

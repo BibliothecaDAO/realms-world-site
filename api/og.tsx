@@ -7,7 +7,7 @@ export const config = {
 export default async function handler(request: Request) {
   try {
     // Get dynamic parameters with safer parsing
-    let title = "Realms World";
+    let title = "Realms.World";
     let description = "The future of gaming is onchain";
     let path = "";
 
@@ -50,15 +50,8 @@ export default async function handler(request: Request) {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundImage: `
-                repeating-linear-gradient(
-                  45deg,
-                  transparent,
-                  transparent 10px,
-                  rgba(255, 255, 255, 0.02) 10px,
-                  rgba(255, 255, 255, 0.02) 20px
-                )
-              `,
+              backgroundImage:
+                "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px)",
             }}
           />
 
@@ -106,7 +99,7 @@ export default async function handler(request: Request) {
                 color: "white",
               }}
             >
-              Realms World
+              Realms.World
             </span>
           </div>
 

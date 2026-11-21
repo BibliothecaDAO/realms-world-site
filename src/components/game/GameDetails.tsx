@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FrontierGuide } from "@/components/game/FrontierGuide";
-import { Game, gameStatusText } from "@/data/games";
+import { Game, gameStatusText, pagePlayNowUrl, showsLiveStamp } from "@/data/games";
 import { useNavigate } from "@tanstack/react-router";
 import {
   BookOpen,
@@ -206,7 +206,7 @@ export function GameDetails({ game }: { game: Game }) {
                   </motion.h1>
 
                   <div className="mt-4 flex flex-wrap items-center gap-2">
-                    {game.isLive ? <LiveIndicator /> : null}
+                    {showsLiveStamp(game) ? <LiveIndicator /> : null}
                     {statusText ? (
                       <Badge
                         variant="outline"
@@ -225,11 +225,11 @@ export function GameDetails({ game }: { game: Game }) {
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  {game.isLive && game.links?.homepage ? (
+                  {pagePlayNowUrl(game) ? (
                     <Button
                       size="lg"
                       variant="war"
-                      onClick={() => openExternal(game.links?.homepage)}
+                      onClick={() => openExternal(pagePlayNowUrl(game))}
                       className="gap-2"
                     >
                       <Play className="h-4 w-4" />
@@ -239,7 +239,7 @@ export function GameDetails({ game }: { game: Game }) {
                   {game.howToPlay ? (
                     <Button
                       size="lg"
-                      variant={game.isLive && game.links?.homepage ? "rune" : "war"}
+                      variant={pagePlayNowUrl(game) ? "rune" : "war"}
                       className="gap-2"
                       asChild
                     >
@@ -291,6 +291,7 @@ export function GameDetails({ game }: { game: Game }) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.15 }}
                 className="realm-games-detail-media relative aspect-video overflow-hidden rounded-lg border border-primary/25"
+                style={game.imageAspect ? { aspectRatio: game.imageAspect } : undefined}
               >
                 {game.video ? (
                   <iframe
@@ -374,7 +375,7 @@ export function GameDetails({ game }: { game: Game }) {
                       <h2 className="realm-title mt-3 text-2xl sm:text-3xl">Dashboards</h2>
                     </div>
                     <span className="realm-sigil">
-                      {game.dashboards.length} dashboard
+                      {game.dashboards.length} {game.dashboards.length === 1 ? "dashboard" : "dashboards"}
                     </span>
                   </header>
 
@@ -414,7 +415,7 @@ export function GameDetails({ game }: { game: Game }) {
                       </h2>
                     </div>
                     <span className="realm-sigil">
-                      {game.backgroundImages.length} captures
+                      {game.backgroundImages.length} {game.backgroundImages.length === 1 ? "screenshot" : "screenshots"}
                     </span>
                   </header>
 
@@ -489,7 +490,7 @@ export function GameDetails({ game }: { game: Game }) {
                     className="gap-2 border-primary/35 bg-black/30 hover:bg-black/45"
                   >
                     <Twitter className="h-4 w-4" />
-                    Twitter
+                    X
                     <ExternalLink className="h-3 w-3" />
                   </Button>
                 ) : null}

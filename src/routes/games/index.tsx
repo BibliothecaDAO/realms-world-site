@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { generateMetaTags } from "@/lib/og-image";
-import { gameStatusText, type Game } from "@/data/games";
+import { gameStatusText, showsLiveStamp, type Game } from "@/data/games";
 
 const otherStudioSlugs = ["loot-survivor", "zkube", "pistols-at-dawn"];
 
@@ -16,9 +16,9 @@ export const Route = createFileRoute("/games/")({
   component: GamesPage,
   head: () => ({
     meta: generateMetaTags({
-      title: "Games - Realms World",
+      title: "Realms.World | Games",
       description:
-        "Blitz, Frontier and Eternum, the AI-native onchain games of Realms, and games from other studios in the ecosystem.",
+        "Blitz and Eternum, the AI-native onchain games of Realms, plus Frontier and games from other studios in the ecosystem.",
       path: "/games",
     }),
   }),
@@ -67,7 +67,7 @@ function GameCard({ game, index }: { game: Game; index: number }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
         <div className="absolute left-3 top-3 flex items-center gap-2">
-          {game.isLive ? (
+          {showsLiveStamp(game) ? (
             <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/80 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
               <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
               Live
@@ -123,7 +123,7 @@ function GamesPage() {
 
   const orderedGames = [...realmsGames, ...otherGames];
   const [featuredGame, ...otherRealmsGames] = realmsGames;
-  const liveGamesCount = orderedGames.filter((game) => game.isLive).length;
+  const liveGamesCount = orderedGames.filter(showsLiveStamp).length;
   const studiosCount = new Set(orderedGames.map((game) => game.studio)).size;
 
   return (
@@ -143,7 +143,7 @@ function GamesPage() {
                 </h1>
                 <p className="mt-3 text-base text-foreground/80 sm:text-lg">
                   Browse live and in-development games shipping across the
-                  Realms.World ecosystem. Access more information, socials and
+                  Realms.World ecosystem. Access more information, socials, and
                   gameplay links on individual game pages.
                 </p>
               </div>
@@ -193,7 +193,7 @@ function GamesPage() {
                 <div className="p-5 sm:p-6 lg:py-7">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="realm-banner">Featured Game</p>
-                    {featuredGame.isLive ? (
+                    {showsLiveStamp(featuredGame) ? (
                       <span className="inline-flex items-center rounded-full border border-emerald-400/35 bg-black/80 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-emerald-300">
                         <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-300" />
                         Live

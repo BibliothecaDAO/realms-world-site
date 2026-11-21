@@ -18,14 +18,20 @@ export interface Game {
   status?: "mainnet" | "testnet" | "development";
   statusLabel?: string;
   isLive: boolean;
+  /** Keeps the game live (its Play action, the sort) but shows no Live stamp. */
+  hideLiveStamp?: boolean;
   studio: string;
   whitepaper?: string;
   howToPlay?: string;
   players?: number;
   tvl?: number;
   video?: string;
+  /** The game's page hero frame ratio when `image` is not 16:9, so the picture shows whole. */
+  imageAspect?: string;
   links?: {
     homepage?: string;
+    /** Where the Play Now button on the game's own page goes, for a game with no website of its own. */
+    play?: string;
     discord?: string;
     twitter?: string;
     telegram?: string;
@@ -35,6 +41,21 @@ export interface Game {
 
 /** Realms' own games, in the order every games list leads with. */
 export const realmsGameSlugs = ["frontier", "blitz", "realms-eternum"];
+
+/** Whether the Live stamp shows on a game's cards and page. */
+export function showsLiveStamp(game: Game) {
+  return game.isLive && !game.hideLiveStamp;
+}
+
+/** Where a Play Now action goes, or nothing when the game has none. */
+export function playNowUrl(game: Game) {
+  return game.isLive ? game.links?.homepage : undefined;
+}
+
+/** Where the Play Now button on a game's own page goes. */
+export function pagePlayNowUrl(game: Game) {
+  return game.isLive ? (game.links?.play ?? game.links?.homepage) : undefined;
+}
 
 /** The status a game shows wherever one is rendered. */
 export function gameStatusText(game: Game) {
@@ -57,9 +78,10 @@ export const games: Game[] = [
       "Blitz is a one-hour onchain RTS where players compete over territory, production, and tactical timing. Matches are fully verifiable on Starknet, and top-ranking players win a share of the $LORDS prize pool.",
     status: "mainnet",
     isLive: true,
+    hideLiveStamp: true,
     studio: "Realms Games",
     links: {
-      homepage: "https://blitz.realms.world/",
+      play: "https://play.realms.party",
       discord: "https://discord.gg/realmsworld",
       twitter: "https://x.com/realmsgg",
       github: "https://github.com/BibliothecaDAO/eternum",
@@ -69,17 +91,19 @@ export const games: Game[] = [
     id: 14,
     slug: "frontier",
     title: "Realms: Frontier",
-    image: "/games/frontier/cover.png",
+    image: "/games/frontier/painted-logo.webp",
+    imageAspect: "3 / 2",
     backgroundImage: "/games/frontier/settlement-at-dawn.webp",
-    genre: ["PvE", "Roguelite", "Free to play"],
+    genre: ["Roguelite", "Strategy", "Free to play"],
     description:
-      "Your Realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land and send home what they find. At the day's end the mist takes the map and every army. Your Realm keeps all it earned. Free to play, and no other player can attack you.",
+      "Your Realm is the only safety. Each day a new map opens around it: send armies into the mist, clear what guards the land, and send home what they find. At the day's end the mist consumes the map and every army. Your Realm keeps all it earned. Free to play.",
     featureBlurb:
-      "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.",
+      "Frontier is a free-to-play, roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and descend into the ethereal plane to compete for glory. Work with others from your order to build a Hyperstructure and overcome the mist, winning a share of prize $LORDS based on your contribution.",
     featureDetail:
-      "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.",
-    statusLabel: "Season 1 - coming soon",
+      "Every day is one expedition. Send armies of Knights, Crossbows, and Scouts across a fresh map to explore, clear the beasts that guard it, and send what they find home. Armies take Oaths and carry relics that sharpen the day's fights. When the day ends, the mist consumes the map and every army, and your Realm keeps all it earned, so each day can start a little stronger. Spires lead down to the Deep, a map every Realm shares, where armies fight armies for the sites that matter. Pick an Aspect, hold sites in the Deep with your mates, and build your Aspect's Hyperstructure. The first to finish wins the age, and the prize $LORDS are shared by contribution, measured in Glory.",
+    statusLabel: "Season 1: coming soon",
     isLive: true,
+    hideLiveStamp: true,
     studio: "Realms Games",
     howToPlay: "https://docs.realms.party/frontier",
     links: {
@@ -102,7 +126,7 @@ export const games: Game[] = [
     ],
     dashboards: [
       {
-        title: "Eternum Season One",
+        title: "Eternum Season 1",
         subtitle: "Revenue & Rewards Dashboard",
         image: "/games/realms-eternum/dashboards/eternum-stats-dashboard.svg",
         href: "https://eternum-stats-mu.vercel.app/",
@@ -110,7 +134,7 @@ export const games: Game[] = [
     ],
     genre: ["Grand Strategy", "Economic Sim", "PvP", "Realms Games"],
     description:
-      "Eternum is the seasonal grand-strategy world of the Realms ecosystem: a living economy of settlements, trade, alliances, raiding, and territory control. Season 1 has concluded, and the next public campaign is being prepared.",
+      "Eternum is the seasonal grand-strategy world of the Realms ecosystem: a living economy of settlements, trade, alliances, raiding, and territory control. Eternum Season 1 has concluded, and the next public campaign is being prepared.",
     status: "development",
     isLive: false,
     studio: "Realms Games",
@@ -161,7 +185,7 @@ export const games: Game[] = [
     ],
     genre: ["Play to Die", "Roguelike"],
     description:
-      "Survivors is the first Loot adventure game exploring the Play2Die mechanic. It is a game of onchain survival where you must defeat beasts and collect gear in the fight to stay alive and make it to the top of the leaderboard.",
+      "Loot Survivor is the first Loot adventure game exploring the Play2Die mechanic. It is a game of onchain survival where you must defeat beasts and collect gear in the fight to stay alive and make it to the top of the leaderboard.",
     status: "mainnet",
     isLive: true,
     studio: "Provable Games",
@@ -187,9 +211,9 @@ export const games: Game[] = [
       "/games/pistols/screenshots/05.jpg",
       "/games/pistols/screenshots/06.jpg",
     ],
-    genre: ["Social", "Casual", "Strategy", "PVP"],
+    genre: ["Social", "Casual", "Strategy", "PvP"],
     description:
-      'Kill or be killed — not just a game, but a showdown of souls. Challenge a friend or a foe in an atmospheric, on-chain duel where every choice, bluff, and bullet is forever etched in the blockchain. Pick your cards. Choose your moment. Fire… or don\'t! Each duel tells a story — make yours legendary.',
+      'Kill or be killed: not just a game, but a showdown of souls. Challenge a friend or a foe in an atmospheric, onchain duel where every choice, bluff, and bullet is forever etched in the blockchain. Pick your cards. Choose your moment. Fire… or don\'t! Each duel tells a story: make yours legendary.',
     status: "development",
     isLive: false,
     studio: "Underware",

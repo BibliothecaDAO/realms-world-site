@@ -14,7 +14,7 @@ title: "A History of Lost Worlds"
 excerpt: "Follow the four ages."
 date: "2026-10-16"
 type: ${JSON.stringify(type)}
-author: "Realms World"
+author: "Realms.World"
 tags: ["lore"]
 published: true
 canonicalUrl: "https://example.com/canonical"

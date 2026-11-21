@@ -14,7 +14,7 @@ import {
 type ScrollFilter = "all" | ScrollPostType;
 
 const filterOptions = [
-  { id: "all", label: "All Dispatches" },
+  { id: "all", label: "All posts" },
   { id: "update", label: "Updates" },
   { id: "thought-piece", label: "Thought Pieces" },
   { id: "lore", label: "Lore" },
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/scroll/")({
   component: ScrollIndexPage,
   head: () => ({
     meta: generateMetaTags({
-      title: "Scroll - Realms World",
+      title: "Realms.World | Scroll",
       description: "Ecosystem updates, thought pieces, and lore from the Realms.",
       path: "/scroll",
     }),
@@ -75,7 +75,7 @@ function ScrollIndexPage() {
                 Scroll Archive
               </h1>
               <p className="mt-3 text-base sm:text-lg text-foreground/80">
-                The written layer for Realms. Read ecosystem updates, thought pieces,
+                The written layer for the Realms. Read ecosystem updates, thought pieces,
                 and lore published as an open chronicle.
               </p>
             </div>

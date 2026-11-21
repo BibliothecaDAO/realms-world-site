@@ -29,7 +29,7 @@ export function FooterSection() {
           icon: ExternalLink,
         },
         {
-          label: "Twitter",
+          label: "X",
           href: "https://x.com/LootRealms",
           icon: ExternalLink,
         },
@@ -72,7 +72,7 @@ export function FooterSection() {
                   height={65}
                   className="h-auto w-16 mb-5"
                 />
-                <h3 className="realm-title text-3xl mb-3">Realms World</h3>
+                <h3 className="realm-title text-3xl mb-3">Realms.World</h3>
                 <p className="text-muted-foreground leading-relaxed max-w-sm">
                   The onchain gaming ecosystem powered by $LORDS.
                   Built by BibliothecaDAO.

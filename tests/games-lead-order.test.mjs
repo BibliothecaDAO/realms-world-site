@@ -1,4 +1,5 @@
 import test, { after, before } from "node:test";
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -7,18 +8,18 @@ import { createElement } from "react";
 import { prerenderToNodeStream } from "react-dom/static";
 import { createServer } from "vite";
 import { generate } from "../scripts/generate-scroll-posts.mjs";
-import { games, gameStatusText, pickGames } from "../src/data/games.ts";
+import { games, gameStatusText, pagePlayNowUrl, pickGames, playNowUrl, showsLiveStamp } from "../src/data/games.ts";
 
 const ROOT = process.cwd();
 const APP_ENTRY = "virtual:site-render-test-app";
-const FRONTIER_LABEL = "Season 1 - coming soon";
+const FRONTIER_LABEL = "Season 1: coming soon";
 const FRONTIER_ART = "/games/frontier/settlement-at-dawn.webp";
 const BLITZ_ART = "/games/blitz/soldiers-in-rain.webp";
 const ETERNUM_ART = "/games/realms-eternum/alpine-war-council.webp";
 const FRONTIER_BLURB =
-  "Frontier is a free-to-play, PvE roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and recover $LORDS from ancient ruins. All actions are fully onchain and verifiable, and top-ranked players receive an additional $LORDS prize at the end of the season.";
+  "Frontier is a free-to-play, roguelite strategy game in which players explore the world, fight beasts, capture resources to upgrade their Realm, and descend into the ethereal plane to compete for glory. Work with others from your order to build a Hyperstructure and overcome the mist, winning a share of prize $LORDS based on your contribution.";
 const FRONTIER_DETAIL =
-  "Each player starts with their Realm as a basic settlement and must construct various buildings to establish a steady supply of wheat, labor, and troops. Troops are deployed to explore the map, find additional labor and Essence for construction and upgrades, fight beasts, gain experience, and secure $LORDS. Beware the mist, however. At the end of each in-game day, the mist (and whatever lurks within) consumes and resets the map, wiping out all armies. Realms retain their buildings and upgrades, so strategic and committed players can get a little further each day. Eventually, players can master the mist and access the calamitous alternate reality choking the world, uncovering even greater rewards.";
+  "Every day is one expedition. Send armies of Knights, Crossbows, and Scouts across a fresh map to explore, clear the beasts that guard it, and send what they find home. Armies take Oaths and carry relics that sharpen the day's fights. When the day ends, the mist consumes the map and every army, and your Realm keeps all it earned, so each day can start a little stronger. Spires lead down to the Deep, a map every Realm shares, where armies fight armies for the sites that matter. Pick an Aspect, hold sites in the Deep with your mates, and build your Aspect's Hyperstructure. The first to finish wins the age, and the prize $LORDS are shared by contribution, measured in Glory.";
 const TAKEN_DOWN_SLUG = "eternum-agent-first-design";
 
 function read(relPath) {
@@ -111,6 +112,7 @@ before(async () => {
     pages.games = await renderRoute("/games", app);
     pages.frontier = await renderRoute("/games/frontier", app);
     pages.blitz = await renderRoute("/games/blitz", app);
+    pages.zkube = await renderRoute("/games/zkube", app);
     pages.eternum = await renderRoute("/games/realms-eternum", app);
     pages.scroll = await renderRoute("/scroll", app);
     // The home page mounts this section on scroll, so it renders on its own.
@@ -234,7 +236,7 @@ test("The home page features Frontier, then Blitz and Eternum, above other studi
     "Realms: Frontier",
     "Realms: Blitz",
     "Realms: Eternum",
-    "GAMES FROM OTHER STUDIOS",
+    "Games from Other Studios",
     "Loot Survivor",
     "zKube",
   ]);
@@ -249,10 +251,10 @@ test("Both pages lead with the first slug in the shared list", () => {
   assert.deepEqual(listing(blitzFirst.games.slice(blitzFirst.games.indexOf("</header>"))).slice(2, 5), lead);
 });
 
-test("Both features show Frontier as Live, then its date, above the title", () => {
+test("Both features show Frontier's date above the title, with no Live stamp", () => {
   for (const shown of [shownText(homeFeature()), shownText(gamesFeature())]) {
-    assert.ok(shown.includes("Live"), `Expected Live among ${shown}`);
-    assert.ok(shown.indexOf(FRONTIER_LABEL) === shown.indexOf("Live") + 1, `Expected Live, then the label, among ${shown}`);
+    assert.ok(!shown.includes("Live"), `Expected no Live among ${shown}`);
+    assert.ok(shown.includes(FRONTIER_LABEL), `Expected the label among ${shown}`);
     assert.ok(shown.indexOf(FRONTIER_LABEL) < shown.indexOf("Realms: Frontier"), `Expected the chips before the title among ${shown}`);
   }
 });
@@ -266,7 +268,7 @@ test("/games features Frontier with both texts and exactly its three tags", () =
   assert.ok(shown.includes(FRONTIER_DETAIL), "Expected the explainer");
   assert.deepEqual(
     [...feature.matchAll(/<span class="rounded-md[^"]*">([^<]*)</g)].map(([, tag]) => tag),
-    ["PvE", "Roguelite", "Free to play"]
+    ["Roguelite", "Strategy", "Free to play"]
   );
 });
 
@@ -275,7 +277,7 @@ test("Frontier's own page lists the same three tags", () => {
 
   assert.deepEqual(
     shownText(genres).filter(Boolean),
-    ["PvE", "Roguelite", "Free to play"]
+    ["Roguelite", "Strategy", "Free to play"]
   );
 });
 
@@ -287,10 +289,9 @@ test("The home page features Frontier with the blurb and exact pills, without th
   assert.ok(shown.includes(FRONTIER_BLURB), "Expected the blurb");
   assert.ok(!shown.includes(FRONTIER_DETAIL), "Expected the explainer to stay on /games");
   for (const [label, detail] of [
-    ["PvE Roguelite", "Explore, fight beasts, and upgrade your Realm"],
+    ["Roguelite Strategy", "Explore, fight beasts, and upgrade your Realm"],
     ["Free to Play", "Found your Realm for free"],
-    ["Fully Onchain", "All actions verifiable onchain"],
-    ["$LORDS Rewards", "Recover $LORDS from ruins; top players win a prize"],
+    ["Prize $LORDS", "Aspects share the prize by Glory"],
   ]) {
     assert.ok(shown.indexOf(detail) === shown.indexOf(label) + 1, `Expected ${label} with its detail among ${shown}`);
   }
@@ -301,7 +302,7 @@ test("Frontier's primary actions follow isLive", () => {
     ["Enter Frontier", "https://play.realms.party"],
     ["Learn More", "/games/frontier"],
   ]);
-  assert.ok(shownText(homeFeature()).includes("Live"));
+  assert.ok(!shownText(homeFeature()).includes("Live"));
   assert.ok(shownText(homeFeature()).includes(FRONTIER_LABEL));
   assert.match(pages.frontier, /Play Now/);
 
@@ -360,7 +361,27 @@ test("Blitz is an ordinary card, first under each feature", () => {
     assert.match(blitz.match(/<img\b[^>]*>/)[0], /object-cover/);
     assert.ok(shownText(blitz).some((text) => text.startsWith("Blitz is a one-hour onchain RTS")));
   }
-  assert.match(home, /Play Now/);
+  assert.doesNotMatch(home, /Play Now/);
+});
+
+test("Blitz's page has one Play Now to play.realms.party, and its cards have none", () => {
+  const [blitz] = pickGames(["blitz"]);
+
+  assert.equal(pagePlayNowUrl(blitz), "https://play.realms.party");
+  assert.equal(playNowUrl(blitz), undefined);
+  assert.match(pages.blitz, /Play Now/);
+  assert.equal(pages.blitz.match(/Play Now/g).length, 1);
+  assert.doesNotMatch(card(homeGames(), "article", "Realms: Blitz"), /Play Now/);
+  assert.doesNotMatch(card(gamesDirectory(), "button", "Realms: Blitz"), /Play Now/);
+});
+
+test("No page links to the Blitz website, and Blitz's page has no Website button", () => {
+  for (const [name, html] of Object.entries(pages)) {
+    assert.doesNotMatch(html, /blitz\.realms\.world/, `Expected no link to the Blitz website on ${name}`);
+  }
+  assert.doesNotMatch(pages.blitz, />\s*Website\s*</);
+  assert.match(pages.frontier, /Play Now/);
+  assert.match(homeGames(), /Play Now/, "Expected the other live games to keep Play Now");
 });
 
 test("Blitz's own page shows the soldiers in rain, and nothing renders the old card", () => {
@@ -392,12 +413,12 @@ test("No rendered page says test LORDS", () => {
   for (const [name, html] of Object.entries(pages)) {
     assert.doesNotMatch(decode(html), /test LORDS/i, `Expected no test LORDS on ${name}`);
   }
-  assert.ok(shownText(pages.frontier).includes("Chests pay LORDS from the season's pool into your Realm."));
-  assert.ok(
-    decode(pages.frontier).includes(
-      "A normal day lasts 8 to 24 hours, or 4 to 12 in the Devcon season. The game shows when today ends and how long tomorrow lasts."
-    )
-  );
+  const frontier = shownText(pages.frontier).join(" ");
+  assert.ok(frontier.includes("No $LORDS are found along the way."));
+  for (const gone of ["Chests pay LORDS", "a missing point", "Devcon", "on any day of the season"]) {
+    assert.ok(!frontier.includes(gone), `Expected Frontier's page to drop "${gone}"`);
+  }
+  assert.ok(frontier.includes("lasts 8 to 24 hours."));
 });
 
 // The classes of the button or link whose text is the given label.
@@ -417,18 +438,51 @@ test("Play Now is the gold action on a live game's page, and How to Play is gold
 });
 
 test("The Live badge on a game's page does not animate", () => {
-  const badge = between(pages.frontier, "</h1>", "Live<");
+  const badge = between(pages.zkube, "</h1>", "Live<");
   const tag = badge.slice(badge.lastIndexOf('<span class="inline-flex'));
   assert.match(tag, /^<span class="inline-flex[^"]*">/, `Expected a plain Live badge, got ${tag}`);
 });
 
-test("Frontier's page shows Live beside its date, and the date on its Game Status card", () => {
+test("Frontier's page shows its date with no Live stamp, and the date on its Game Status card", () => {
   const chip = between(pages.frontier, "</h1>", "Play Now");
   const statusCard = between(pages.frontier, "Game Status", 'id="frontier-day"');
 
-  assert.ok(shownText(chip).includes("Live"), "Expected Live in the page chips");
+  assert.ok(!shownText(chip).includes("Live"), "Expected no Live in the page chips");
   assert.ok(shownText(chip).includes(FRONTIER_LABEL), "Expected the label in the page chip");
   assert.ok(shownText(statusCard).includes(FRONTIER_LABEL), "Expected the label in the Game Status card");
+});
+
+test("Frontier's page shows six illustrated cards, each with a picture, a title in the title face and its text", () => {
+  const CARDS = [
+    ["One day, one expedition", "hourglass", "Each day a new map opens around your Realm and lasts 8 to 24 hours."],
+    ["The mist forgets. Your Realm remembers.", "realm-2", "At the day's end the mist consumes the map"],
+    ["Go down to the Deep", "depth-3", "Spires lead down through the map to the Deep, the ethereal plane every Realm shares."],
+    ["Pick an Aspect", ["aspect-luminary", "aspect-havoc", "aspect-prowess", "aspect-insight"], "Pick one of four Aspects, the teams of Frontier: Luminary, Havoc, Prowess, or Insight. Keep it all season."],
+    ["Share the prize", "crown", "Glory is your score."],
+    ["Free to play", "realm-0", "Founding your Realm costs nothing."],
+  ];
+  const html = decode(pages.frontier);
+
+  for (const [title, art, text] of CARDS) {
+    const files = [art].flat();
+    const heading = html.indexOf(`>${title}</h`);
+    const pictures = files.map((file) => html.indexOf(`<img src="/games/frontier/${file}.webp"`));
+    assert.ok(pictures.every((at, i) => at !== -1 && at < heading && (i === 0 || at > pictures[i - 1])), `Expected ${files} in order before the ${title} card title`);
+    assert.ok(heading - pictures.at(-1) < 400, `Expected ${files.at(-1)} directly before the ${title} card title`);
+    assert.match(html.slice(html.lastIndexOf("<h", heading), heading), /class="realm-title /, `Expected ${title} in the title face`);
+    assert.ok(html.indexOf(text, heading) > heading, `Expected the text of ${title}`);
+    for (const file of files) {
+      const cap = file.startsWith("aspect-") ? 16000 : 12000;
+      assert.ok(statSync(join(ROOT, `public/games/frontier/${file}.webp`)).size <= cap, `Expected ${file} to stay under ${cap} bytes`);
+    }
+    if (files.length > 1) {
+      const grid = html.slice(html.lastIndexOf("<div", pictures[0]), pictures[0]);
+      assert.match(grid, /aria-hidden="true"/, `Expected the ${title} pictures hidden from assistive tech`);
+      assert.match(grid, /grid-cols-2/, `Expected the ${title} pictures in two columns`);
+      assert.match(grid, /h-16 w-16/, `Expected the ${title} pictures in the 64 px icon box`);
+      assert.match(grid, /sm:h-20 sm:w-20/, `Expected the ${title} pictures in the 80 px icon box`);
+    }
+  }
 });
 
 test("Other games keep their own status on the same surfaces", () => {
@@ -451,9 +505,9 @@ test("Every status chip on /games sits on the solid ground, whatever art is behi
   const before = gamesDirectory(notLive.games);
 
   assert.deepEqual(chips(card(today, "button", "Realms: Eternum")), expected("development"));
-  assert.deepEqual(chips(card(today, "button", "Realms: Blitz")), expected("Live", "mainnet"));
+  assert.deepEqual(chips(card(today, "button", "Realms: Blitz")), expected("mainnet"));
   assert.deepEqual(chips(card(today, "button", "zKube")), expected("Live", "mainnet"));
-  assert.deepEqual(chips(gamesFeature()), expected("Live", FRONTIER_LABEL));
+  assert.deepEqual(chips(gamesFeature()), expected(FRONTIER_LABEL));
   assert.deepEqual(chips(card(before, "button", "Realms: Eternum")), expected("testnet"));
   assert.deepEqual(chips(between(before, "Featured Game", 'class="grid grid-cols-1 gap-5 md:grid-cols-2')), expected(FRONTIER_LABEL));
   assert.deepEqual(chips(today).filter(([, ground]) => ground.join() !== SOLID.join()), []);
@@ -518,7 +572,7 @@ test("The hero has two actions and a still gold title", () => {
   const title = hero.match(/<h1\b[^>]*class="([^"]*)"[^>]*>([^<]*)<\/h1>/);
 
   assert.deepEqual(actions, ["Explore Games", "Stake veLORDS"]);
-  assert.equal(title[2], "THE NEW FRONTIER OF GAMING");
+  assert.equal(title[2], "The New Frontier of Gaming");
   assert.ok(title[1].split(/\s+/).includes("text-[#F3D08A]"));
   assert.doesNotMatch(read("src/index.css"), /hero-shimmer|hero-title-shimmer/);
 });
@@ -542,6 +596,17 @@ test("Frontier has its season label and is live", () => {
   assert.equal(frontier.links.homepage, "https://play.realms.party");
 });
 
+test("Hiding the Live stamp on Frontier and Blitz keeps both live, and Live Games counts only the stamps shown", () => {
+  const [frontier, blitz] = pickGames(["frontier", "blitz"]);
+  const listed = pickGames(["frontier", "blitz", "realms-eternum", "loot-survivor", "zkube", "pistols-at-dawn"]);
+  const count = between(gamesDirectory(), "Live Games</p>", "</article>").match(/>(\d+)</)[1];
+
+  assert.equal(frontier.isLive && blitz.isLive, true);
+  assert.deepEqual(games.filter((game) => game.hideLiveStamp).map((game) => game.slug), ["blitz", "frontier"]);
+  assert.equal(count, String(listed.filter(showsLiveStamp).length));
+  assert.equal(count, "2");
+});
+
 test("Only Frontier has a status label, and other games keep their status", () => {
   for (const game of games.filter((entry) => entry.slug !== "frontier")) {
     assert.equal(game.statusLabel, undefined);
@@ -555,7 +620,7 @@ test("The hero states the approved position, and no page names a year after 2026
 
   assert.ok(
     decode(hero).includes(
-      ">The AI era is here and fundamentally changing gaming as we know it. The Realms Ecosystem is building for the new age, one where AI and humans can build, strategize, collaborate, and compete. Together. Onchain. Forever.</p>"
+      ">The AI era is here and fundamentally changing gaming as we know it. The Realms ecosystem is building for the new age, one where AI and humans can build, strategize, collaborate, and compete. Together. Onchain. Forever.</p>"
     ),
     "Expected the approved paragraph in the hero"
   );
@@ -687,12 +752,24 @@ test("The taken-down post is not in what the site ships", () => {
 
 test("The economics section keeps the flywheel and staking block, with no token supply panel", () => {
   const text = shownText(pages.economics);
-  assert.ok(text.includes("$LORDS TOKEN"));
+  assert.ok(text.includes("$LORDS Token"));
   assert.equal(text.includes("TREASURY"), false);
   // Without the wrap, the two buttons run 41 px past a 390 px screen.
   assert.match(pages.economics, /class="flex flex-wrap shrink-0 gap-3"/);
   assert.ok(text.includes("Stake LORDS"));
-  assert.ok(text.includes("Lock LORDS as veLORDS and earn weekly staking rewards."));
+  assert.ok(text.includes("Lock LORDS as veLORDS"));
+  assert.ok(text.includes("veLORDS holders receive a share of the fees the games earn."));
+  assert.ok(text.includes("LORDS Price") && text.includes("Total Value Locked"));
+  for (const line of [
+    "The flywheel is how the games and the token are designed to feed each other.",
+    "Players take part in the games",
+    "The games earn fees",
+    "LORDS locked as veLORDS",
+    "A stronger ecosystem draws more players",
+    "The loop repeats",
+  ]) {
+    assert.ok(text.includes(line), `Expected the flywheel to say "${line}"`);
+  }
   assert.match(pages.economics, /<svg/);
   for (const gone of ["TOKEN SUPPLY", "Total Supply", "Circulating", "Freely liquid"]) {
     assert.equal(text.includes(gone), false, `Expected no "${gone}"`);
@@ -706,6 +783,18 @@ function readableWords(html) {
 }
 
 const VISITOR_PAGES = ["home", "economics", "games", "frontier", "blitz", "eternum", "scroll"];
+
+test("No page shows an APY, a yield or a reward rate, and the hero lists no APY tile", () => {
+  for (const name of VISITOR_PAGES) {
+    const words = readableWords(pages[name]).join(" ");
+    assert.doesNotMatch(words, /\bAPY\b|\byield|staking rewards|weekly rewards|%\*/i, `Expected no return figure on ${name}`);
+  }
+  const hero = between(pages.home, 'id="hero"', 'id="games"');
+  assert.deepEqual(
+    shownText(hero).filter((text) => ["Realms Games", "LORDS Price", "Staking APY"].includes(text)),
+    ["Realms Games", "LORDS Price"]
+  );
+});
 
 // A link or file path stays as written. Any other lowercase "realm", wherever it sits in a sentence, is a word.
 const NOT_A_WORD = /^(?:[a-z]+:\/\/\S+|(?:[a-z0-9-]+\.)*realms\.(?:world|party)(?:\/\S*)?|(?:\/[\w-]+)+(?:\.\w+)?)$/;
@@ -746,5 +835,59 @@ test("Visitor copy uses American spelling", () => {
   }
   for (const path of ["src/components/lore/history-of-lost-worlds.html", "src/routes/terms.tsx", "src/data/games.ts"]) {
     assert.doesNotMatch(read(path), british, `Expected American spelling in ${path}`);
+  }
+});
+
+test("The home and games descriptions call only Blitz and Eternum AI-native, and titles use a bar", () => {
+  for (const [path, title, description] of [
+    [
+      "src/routes/index.tsx",
+      "Realms.World | Blitz, Frontier, and Eternum",
+      "Blitz and Eternum are AI-native onchain games, Frontier is a free-to-play roguelite strategy game, and $LORDS is the token of their ecosystem.",
+    ],
+    [
+      "src/routes/games/index.tsx",
+      "Realms.World | Games",
+      "Blitz and Eternum, the AI-native onchain games of Realms, plus Frontier and games from other studios in the ecosystem.",
+    ],
+  ]) {
+    const source = read(path);
+    assert.ok(source.includes(`title: "${title}"`), `Expected the title ${title} in ${path}`);
+    assert.ok(source.includes(`"${description}"`), `Expected the description in ${path}`);
+  }
+});
+
+test("The site is named Realms.World in every tracked source, handler, content and public text file", () => {
+  const exceptions = new Map([
+    ["src/routes/terms.tsx", "legal page, left as written until the legal copy is reviewed"],
+    ["src/routes/privacy.tsx", "legal page, left as written until the legal copy is reviewed"],
+    ["src/data/games/realms-eternum.mdoc", "names the game world, not the site"],
+  ]);
+  const tracked = execFileSync(
+    "git",
+    ["ls-files", "-z", "--", "src", "api", "content", "index.html", "public/*.html", "public/*.json", "public/*.xml", "public/*.txt"],
+    { cwd: ROOT, encoding: "utf8" },
+  )
+    .split("\0")
+    .filter(Boolean);
+  for (const path of [
+    "api/og.tsx",
+    "index.html",
+    "src/routes/__root.tsx",
+    "src/components/sections/FooterSection.tsx",
+    "public/robots.txt",
+  ]) {
+    assert.ok(tracked.includes(path), `Expected the scan to include ${path}`);
+  }
+  assert.ok(
+    tracked.some((path) => /^content\/scroll\/.+\.md$/.test(path)),
+    "Expected the scan to include a content/scroll post",
+  );
+  for (const path of exceptions.keys()) {
+    assert.ok(tracked.includes(path), `Expected the exception ${path} to be tracked`);
+  }
+  for (const path of tracked) {
+    if (exceptions.has(path)) continue;
+    assert.doesNotMatch(read(path), /Realms World/, `Expected ${path} to say Realms.World`);
   }
 });

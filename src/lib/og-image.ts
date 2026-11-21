@@ -52,7 +52,7 @@ export function generateMetaTags(
     description = "Explore onchain games powered by $LORDS in the Realms ecosystem.",
     url = BASE_URL,
     type = "website",
-    siteName = "Realms World",
+    siteName = "Realms.World",
   } = params;
 
   const ogImage = generateOGImageUrl(params);
